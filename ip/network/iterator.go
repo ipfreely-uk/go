@@ -59,6 +59,9 @@ func ranges2AddressIterator[A ip.Address[A]](slice []Range[A]) Iterator[A] {
 				return true, result
 			}
 			rok, rnge = ranges()
+			if !rok {
+				break
+			}
 			addresses = rnge.Addresses()
 		}
 		return false, result

@@ -50,22 +50,24 @@ func NewSet[A ip.Address[A]](spans ...Range[A]) AddressSet[A] {
 }
 
 func rationalize[A ip.Address[A]](spans []Range[A]) []Range[A] {
-	result := make([]Range[A], len(spans))
-	count := len(result)
-outer:
-	for i := count - 1; i >= 0; i-- {
-		a := result[i]
-		for j := 0; j < i; j++ {
-			b := result[j]
+	set := map[Range[A]]bool{}
+	for _, r := range spans {
+		set[r] = true
+	}
+	for i := range spans {
+		a := spans[i]
+		for b := range set {
 			if Contiguous(a, b) {
-				c := Join(a, b)
-				result[i] = c
-				count--
-				continue outer
+				a = Join(a, b)
+				delete(set, b)
 			}
 		}
+		set[a] = true
 	}
-	result = result[:count]
+	result := []Range[A]{}
+	for r := range set {
+		result = append(result, r)
+	}
 	sort.Slice(result, func(i, j int) bool {
 		fi := result[i].First()
 		fj := result[j].First()
