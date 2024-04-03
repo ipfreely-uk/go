@@ -16,4 +16,4 @@ jobs:
     - name: Go Pages
       run: go install github.com/johnstarich/go/gopages@latest
     - name: 
-      run: gopages -gh-pages
+      run: gopages -gh-pages -gh-pages-token ${{ secrets.GITHUB_TOKEN }}
