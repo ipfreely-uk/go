@@ -55,7 +55,7 @@ func (b *block[A]) Blocks() Iterator[Block[A]] {
 func NewBlock[A ip.Address[A]](network A, mask int) Block[A] {
 	fam := network.Family()
 	m := subnet.Mask(fam, mask)
-	if !compare.Eq(network, m.Or(network)) {
+	if !compare.Eq(network, m.And(network)) {
 		msg, _ := fmt.Printf("mask %s does not cover %s", m.String(), network.String())
 		panic(msg)
 	}
