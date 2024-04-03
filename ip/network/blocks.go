@@ -5,10 +5,24 @@ import (
 
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ip/compare"
+	"github.com/ipfreely-uk/go/ip/subnet"
 )
 
 // TODO: can replace with constant
 var LOG_2 = math.Log2(2.0)
+
+// Subdivides range into valid CIDR blocks
+func Blocks[A ip.Address[A]](r Range[A]) Iterator[Block[A]] {
+	first := r.First()
+	last := r.Last()
+	mask := subnet.MaskSize(first, last)
+	if mask >= 0 {
+		block := NewBlock(first, mask)
+		slice := []Block[A]{block}
+		return sliceIterator(slice)
+	}
+	return blockIterator(r.First(), r.Last())
+}
 
 func blockIterator[A ip.Address[A]](start, end A) Iterator[Block[A]] {
 	// implementation breaks on entire internet but guarded elsewhere

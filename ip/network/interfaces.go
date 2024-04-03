@@ -12,9 +12,9 @@ type AddressSet[A ip.Address[A]] interface {
 	Contains(address A) bool
 	// Number of addresses
 	Size() *big.Int
-	// Consituent addresses
+	// Addresses from least to greatest
 	Addresses() Iterator[A]
-	// Consituent ranges
+	// Non-contiguous ranges from least to greatest
 	Ranges() Iterator[Range[A]]
 }
 
@@ -24,7 +24,6 @@ type Range[A ip.Address[A]] interface {
 	AddressSet[A]
 	First() A
 	Last() A
-	Blocks() Iterator[Block[A]]
 }
 
 // Immutable RFC-4632 CIDR block.
