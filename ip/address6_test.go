@@ -93,9 +93,12 @@ func TestShiftLeft6(t *testing.T) {
 func TestCompare6(t *testing.T) {
 	one := ip.V6().FromInt(1)
 	hundred := ip.V6().FromInt(100)
+	max := ip.V6().FromInt(0).Not()
 	assert.Equal(t, -1, one.Compare(hundred))
 	assert.Equal(t, 1, hundred.Compare(one))
 	assert.Equal(t, 0, hundred.Compare(hundred))
+	assert.Equal(t, 1, max.Compare(one))
+	assert.Equal(t, -1, one.Compare(max))
 }
 
 func TestString6(t *testing.T) {
