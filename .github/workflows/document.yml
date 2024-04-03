@@ -17,4 +17,3 @@ jobs:
       run: go install github.com/johnstarich/go/gopages@latest
     - name: 
       run: gopages -gh-pages
-
