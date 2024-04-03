@@ -2,8 +2,6 @@ package ip
 
 import (
 	"errors"
-	"fmt"
-	"net"
 	"net/netip"
 )
 
@@ -18,12 +16,11 @@ func Parse[A Address[A]](family Family[A], candidate string) (A, error) {
 
 // Parse IP address string from unknown family
 func ParseUnknown(candidate string) (any, error) {
-	parsed := net.ParseIP(candidate)
-	if parsed == nil {
-		msg := fmt.Sprintf("%s is not an IP address", candidate)
-		return nil, errors.New(msg)
+	parsed, err := netip.ParseAddr(candidate)
+	if err != nil {
+		return nil, err
 	}
-	return FromBytes(parsed...)
+	return FromBytes(parsed.AsSlice()...)
 }
 
 // Parse IP address bytes from unknown family
