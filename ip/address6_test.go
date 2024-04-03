@@ -13,12 +13,22 @@ func TestAdd6(t *testing.T) {
 	expected := ip.V6().FromInt(2)
 	actual := one.Add(one)
 	assert.Equal(t, expected, actual)
+
+	big, _ := ip.Parse(ip.V6(), "::ffff:ffff:ffff:ffff")
+	expected, _ = ip.Parse(ip.V6(), "0:0:0:1::")
+	actual = big.Add(one)
+	assert.Equal(t, expected, actual)
 }
 
 func TestSubtract6(t *testing.T) {
 	one := ip.V6().FromInt(1)
 	expected := ip.V6().FromInt(0)
 	actual := one.Subtract(one)
+	assert.Equal(t, expected, actual)
+
+	big, _ := ip.Parse(ip.V6(), "fe80:0:0:1::")
+	expected, _ = ip.Parse(ip.V6(), "fe80:0:0:0:ffff:ffff:ffff:ffff")
+	actual = big.Subtract(one)
 	assert.Equal(t, expected, actual)
 }
 

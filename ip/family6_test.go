@@ -39,6 +39,9 @@ func TestFromBytes6(t *testing.T) {
 	assert.Equal(t, byte(0xAA), bs[13])
 	assert.Equal(t, byte(0xFF), bs[14])
 	assert.Equal(t, byte(0xEE), bs[15])
+
+	_, err = ip.V6().FromBytes()
+	assert.NotNil(t, err)
 }
 
 func TestFromInvalidBytes6(t *testing.T) {

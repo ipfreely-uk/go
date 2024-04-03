@@ -22,4 +22,9 @@ func TestBigInt(t *testing.T) {
 	oversize := max.Mul(max, two)
 	_, err = ip.FromBigInt(ip.V4(), oversize)
 	assert.NotNil(t, err)
+
+	max = ip.ToBigInt(ip.MaxAddress(ip.V4()))
+	back, err := ip.FromBigInt(ip.V4(), max)
+	assert.Nil(t, err)
+	assert.Equal(t, ip.MaxAddress(ip.V4()), back)
 }

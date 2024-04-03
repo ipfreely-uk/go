@@ -95,3 +95,40 @@ func TestParseBad6(t *testing.T) {
 		assert.NotNil(t, err)
 	}
 }
+
+func TestParseUnknown(t *testing.T) {
+	type test struct {
+		expected []byte
+		input    string
+		err      bool
+	}
+
+	tests := []test{
+		{
+			expected: []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			input:    "::",
+			err:      false,
+		},
+		{
+			expected: []byte{0, 0, 0, 0},
+			input:    "foo",
+			err:      true,
+		},
+		{
+			expected: []byte{0, 0, 0, 0},
+			input:    "0.0.0.0",
+			err:      false,
+		},
+	}
+
+	for _, c := range tests {
+		expected, _ := ip.FromBytes(c.expected...)
+		actual, err := ip.ParseUnknown(c.input)
+		if c.err {
+			assert.NotNil(t, err)
+		} else {
+			assert.Nil(t, err)
+			assert.Equal(t, expected, actual)
+		}
+	}
+}
