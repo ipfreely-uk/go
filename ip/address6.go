@@ -111,20 +111,16 @@ func (a Address6) Xor(operand Address6) Address6 {
 }
 
 func (a Address6) Shift(bits int) Address6 {
-	if bits >= 128 || bits <= -128 {
-		// TODO: revisit this re overflow
-		panic(bits)
-	}
 	var high uint64
 	var low uint64
 	if bits > 0 {
-		n := bits % 128
-		x := a.high << (128 - n)
+		n := bits % 64
+		x := a.high << (64 - n)
 		high = a.high >> n
-		low = low>>n | x
+		low = a.low>>n | x
 	} else {
-		n := (bits * -1) % 128
-		x := a.low >> (128 - n)
+		n := (bits * -1) % 64
+		x := a.low >> (64 - n)
 		high = a.high<<n | x
 		low = a.low << n
 	}

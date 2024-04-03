@@ -90,7 +90,7 @@ func TestShiftLeft(t *testing.T) {
 	assert.Equal(t, expected, actual)
 }
 
-func TestCompre(t *testing.T) {
+func TestCompare(t *testing.T) {
 	one := ip.V4().FromInt(1)
 	hundred := ip.V4().FromInt(100)
 	assert.Equal(t, -1, one.Compare(hundred))
