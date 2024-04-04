@@ -41,7 +41,7 @@ func (a Address6) Not() Address6 {
 
 func (a Address6) Add(addend Address6) Address6 {
 	var low = a.low + addend.low
-	var high = a.high + a.high
+	var high = a.high + addend.high
 	if low < addend.low || low < a.low {
 		high = high + 1
 	}
