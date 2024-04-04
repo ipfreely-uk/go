@@ -17,16 +17,16 @@ func Example_subnet_Mask() {
 }
 
 func Example_subnet_AddressCount() {
-	family := ip.V4()
-	for mask := 0; mask <= family.Width(); mask++ {
-		count := subnet.AddressCount(family, mask)
-		msg := fmt.Sprintf("IPv%d /%d ==\t%s", family.Version(), mask, count.String())
+	family4 := ip.V4()
+	for mask := 0; mask <= family4.Width(); mask++ {
+		count := subnet.AddressCount(family4, mask)
+		msg := fmt.Sprintf("IPv%d /%d ==\t%s", family4.Version(), mask, count.String())
 		println(msg)
 	}
-	// family = ip.V6()
-	// for mask := 0; mask <= family.Width(); mask++ {
-	// 	count := subnet.AddressCount(family, mask)
-	// 	msg := fmt.Sprintf("IPv%d /%d ==\t%s", family.Version(), mask, count.String())
-	// 	println(msg)
-	// }
+	family6 := ip.V6()
+	for mask := 0; mask <= family6.Width(); mask++ {
+		count := subnet.AddressCount(family6, mask)
+		msg := fmt.Sprintf("IPv%d /%d ==\t%s", family6.Version(), mask, count.String())
+		println(msg)
+	}
 }

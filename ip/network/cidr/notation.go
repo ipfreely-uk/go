@@ -44,3 +44,11 @@ func Parse[A ip.Address[A]](f ip.Family[A], notation string) (network.Block[A], 
 	}
 	return network.NewBlock(address, mask), nil
 }
+
+func ParseUnknown(notation string) (any, error) {
+	b, err := Parse(ip.V4(), notation)
+	if err == nil {
+		return b, err
+	}
+	return Parse(ip.V6(), notation)
+}
