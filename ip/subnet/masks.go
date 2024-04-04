@@ -10,10 +10,7 @@ import (
 
 // Creates mask of given bit size
 func Mask[A ip.Address[A]](family ip.Family[A], bits int) A {
-	if bits < 0 || bits > family.Width() {
-		msg := fmt.Sprintf("wanted 0-%d for IPv%d; got %d", family.Width(), family.Version(), bits)
-		panic(msg)
-	}
+	validateBits(family, bits)
 
 	bytes := family.Width() / 8
 	arr := make([]byte, bytes)
@@ -46,13 +43,18 @@ func Mask[A ip.Address[A]](family ip.Family[A], bits int) A {
 	return mask
 }
 
-// Number of addresses in subnet with given bit mask size
-func AddressCount[A ip.Address[A]](family ip.Family[A], bits int) *big.Int {
+func validateBits[A ip.Address[A]](family ip.Family[A], bits int) {
 	width := family.Width()
 	if bits < 0 || bits > width {
-		panic("TODO")
+		msg := fmt.Sprintf("wanted 0-%d for IPv%d; got %d", family.Width(), family.Version(), bits)
+		panic(msg)
 	}
-	size := big.NewInt(int64(width - bits))
+}
+
+// Number of addresses in subnet with given bit mask size
+func AddressCount[A ip.Address[A]](family ip.Family[A], bits int) *big.Int {
+	validateBits(family, bits)
+	size := big.NewInt(int64(family.Width() - bits))
 	two := big.NewInt(2)
 	return two.Exp(two, size, nil)
 }

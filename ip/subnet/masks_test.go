@@ -23,6 +23,10 @@ func TestMask(t *testing.T) {
 	verifyMask(t, []byte{0b11111000, 0, 0, 0}, ip.V4(), 5)
 	verifyMask(t, []byte{0b11111100, 0, 0, 0}, ip.V4(), 6)
 	verifyMask(t, []byte{0b11111110, 0, 0, 0}, ip.V4(), 7)
+
+	assert.Panics(t, func() { subnet.Mask(ip.V4(), 33) })
+	assert.Panics(t, func() { subnet.Mask(ip.V6(), 129) })
+	assert.Panics(t, func() { subnet.Mask(ip.V4(), -1) })
 }
 
 func verifyMask[A ip.Address[A]](t *testing.T, expected []byte, family ip.Family[A], mask int) {
@@ -38,6 +42,10 @@ func TestAddressCount(t *testing.T) {
 
 	assert.Equal(t, one, subnet.AddressCount(ip.V4(), 32))
 	assert.Equal(t, v6, subnet.AddressCount(ip.V6(), 0))
+
+	assert.Panics(t, func() { subnet.AddressCount(ip.V4(), 33) })
+	assert.Panics(t, func() { subnet.AddressCount(ip.V6(), 129) })
+	assert.Panics(t, func() { subnet.AddressCount(ip.V6(), -1) })
 }
 
 func TestMaskSize(t *testing.T) {
