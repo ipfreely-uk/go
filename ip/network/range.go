@@ -53,7 +53,8 @@ func NewRange[A ip.Address[A]](first, last A) Range[A] {
 	}
 	mask := subnet.MaskSize(first, last)
 	if mask >= 0 {
-		return NewBlock(first, mask)
+		b := NewBlock(first, mask)
+		return b
 	}
 	return &ipRange[A]{
 		first,
