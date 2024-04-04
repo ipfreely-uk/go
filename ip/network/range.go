@@ -42,10 +42,6 @@ func (a *ipRange[A]) Ranges() Iterator[Range[A]] {
 	return sliceIterator(slice)
 }
 
-func (a *ipRange[A]) Blocks() Iterator[Block[A]] {
-	return blockIterator(a.first, a.last)
-}
-
 func NewRange[A ip.Address[A]](first, last A) Range[A] {
 	if first.Compare(last) > 0 {
 		msg := fmt.Sprintf("first element %s must be less than last %s", first.String(), last.String())
