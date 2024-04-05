@@ -98,6 +98,24 @@ func TestCompare(t *testing.T) {
 	assert.Equal(t, 0, hundred.Compare(hundred))
 }
 
+func TestLeadingZeros(t *testing.T) {
+	f := ip.V4()
+	assert.Equal(t, 0, f.FromInt(0xFFFFFFFF).LeadingZeros())
+	assert.Equal(t, 32, f.FromInt(0).LeadingZeros())
+	assert.Equal(t, 8, f.FromInt(0xFFFFFF).LeadingZeros())
+	assert.Equal(t, 8, f.FromInt(0xFFFF00).LeadingZeros())
+	assert.Equal(t, 9, f.FromInt(0b01111111_11111111_11111111).LeadingZeros())
+}
+
+func TestTrailingZeros(t *testing.T) {
+	f := ip.V4()
+	assert.Equal(t, 0, f.FromInt(0xFFFFFFFF).TrailingZeros())
+	assert.Equal(t, 32, f.FromInt(0).TrailingZeros())
+	assert.Equal(t, 0, f.FromInt(0xFFFFFF).TrailingZeros())
+	assert.Equal(t, 8, f.FromInt(0xFFFF00).TrailingZeros())
+	assert.Equal(t, 1, f.FromInt(0b10).TrailingZeros())
+}
+
 func TestString(t *testing.T) {
 	type test struct {
 		input    []byte

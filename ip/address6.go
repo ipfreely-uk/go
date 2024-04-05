@@ -1,6 +1,9 @@
 package ip
 
-import "net/netip"
+import (
+	"math/bits"
+	"net/netip"
+)
 
 type Address6 struct {
 	high uint64
@@ -76,7 +79,7 @@ func (a Address6) Divide(denominator Address6) Address6 {
 	this := ToBigInt(a)
 	that := ToBigInt(denominator)
 	max := ToBigInt(MaxAddress(a.Family()))
-	_, result := this.DivMod(this, that, max)
+	result, _ := this.DivMod(this, that, max)
 	address, _ := FromBigInt(a.Family(), result)
 	return address
 }
@@ -144,6 +147,22 @@ func (a Address6) Compare(other Address6) int {
 		return 1
 	}
 	return 0
+}
+
+func (a Address6) LeadingZeros() int {
+	high0 := bits.LeadingZeros64(a.high)
+	if high0 == 64 {
+		return bits.LeadingZeros64(a.low) + 64
+	}
+	return high0
+}
+
+func (a Address6) TrailingZeros() int {
+	low0 := bits.TrailingZeros64(a.low)
+	if low0 == 64 {
+		return bits.TrailingZeros64(a.high) + 64
+	}
+	return low0
 }
 
 func (a Address6) String() string {

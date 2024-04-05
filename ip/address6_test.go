@@ -111,6 +111,31 @@ func TestCompare6(t *testing.T) {
 	assert.Equal(t, -1, one.Compare(max))
 }
 
+func TestLeadingZeros6(t *testing.T) {
+	f := ip.V6()
+	two := f.FromInt(2)
+	assert.Equal(t, 0, f.FromInt(0).Not().LeadingZeros())
+	assert.Equal(t, 128, f.FromInt(0).LeadingZeros())
+	assert.Equal(t, 104, f.FromInt(0xFF_FF_FF).LeadingZeros())
+	assert.Equal(t, 104, f.FromInt(0xFF_FF_00).LeadingZeros())
+	assert.Equal(t, 105, f.FromInt(0b01111111_11111111_11111111).LeadingZeros())
+	assert.Equal(t, 0, f.FromInt(1).Not().LeadingZeros())
+	assert.Equal(t, 1, ip.MaxAddress(f).Divide(two).LeadingZeros())
+	bottom, _ := ip.Parse(ip.V6(), "::FFFF:FFFF:FFFF:FFFF")
+	assert.Equal(t, 64, bottom.LeadingZeros())
+}
+
+func TestTrailingZeros6(t *testing.T) {
+	f := ip.V6()
+	assert.Equal(t, 0, f.FromInt(0xFFFFFFFF).TrailingZeros())
+	assert.Equal(t, 128, f.FromInt(0).TrailingZeros())
+	assert.Equal(t, 0, f.FromInt(0xFFFFFF).TrailingZeros())
+	assert.Equal(t, 8, f.FromInt(0xFFFF00).TrailingZeros())
+	assert.Equal(t, 1, f.FromInt(0b10).TrailingZeros())
+	top, _ := ip.Parse(ip.V6(), "FFFF:FFFF:FFFF:FFFF::")
+	assert.Equal(t, 64, top.TrailingZeros())
+}
+
 func TestString6(t *testing.T) {
 	type test struct {
 		input    []byte

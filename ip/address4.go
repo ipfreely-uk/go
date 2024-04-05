@@ -1,6 +1,7 @@
 package ip
 
 import (
+	"math/bits"
 	"net/netip"
 )
 
@@ -96,6 +97,14 @@ func (a Address4) Compare(other Address4) int {
 		return 1
 	}
 	return 0
+}
+
+func (a Address4) LeadingZeros() int {
+	return bits.LeadingZeros32(a.value)
+}
+
+func (a Address4) TrailingZeros() int {
+	return bits.TrailingZeros32(a.value)
 }
 
 func (a Address4) String() string {

@@ -40,6 +40,10 @@ type Address[A any] interface {
 	// Returns -1 if operand is more than this.
 	// Returns 0 if operand is equal.
 	Compare(A) int
+	// Similar to math/bits.LeadingZeros*
+	LeadingZeros() int
+	// Similar to math/bits.TrailingZeros*
+	TrailingZeros() int
 	// Canonical string form
 	String() string
 }
