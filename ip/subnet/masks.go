@@ -61,15 +61,24 @@ func AddressCount[A ip.Address[A]](family ip.Family[A], bits int) *big.Int {
 
 // Mask size in bits
 func MaskSize[A ip.Address[A]](first, last A) int {
+	// TODO: replace all this with leading/trailing zero func
 	fam := first.Family()
-	width := fam.Width()
 	xor := first.Xor(last)
-	for i := width; i >= 0; i-- {
-		mask := Mask(fam, i)
-		imask := mask.Not()
-		if compare.Eq(imask, xor) {
-			return i
-		}
+	zero := fam.FromInt(0)
+	if !compare.Eq(xor.And(first), zero) {
+		return -1
+	}
+	if !compare.Eq(xor.And(last), xor) {
+		return -1
+	}
+	one := fam.FromInt(1)
+	idx := 0
+	for compare.Eq(one, one.And(xor)) {
+		xor = xor.Shift(1)
+		idx++
+	}
+	if compare.Eq(xor, zero) {
+		return fam.Width() - idx
 	}
 	return -1
 }

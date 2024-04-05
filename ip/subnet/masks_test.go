@@ -49,13 +49,28 @@ func TestAddressCount(t *testing.T) {
 }
 
 func TestMaskSize(t *testing.T) {
-	one := ip.V4().FromInt(1)
-	tenStart, _ := ip.Parse(ip.V4(), "10.0.0.0")
-	tenEnd, _ := ip.Parse(ip.V4(), "10.255.255.255")
+	{
+		one := ip.V4().FromInt(1)
+		two := ip.V4().FromInt(2)
+		tenStart, _ := ip.Parse(ip.V4(), "10.0.0.0")
+		tenEnd, _ := ip.Parse(ip.V4(), "10.255.255.255")
 
-	assert.Equal(t, 32, subnet.MaskSize(one, one))
-	assert.Equal(t, 8, subnet.MaskSize(tenStart, tenEnd))
-	assert.Equal(t, 0, subnet.MaskSize(ip.MinAddress(ip.V4()), ip.MaxAddress(ip.V4())))
-	assert.Equal(t, 0, subnet.MaskSize(ip.MinAddress(ip.V6()), ip.MaxAddress(ip.V6())))
-	assert.Equal(t, -1, subnet.MaskSize(one, tenEnd))
+		assert.Equal(t, 32, subnet.MaskSize(one, one))
+		assert.Equal(t, 8, subnet.MaskSize(tenStart, tenEnd))
+		assert.Equal(t, 0, subnet.MaskSize(ip.MinAddress(ip.V4()), ip.MaxAddress(ip.V4())))
+		assert.Equal(t, -1, subnet.MaskSize(one, tenEnd))
+		assert.Equal(t, -1, subnet.MaskSize(one, two))
+	}
+	{
+		one := ip.V6().FromInt(1)
+		two := ip.V6().FromInt(2)
+		fe80Start, _ := ip.Parse(ip.V6(), "fe80::")
+		fe80End, _ := ip.Parse(ip.V6(), "fe80:ffff:ffff:ffff:ffff:ffff:ffff:ffff")
+
+		assert.Equal(t, 128, subnet.MaskSize(one, one))
+		assert.Equal(t, 16, subnet.MaskSize(fe80Start, fe80End))
+		assert.Equal(t, 0, subnet.MaskSize(ip.MinAddress(ip.V6()), ip.MaxAddress(ip.V6())))
+		assert.Equal(t, -1, subnet.MaskSize(one, fe80End))
+		assert.Equal(t, -1, subnet.MaskSize(one, two))
+	}
 }
