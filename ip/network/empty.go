@@ -20,8 +20,8 @@ func (e *empty[A]) Addresses() Iterator[A] {
 	return emptyIterator[A]()
 }
 
-func (e *empty[A]) Ranges() Iterator[Range[A]] {
-	return emptyIterator[Range[A]]()
+func (e *empty[A]) Ranges() Iterator[AddressRange[A]] {
+	return emptyIterator[AddressRange[A]]()
 }
 
 func emptySet[A ip.Address[A]]() AddressSet[A] {

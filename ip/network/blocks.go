@@ -12,7 +12,7 @@ import (
 var LOG_2 = math.Log(2.0)
 
 // Subdivides range into valid CIDR blocks
-func Blocks[A ip.Address[A]](r Range[A]) Iterator[Block[A]] {
+func Blocks[A ip.Address[A]](r AddressRange[A]) Iterator[Block[A]] {
 	first := r.First()
 	last := r.Last()
 	mask := subnet.MaskSize(first, last)

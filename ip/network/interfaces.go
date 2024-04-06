@@ -15,12 +15,12 @@ type AddressSet[A ip.Address[A]] interface {
 	// Addresses from least to greatest
 	Addresses() Iterator[A]
 	// Non-contiguous ranges from least to greatest
-	Ranges() Iterator[Range[A]]
+	Ranges() Iterator[AddressRange[A]]
 }
 
 // Immutable contiguous range of one or more IP addresses.
 // TODO: rename this type to avoid confusion with range keyword.
-type Range[A ip.Address[A]] interface {
+type AddressRange[A ip.Address[A]] interface {
 	AddressSet[A]
 	First() A
 	Last() A
@@ -28,6 +28,6 @@ type Range[A ip.Address[A]] interface {
 
 // Immutable RFC-4632 CIDR block.
 type Block[A ip.Address[A]] interface {
-	Range[A]
+	AddressRange[A]
 	MaskSize() int
 }

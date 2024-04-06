@@ -6,12 +6,12 @@ import (
 )
 
 // Ranges overlap in any way
-func Intersect[A ip.Address[A]](r0, r1 Range[A]) bool {
+func Intersect[A ip.Address[A]](r0, r1 AddressRange[A]) bool {
 	return r0.Contains(r1.First()) || r0.Contains(r1.Last()) || r1.Contains(r0.First()) || r1.Contains(r0.Last())
 }
 
 // Ranges are one element from overlap
-func Adjacent[A ip.Address[A]](r0, r1 Range[A]) bool {
+func Adjacent[A ip.Address[A]](r0, r1 AddressRange[A]) bool {
 	return lastNextToFirst(r0.Last(), r1.First()) || lastNextToFirst(r1.Last(), r0.First())
 }
 
@@ -24,19 +24,19 @@ func lastNextToFirst[A ip.Address[A]](last, first A) bool {
 }
 
 // Ranges either intersect or are adjacent
-func Contiguous[A ip.Address[A]](r0, r1 Range[A]) bool {
+func Contiguous[A ip.Address[A]](r0, r1 AddressRange[A]) bool {
 	return Intersect(r0, r1) || Adjacent(r0, r1)
 }
 
 // Joins ranges using least and greatest elements.
 // Ranges do not have to be contiguous.
-func Join[A ip.Address[A]](r0, r1 Range[A]) Range[A] {
+func Join[A ip.Address[A]](r0, r1 AddressRange[A]) AddressRange[A] {
 	first := compare.Min(r0.First(), r1.First())
 	last := compare.Max(r0.Last(), r1.Last())
 	if compare.Eq(r0.First(), first) && compare.Eq(r0.Last(), last) {
 		return r0
 	}
-	if compare.Eq(r0.First(), first) && compare.Eq(r1.Last(), last) {
+	if compare.Eq(r1.First(), first) && compare.Eq(r1.Last(), last) {
 		return r1
 	}
 	return NewRange(first, last)

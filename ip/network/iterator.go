@@ -46,7 +46,7 @@ func addressIterator[A ip.Address[A]](first, last A) Iterator[A] {
 	}
 }
 
-func ranges2AddressIterator[A ip.Address[A]](slice []Range[A]) Iterator[A] {
+func ranges2AddressIterator[A ip.Address[A]](slice []AddressRange[A]) Iterator[A] {
 	ranges := sliceIterator(slice)
 	rok, rnge := ranges()
 	addresses := rnge.Addresses()

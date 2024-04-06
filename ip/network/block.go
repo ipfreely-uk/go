@@ -42,8 +42,8 @@ func (a *block[A]) Addresses() Iterator[A] {
 	return addressIterator(a.first, a.last)
 }
 
-func (a *block[A]) Ranges() Iterator[Range[A]] {
-	slice := []Range[A]{a}
+func (a *block[A]) Ranges() Iterator[AddressRange[A]] {
+	slice := []AddressRange[A]{a}
 	return sliceIterator(slice)
 }
 

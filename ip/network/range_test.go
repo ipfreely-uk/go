@@ -69,7 +69,7 @@ func TestRange_Ranges(t *testing.T) {
 	actual := net.Ranges()
 
 	var count = 0
-	var last network.Range[ip.Address6]
+	var last network.AddressRange[ip.Address6]
 	for ok, addr := actual(); ok; ok, addr = actual() {
 		last = addr
 		count++

@@ -8,7 +8,7 @@ import (
 )
 
 type addressset[A ip.Address[A]] struct {
-	ranges []Range[A]
+	ranges []AddressRange[A]
 }
 
 func (s *addressset[A]) Contains(address A) bool {
@@ -32,11 +32,11 @@ func (s *addressset[A]) Addresses() Iterator[A] {
 	return ranges2AddressIterator(s.ranges)
 }
 
-func (s *addressset[A]) Ranges() Iterator[Range[A]] {
+func (s *addressset[A]) Ranges() Iterator[AddressRange[A]] {
 	return sliceIterator(s.ranges)
 }
 
-func NewSet[A ip.Address[A]](spans ...Range[A]) AddressSet[A] {
+func NewSet[A ip.Address[A]](spans ...AddressRange[A]) AddressSet[A] {
 	if len(spans) == 0 {
 		return emptySet[A]()
 	}
@@ -49,8 +49,8 @@ func NewSet[A ip.Address[A]](spans ...Range[A]) AddressSet[A] {
 	}
 }
 
-func rationalize[A ip.Address[A]](spans []Range[A]) []Range[A] {
-	set := map[Range[A]]bool{}
+func rationalize[A ip.Address[A]](spans []AddressRange[A]) []AddressRange[A] {
+	set := map[AddressRange[A]]bool{}
 	for _, r := range spans {
 		set[r] = true
 	}
@@ -64,7 +64,7 @@ func rationalize[A ip.Address[A]](spans []Range[A]) []Range[A] {
 		}
 		set[a] = true
 	}
-	result := []Range[A]{}
+	result := []AddressRange[A]{}
 	for r := range set {
 		result = append(result, r)
 	}
