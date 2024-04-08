@@ -9,7 +9,10 @@ type Address4 struct {
 	value uint32
 }
 
+func (a Address4) sealed() {}
+
 func (a Address4) Family() Family[Address4] {
+	a.sealed()
 	return V4()
 }
 

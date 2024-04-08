@@ -10,7 +10,10 @@ type Address6 struct {
 	low  uint64
 }
 
+func (a Address6) sealed() {}
+
 func (a Address6) Family() Family[Address6] {
+	a.sealed()
 	return V6()
 }
 

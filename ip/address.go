@@ -12,6 +12,8 @@ const (
 
 // Generic IP address type
 type Address[A any] interface {
+	// Structs that conform to this interface must be produced by this package
+	sealed()
 	// IP address family
 	Family() Family[A]
 	// Address as bytes

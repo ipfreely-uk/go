@@ -6,7 +6,10 @@ type family4 struct{}
 
 var f4 = family4{}
 
+func (f *family4) sealed() {}
+
 func (f *family4) Version() Version {
+	f.sealed()
 	return Version4
 }
 
