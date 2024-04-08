@@ -1,2 +1,2 @@
-// Core functions for working with subnets
+// Functions for working with subnets
 package subnet

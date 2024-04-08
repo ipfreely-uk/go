@@ -47,6 +47,7 @@ func (a *block[A]) Ranges() Iterator[AddressRange[A]] {
 	return sliceIterator(slice)
 }
 
+// Creates [Block] from given operands
 func NewBlock[A ip.Address[A]](network A, mask int) Block[A] {
 	fam := network.Family()
 	m := subnet.Mask(fam, mask)

@@ -4,7 +4,7 @@ import (
 	"github.com/ipfreely-uk/go/ip"
 )
 
-func Example_ip_V6() {
+func ExampleV6() {
 	bytes := make([]byte, 16)
 	bytes[0] = 0xFE
 	bytes[1] = 0x80

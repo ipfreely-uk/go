@@ -5,6 +5,7 @@ import (
 	"net/netip"
 )
 
+// Immutable 128bit unsigned integer IP [Address] representation
 type Address6 struct {
 	high uint64
 	low  uint64

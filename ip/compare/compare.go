@@ -1,6 +1,6 @@
 package compare
 
-// Generic compare interface
+// Generic comparison interface
 type Comparable[C any] interface {
 	// -1 less; 0 equal; 1 more
 	Compare(C) int
@@ -12,7 +12,7 @@ func Eq[C Comparable[C]](a0, a1 C) bool {
 }
 
 // Returns greatest element
-func Max[C Comparable[C]](this C, that C) C {
+func Max[C Comparable[C]](this, that C) C {
 	if this.Compare(that) >= 0 {
 		return this
 	}
@@ -20,7 +20,7 @@ func Max[C Comparable[C]](this C, that C) C {
 }
 
 // Returns least element
-func Min[C Comparable[C]](this C, that C) C {
+func Min[C Comparable[C]](this, that C) C {
 	if this.Compare(that) <= 0 {
 		return this
 	}

@@ -12,10 +12,12 @@ import (
 	"github.com/ipfreely-uk/go/ip/subnet"
 )
 
+// Returns string form in CIDR notation
 func Notation[A ip.Address[A]](b network.Block[A]) string {
 	return fmt.Sprintf("%s/%d", b.First(), b.MaskSize())
 }
 
+// Parses CIDR notation
 func Parse[A ip.Address[A]](f ip.Family[A], notation string) (network.Block[A], error) {
 	split := strings.LastIndex(notation, "/")
 	if split < 0 {
@@ -45,6 +47,9 @@ func Parse[A ip.Address[A]](f ip.Family[A], notation string) (network.Block[A], 
 	return network.NewBlock(address, mask), nil
 }
 
+// Parses CIDR notation where IP address family is unknown.
+// Returns error if operand is not valid CIDR notation.
+// Returns [network.Block] when oprand is valid.
 func ParseUnknown(notation string) (any, error) {
 	b, err := Parse(ip.V4(), notation)
 	if err == nil {
@@ -52,3 +57,5 @@ func ParseUnknown(notation string) (any, error) {
 	}
 	return Parse(ip.V6(), notation)
 }
+
+// TODO: use heuristics to detect address types for efficiency

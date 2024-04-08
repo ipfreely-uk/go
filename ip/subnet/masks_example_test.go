@@ -7,7 +7,7 @@ import (
 	"github.com/ipfreely-uk/go/ip/subnet"
 )
 
-func Example_subnet_Mask() {
+func ExampleMask() {
 	network, _ := ip.V4().FromBytes(192, 168, 0, 0)
 	mask := subnet.Mask(ip.V4(), 24)
 
@@ -16,7 +16,7 @@ func Example_subnet_Mask() {
 	println("Mask: %s", mask.String())
 }
 
-func Example_subnet_AddressCount() {
+func ExampleAddressCount() {
 	family4 := ip.V4()
 	for mask := 0; mask <= family4.Width(); mask++ {
 		count := subnet.AddressCount(family4, mask)

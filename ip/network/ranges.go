@@ -23,7 +23,7 @@ func lastNextToFirst[A ip.Address[A]](last, first A) bool {
 	return ip.Prev(first).Compare(last) == 0
 }
 
-// Ranges either intersect or are adjacent
+// Ranges either [Intersect] or are [Adjacent]
 func Contiguous[A ip.Address[A]](r0, r1 AddressRange[A]) bool {
 	return Intersect(r0, r1) || Adjacent(r0, r1)
 }

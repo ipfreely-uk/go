@@ -38,6 +38,7 @@ func (f *family6) FromInt(i uint32) Address6 {
 	}
 }
 
+// IPv6 family of addresses
 func V6() Family[Address6] {
 	return &f6
 }

@@ -36,16 +36,19 @@ func (s *addressset[A]) Ranges() Iterator[AddressRange[A]] {
 	return sliceIterator(s.ranges)
 }
 
-func NewSet[A ip.Address[A]](spans ...AddressRange[A]) AddressSet[A] {
-	if len(spans) == 0 {
+// Creates [AddressSet] from given IP address ranges.
+// Ranges may overlap.
+// If set reduces to contiguous range returns type that conforms to [Range].
+func NewSet[A ip.Address[A]](ranges ...AddressRange[A]) AddressSet[A] {
+	if len(ranges) == 0 {
 		return emptySet[A]()
 	}
-	spans = rationalize(spans)
-	if len(spans) == 1 {
-		return spans[0]
+	ranges = rationalize(ranges)
+	if len(ranges) == 1 {
+		return ranges[0]
 	}
 	return &addressset[A]{
-		spans,
+		ranges,
 	}
 }
 

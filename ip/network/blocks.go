@@ -9,7 +9,7 @@ import (
 )
 
 // TODO: can replace with constant
-var LOG_2 = math.Log(2.0)
+var log_2 = math.Log(2.0)
 
 // Subdivides range into valid CIDR blocks
 func Blocks[A ip.Address[A]](r AddressRange[A]) Iterator[Block[A]] {
@@ -36,7 +36,7 @@ func blockIterator[A ip.Address[A]](start, end A) Iterator[Block[A]] {
 		}
 		maxSize := width - current.TrailingZeros()
 		size := ip.Next(end.Subtract(current))
-		x := log(size) / LOG_2
+		x := log(size) / log_2
 		maxDiff := int(width - int(math.Floor(x)))
 		mask := max(maxSize, maxDiff)
 		block := NewBlock(current, mask)
@@ -69,7 +69,7 @@ func log[A ip.Address[A]](address A) float64 {
 	double := toFloat64(a)
 	res := math.Log(double)
 	if blex > 0 {
-		res = res + float64(blex)*LOG_2
+		res = res + float64(blex)*log_2
 	}
 	return res
 }

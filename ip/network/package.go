@@ -1,2 +1,2 @@
-// Network ranges.
+// Network ranges and sets.
 package network

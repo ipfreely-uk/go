@@ -10,7 +10,7 @@ const (
 	Version6 Version = 6
 )
 
-// Generic IP address type
+// Generic IP address type.
 type Address[A any] interface {
 	// Structs that conform to this interface must be produced by this package
 	sealed()

@@ -33,6 +33,7 @@ func (f *family4) FromInt(i uint32) Address4 {
 	}
 }
 
+// IPv4 family of addresses
 func V4() Family[Address4] {
 	return &f4
 }
