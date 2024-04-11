@@ -7,128 +7,218 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestParse4(t *testing.T) {
-	type test struct {
-		expected []byte
-		input    string
-	}
-
-	tests := []test{
-		{
-			[]byte{127, 0, 0, 1},
-			"127.0.0.1",
-		},
-		{
-			[]byte{255, 255, 255, 255},
-			"255.255.255.255",
-		},
-		{
-			[]byte{0, 0, 0, 0},
-			"0.0.0.0",
-		},
-	}
-
-	for _, candidate := range tests {
-		expected, x := ip.V4().FromBytes(candidate.expected...)
-		assert.Nil(t, x)
-		actual, err := ip.Parse(ip.V4(), candidate.input)
-		assert.Nil(t, err)
-		assert.Equal(t, expected, actual)
+func TestParse(t *testing.T) {
+	for _, c := range parsingTestSet() {
+		if c.v == ip.Version4 {
+			actual, err := ip.Parse(ip.V4(), c.s)
+			if err != nil {
+				assert.False(t, c.ok)
+				continue
+			}
+			expected := ip.V4().MustFromBytes(c.b...)
+			assert.Equal(t, expected, actual)
+		} else {
+			actual, err := ip.Parse(ip.V6(), c.s)
+			if err != nil {
+				assert.False(t, c.ok)
+				continue
+			}
+			expected := ip.V6().MustFromBytes(c.b...)
+			assert.Equal(t, expected, actual)
+		}
 	}
 }
 
-func TestParseBad4(t *testing.T) {
-	tests := []string{
-		"127.0.0.1a",
-		"127.0.0",
-		"127.0..0.1",
-		"::",
-	}
-
-	for _, candidate := range tests {
-		_, err := ip.Parse(ip.V4(), candidate)
-		assert.NotNil(t, err)
-	}
-}
-
-func TestParse6(t *testing.T) {
-	type test struct {
-		expected []byte
-		input    string
-	}
-
-	tests := []test{
-		{
-			[]byte{0xFE, 0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-			"fe80::1",
-		},
-		{
-			[]byte{0xFE, 0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-			"FE80::1",
-		},
-		{
-			[]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			"::",
-		},
-	}
-
-	for _, c := range tests {
-		expected, x := ip.V6().FromBytes(c.expected...)
-		assert.Nil(t, x)
-		actual, err := ip.Parse(ip.V6(), c.input)
-		assert.Nil(t, err)
-		assert.Equal(t, expected, actual)
-	}
-}
-
-func TestParseBad6(t *testing.T) {
-	tests := []string{
-		"127.0.0.1a",
-		":",
-		":::",
-		"fe800::",
-		"foobar",
-	}
-
-	for _, candidate := range tests {
-		_, err := ip.Parse(ip.V4(), candidate)
-		assert.NotNil(t, err)
+func TestMustParse(t *testing.T) {
+	for _, c := range parsingTestSet() {
+		if c.v == ip.Version4 {
+			if c.ok {
+				actual := ip.MustParse(ip.V4(), c.s)
+				expected := ip.V4().MustFromBytes(c.b...)
+				assert.Equal(t, expected, actual)
+			} else {
+				assert.Panics(t, func() {
+					ip.MustParse(ip.V4(), c.s)
+				})
+			}
+		} else {
+			if c.ok {
+				actual := ip.MustParse(ip.V6(), c.s)
+				expected := ip.V6().MustFromBytes(c.b...)
+				assert.Equal(t, expected, actual)
+			} else {
+				assert.Panics(t, func() {
+					ip.MustParse(ip.V6(), c.s)
+				})
+			}
+		}
 	}
 }
 
 func TestParseUnknown(t *testing.T) {
-	type test struct {
-		expected []byte
-		input    string
-		err      bool
-	}
+	for _, c := range parsingTestSet() {
+		actual, err := ip.ParseUnknown(c.s)
+		if err != nil {
+			assert.False(t, c.ok)
+			continue
+		}
 
-	tests := []test{
-		{
-			expected: []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			input:    "::",
-			err:      false,
-		},
-		{
-			expected: []byte{0, 0, 0, 0},
-			input:    "foo",
-			err:      true,
-		},
-		{
-			expected: []byte{0, 0, 0, 0},
-			input:    "0.0.0.0",
-			err:      false,
-		},
-	}
-
-	for _, c := range tests {
-		expected, _ := ip.FromBytes(c.expected...)
-		actual, err := ip.ParseUnknown(c.input)
-		if c.err {
-			assert.NotNil(t, err)
+		var expected any
+		if c.v == ip.Version4 {
+			expected = ip.V4().MustFromBytes(c.b...)
 		} else {
-			assert.Nil(t, err)
+			expected = ip.V6().MustFromBytes(c.b...)
+		}
+		assert.Equal(t, expected, actual)
+	}
+}
+
+func TestMustParseUnknown(t *testing.T) {
+	for _, c := range parsingTestSet() {
+		if c.ok {
+			actual := ip.MustParseUnknown(c.s)
+			var expected any
+			if c.v == ip.Version4 {
+				expected = ip.V4().MustFromBytes(c.b...)
+			} else {
+				expected = ip.V6().MustFromBytes(c.b...)
+			}
+			assert.Equal(t, expected, actual)
+		} else {
+			assert.Panics(t, func() { ip.MustParseUnknown(c.s) })
+		}
+	}
+}
+
+func TestMustFromBytes(t *testing.T) {
+	for _, c := range parsingTestSet() {
+		if c.ok {
+			actual := ip.MustFromBytes(c.b...)
+			var expected any
+			if c.v == ip.Version4 {
+				expected = ip.V4().MustFromBytes(c.b...)
+			} else {
+				expected = ip.V6().MustFromBytes(c.b...)
+			}
 			assert.Equal(t, expected, actual)
 		}
+	}
+
+	assert.Panics(t, func() { ip.MustFromBytes() })
+}
+
+func TestFromBytes(t *testing.T) {
+	for _, c := range parsingTestSet() {
+		actual, err := ip.FromBytes(c.b...)
+		if err != nil {
+			assert.False(t, c.ok)
+			continue
+		}
+		if !c.ok {
+			continue
+		}
+		var expected any
+		if c.v == ip.Version4 {
+			expected = ip.V4().MustFromBytes(c.b...)
+		} else {
+			expected = ip.V6().MustFromBytes(c.b...)
+		}
+		assert.Equal(t, expected, actual)
+	}
+}
+
+type parseTestCase struct {
+	b  []byte
+	s  string
+	v  ip.Version
+	ok bool
+}
+
+func parsingTestSet() []parseTestCase {
+	return []parseTestCase{
+		{
+			b:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			s:  "::",
+			v:  ip.Version6,
+			ok: true,
+		},
+		{
+			b:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+			s:  "::1",
+			v:  ip.Version6,
+			ok: true,
+		},
+		{
+			b:  []byte{0xFE, 0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+			s:  "fe80::1",
+			v:  ip.Version6,
+			ok: true,
+		},
+		{
+			b:  []byte{0xFF, 0xFF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xCA, 0xFE, 0xBA, 0xBE},
+			s:  "FFFF::Cafe:Babe",
+			v:  ip.Version6,
+			ok: true,
+		},
+		{
+			b:  []byte{0, 0, 0, 0},
+			s:  "0:0:0:0",
+			v:  ip.Version6,
+			ok: false,
+		},
+		{
+			b:  []byte{},
+			s:  ":",
+			v:  ip.Version6,
+			ok: false,
+		},
+		{
+			b:  []byte{},
+			s:  "10000::",
+			v:  ip.Version6,
+			ok: false,
+		},
+		{
+			b:  []byte{0, 0, 0},
+			s:  ":::",
+			v:  ip.Version6,
+			ok: false,
+		},
+		{
+			b:  []byte{0, 0, 0, 0},
+			s:  "0.0.0.0",
+			v:  ip.Version4,
+			ok: true,
+		},
+		{
+			b:  []byte{0, 0, 0, 1},
+			s:  "0.0.0.1",
+			v:  ip.Version4,
+			ok: true,
+		},
+		{
+			b:  []byte{255, 255, 255, 255},
+			s:  "255.255.255.255",
+			v:  ip.Version4,
+			ok: true,
+		},
+		{
+			b:  []byte{255, 255, 255},
+			s:  "255.255.255.",
+			v:  ip.Version4,
+			ok: false,
+		},
+		{
+			b:  []byte{255, 255, 255},
+			s:  "0255.255.255.255",
+			v:  ip.Version4,
+			ok: false,
+		},
+		{
+			b:  []byte{255, 255, 255},
+			s:  "256.255.255.255",
+			v:  ip.Version4,
+			ok: false,
+		},
 	}
 }

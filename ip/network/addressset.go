@@ -3,15 +3,16 @@ package network
 import (
 	"math/big"
 	"sort"
+	"strings"
 
 	"github.com/ipfreely-uk/go/ip"
 )
 
-type addressset[A ip.Address[A]] struct {
+type addressSet[A ip.Address[A]] struct {
 	ranges []AddressRange[A]
 }
 
-func (s *addressset[A]) Contains(address A) bool {
+func (s *addressSet[A]) Contains(address A) bool {
 	for _, r := range s.ranges {
 		if r.Contains(address) {
 			return true
@@ -20,25 +21,40 @@ func (s *addressset[A]) Contains(address A) bool {
 	return false
 }
 
-func (s *addressset[A]) Size() *big.Int {
+func (s *addressSet[A]) Size() *big.Int {
 	sum := big.NewInt(0)
 	for _, r := range s.ranges {
 		sum = sum.Add(sum, r.Size())
+		println(sum.String())
 	}
 	return sum
 }
 
-func (s *addressset[A]) Addresses() Iterator[A] {
+func (s *addressSet[A]) Addresses() Iterator[A] {
 	return ranges2AddressIterator(s.ranges)
 }
 
-func (s *addressset[A]) Ranges() Iterator[AddressRange[A]] {
+func (s *addressSet[A]) Ranges() Iterator[AddressRange[A]] {
 	return sliceIterator(s.ranges)
+}
+
+func (s *addressSet[A]) String() string {
+	buf := strings.Builder{}
+	buf.WriteString("{")
+	delim := ""
+	next := s.Ranges()
+	for ok, r := next(); ok; ok, r = next() {
+		buf.WriteString(delim)
+		delim = ", "
+		buf.WriteString(r.String())
+	}
+	buf.WriteString("}")
+	return buf.String()
 }
 
 // Creates [AddressSet] from given IP address ranges.
 // Ranges may overlap.
-// If set reduces to contiguous range returns type that conforms to [Range].
+// If set reduces to contiguous range returns type that conforms to [AddressRange].
 func NewSet[A ip.Address[A]](ranges ...AddressRange[A]) AddressSet[A] {
 	if len(ranges) == 0 {
 		return emptySet[A]()
@@ -47,7 +63,7 @@ func NewSet[A ip.Address[A]](ranges ...AddressRange[A]) AddressSet[A] {
 	if len(ranges) == 1 {
 		return ranges[0]
 	}
-	return &addressset[A]{
+	return &addressSet[A]{
 		ranges,
 	}
 }

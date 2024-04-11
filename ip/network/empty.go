@@ -24,6 +24,10 @@ func (e *empty[A]) Ranges() Iterator[AddressRange[A]] {
 	return emptyIterator[AddressRange[A]]()
 }
 
+func (e *empty[A]) String() string {
+	return "{}"
+}
+
 func emptySet[A ip.Address[A]]() AddressSet[A] {
 	return &empty[A]{}
 }

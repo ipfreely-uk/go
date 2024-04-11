@@ -5,12 +5,13 @@ import (
 	"math/big"
 )
 
-// Converts any address to big integer
+// Converts any [Address] to big integer
 func ToBigInt[A Address[A]](address A) *big.Int {
 	return big.NewInt(0).SetBytes(address.Bytes())
 }
 
-// Converts big integer to address
+// Converts big integer to [Address].
+// Returns error if value out of range for address family.
 func FromBigInt[A Address[A]](family Family[A], i *big.Int) (A, error) {
 	b := i.Bytes()
 	maxlen := family.Width() / 8

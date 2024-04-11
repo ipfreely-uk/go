@@ -16,6 +16,8 @@ type AddressSet[A ip.Address[A]] interface {
 	Addresses() Iterator[A]
 	// Non-contiguous ranges from least to greatest
 	Ranges() Iterator[AddressRange[A]]
+	// Informational only
+	String() string
 }
 
 // Immutable contiguous range of one or more IP addresses.
@@ -32,4 +34,6 @@ type Block[A ip.Address[A]] interface {
 	AddressRange[A]
 	// Mask size in bits
 	MaskSize() int
+	// Mask as [ip.Address]
+	Mask() A
 }

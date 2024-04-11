@@ -14,6 +14,10 @@ func TestNewBlock(t *testing.T) {
 	address, _ := ip.V4().FromBytes(192, 168, 0, 0)
 	subnet := network.NewBlock(address, 24)
 	assert.NotNil(t, subnet)
+
+	assert.Panics(t, func() {
+		network.NewBlock(address, 0)
+	})
 }
 
 func TestBlock_MaskSize(t *testing.T) {
@@ -61,4 +65,11 @@ func TestBlock_Ranges(t *testing.T) {
 		count = count.Add(count, one)
 	}
 	assert.Equal(t, one, count)
+}
+
+func TestBlock_Mask(t *testing.T) {
+	address, _ := ip.V4().FromBytes(192, 168, 0, 0)
+	actual := network.NewBlock(address, 24).Mask()
+	expected := subnet.Mask(ip.V4(), 24)
+	assert.Equal(t, expected, actual)
 }

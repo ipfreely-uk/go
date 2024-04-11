@@ -14,6 +14,15 @@ func Parse[A Address[A]](family Family[A], candidate string) (A, error) {
 	return family.FromBytes(parsed.AsSlice()...)
 }
 
+// As [Parse] but panics on error
+func MustParse[A Address[A]](family Family[A], candidate string) A {
+	a, err := Parse(family, candidate)
+	if err != nil {
+		panic(err)
+	}
+	return a
+}
+
 // Parse IP address string from unknown family
 func ParseUnknown(candidate string) (any, error) {
 	parsed, err := netip.ParseAddr(candidate)
@@ -21,6 +30,15 @@ func ParseUnknown(candidate string) (any, error) {
 		return nil, err
 	}
 	return FromBytes(parsed.AsSlice()...)
+}
+
+// As [ParseUnknown] but panics on error
+func MustParseUnknown(candidate string) any {
+	a, err := ParseUnknown(candidate)
+	if err != nil {
+		panic(err)
+	}
+	return a
 }
 
 // Parse IP address bytes from unknown family
@@ -33,4 +51,13 @@ func FromBytes(address ...byte) (any, error) {
 		return V6().FromBytes(address...)
 	}
 	return nil, errors.New("slice must be 4 or 16 bytes")
+}
+
+// As [FromBytes] but panics on error
+func MustFromBytes(address ...byte) any {
+	a, err := FromBytes(address...)
+	if err != nil {
+		panic(err)
+	}
+	return a
 }

@@ -11,7 +11,7 @@ import (
 // TODO: can replace with constant
 var log_2 = math.Log(2.0)
 
-// Subdivides range into valid CIDR blocks
+// Subdivides [Range] into valid CIDR blocks
 func Blocks[A ip.Address[A]](r AddressRange[A]) Iterator[Block[A]] {
 	first := r.First()
 	last := r.Last()
@@ -25,7 +25,7 @@ func Blocks[A ip.Address[A]](r AddressRange[A]) Iterator[Block[A]] {
 }
 
 func blockIterator[A ip.Address[A]](start, end A) Iterator[Block[A]] {
-	// implementation breaks on entire internet but guarded elsewhere
+	// implementation breaks on entire internet but guarded above
 	current := start
 	done := false
 	width := start.Family().Width()

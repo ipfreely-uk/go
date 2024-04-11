@@ -40,8 +40,12 @@ func TestFromBytes6(t *testing.T) {
 	assert.Equal(t, byte(0xFF), bs[14])
 	assert.Equal(t, byte(0xEE), bs[15])
 
+	assert.Equal(t, actual, ip.V6().MustFromBytes(actual.Bytes()...))
+
 	_, err = ip.V6().FromBytes()
 	assert.NotNil(t, err)
+
+	assert.Panics(t, func() { ip.V6().MustFromBytes() })
 }
 
 func TestFromInvalidBytes6(t *testing.T) {

@@ -5,6 +5,6 @@ import (
 )
 
 func ExampleV4() {
-	address, _ := ip.V4().FromBytes(192, 168, 0, 1)
+	address, _ := ip.V4().FromBytes(203, 0, 113, 1)
 	println(address.String())
 }

@@ -5,9 +5,13 @@ import (
 )
 
 func ExampleV6() {
-	bytes := make([]byte, 16)
-	bytes[0] = 0xFE
-	bytes[1] = 0x80
-	address, _ := ip.V6().FromBytes(bytes...)
+	family := ip.V6()
+	bytes := make([]byte, family.Width()/8)
+	bytes[0] = 0x20
+	bytes[1] = 0x01
+	bytes[2] = 0xDB
+	bytes[3] = 0x80
+	bytes[15] = 1
+	address, _ := family.FromBytes(bytes...)
 	println(address.String())
 }

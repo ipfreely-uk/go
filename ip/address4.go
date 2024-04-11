@@ -6,18 +6,20 @@ import (
 )
 
 // Immutable 32bit unsigned integer IP [Address] representation
-type Address4 struct {
+type A4 struct {
 	value uint32
 }
 
-func (a Address4) sealed() {}
+func (a A4) sealed() {}
 
-func (a Address4) Family() Family[Address4] {
+// Returns [V4]
+func (a A4) Family() Family[A4] {
 	a.sealed()
 	return V4()
 }
 
-func (a Address4) Bytes() []byte {
+// Returns 4 byte slice
+func (a A4) Bytes() []byte {
 	return []byte{
 		byte(a.value >> 24),
 		byte(a.value >> 16),
@@ -26,61 +28,70 @@ func (a Address4) Bytes() []byte {
 	}
 }
 
-func (a Address4) Not() Address4 {
-	return Address4{
+// Bitwise NOT
+func (a A4) Not() A4 {
+	return A4{
 		^a.value,
 	}
 }
 
-func (a Address4) Add(addend Address4) Address4 {
-	return Address4{
+// Addition with overflow
+func (a A4) Add(addend A4) A4 {
+	return A4{
 		a.value + addend.value,
 	}
 }
 
-func (a Address4) Subtract(addend Address4) Address4 {
-	return Address4{
+// Subtraction with underflow
+func (a A4) Subtract(addend A4) A4 {
+	return A4{
 		a.value - addend.value,
 	}
 }
 
-func (a Address4) Multiply(multiplicand Address4) Address4 {
-	return Address4{
+// Multiplication with overflow
+func (a A4) Multiply(multiplicand A4) A4 {
+	return A4{
 		a.value * multiplicand.value,
 	}
 }
 
-func (a Address4) Divide(denominator Address4) Address4 {
-	return Address4{
+// Division
+func (a A4) Divide(denominator A4) A4 {
+	return A4{
 		a.value / denominator.value,
 	}
 }
 
-func (a Address4) Mod(denominator Address4) Address4 {
-	return Address4{
+// Modulus
+func (a A4) Mod(denominator A4) A4 {
+	return A4{
 		a.value % denominator.value,
 	}
 }
 
-func (a Address4) And(operand Address4) Address4 {
-	return Address4{
+// Bitwise AND
+func (a A4) And(operand A4) A4 {
+	return A4{
 		a.value & operand.value,
 	}
 }
 
-func (a Address4) Or(operand Address4) Address4 {
-	return Address4{
+// Bitwise OR
+func (a A4) Or(operand A4) A4 {
+	return A4{
 		a.value | operand.value,
 	}
 }
 
-func (a Address4) Xor(operand Address4) Address4 {
-	return Address4{
+// Bitwise XOR
+func (a A4) Xor(operand A4) A4 {
+	return A4{
 		a.value ^ operand.value,
 	}
 }
 
-func (a Address4) Shift(bits int) Address4 {
+func (a A4) Shift(bits int) A4 {
 	bits = bits % a.Family().Width()
 	var v uint32
 	if bits > 0 {
@@ -88,12 +99,12 @@ func (a Address4) Shift(bits int) Address4 {
 	} else {
 		v = a.value << (-1 * bits)
 	}
-	return Address4{
+	return A4{
 		v,
 	}
 }
 
-func (a Address4) Compare(other Address4) int {
+func (a A4) Compare(other A4) int {
 	if a.value < other.value {
 		return -1
 	}
@@ -103,15 +114,15 @@ func (a Address4) Compare(other Address4) int {
 	return 0
 }
 
-func (a Address4) LeadingZeros() int {
+func (a A4) LeadingZeros() int {
 	return bits.LeadingZeros32(a.value)
 }
 
-func (a Address4) TrailingZeros() int {
+func (a A4) TrailingZeros() int {
 	return bits.TrailingZeros32(a.value)
 }
 
-func (a Address4) String() string {
+func (a A4) String() string {
 	b := a.Bytes()
 	addr, _ := netip.AddrFromSlice(b)
 	return addr.String()

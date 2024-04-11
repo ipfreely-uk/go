@@ -135,4 +135,22 @@ func TestBlocks(t *testing.T) {
 		ok, _ = nextBlock()
 		assert.False(t, ok)
 	}
+	{
+		family := ip.V4()
+		expectedFirst0, _ := ip.Parse(family, "127.0.0.1")
+		mask := subnet.Mask(family, 32)
+		inverse := mask.Not()
+		expectedLast0 := inverse.Or(expectedFirst0)
+		input := network.NewRange(expectedFirst0, expectedLast0)
+
+		nextBlock := network.Blocks(input)
+
+		ok, actual := nextBlock()
+		assert.True(t, ok)
+		assert.Equal(t, expectedFirst0, actual.First())
+		assert.Equal(t, expectedLast0, actual.Last())
+
+		ok, _ = nextBlock()
+		assert.False(t, ok)
+	}
 }

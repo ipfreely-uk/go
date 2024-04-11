@@ -18,36 +18,44 @@ func (b *block[A]) MaskSize() int {
 	return subnet.MaskSize(b.first, b.last)
 }
 
-func (a *block[A]) Contains(address A) bool {
-	return a.first.Compare(address) <= 0 && a.last.Compare(address) >= 0
+func (b *block[A]) Contains(address A) bool {
+	return b.first.Compare(address) <= 0 && b.last.Compare(address) >= 0
 }
 
-func (a *block[A]) Size() *big.Int {
-	first := ip.ToBigInt(a.first)
-	last := ip.ToBigInt(a.last)
+func (b *block[A]) Size() *big.Int {
+	diff := b.last.Subtract(b.first)
+	bi := ip.ToBigInt(diff)
 	one := big.NewInt(1)
-	sub := last.Sub(last, first)
-	return sub.Add(sub, one)
+	return bi.Add(bi, one)
 }
 
-func (a *block[A]) First() A {
-	return a.first
+func (b *block[A]) First() A {
+	return b.first
 }
 
-func (a *block[A]) Last() A {
-	return a.last
+func (b *block[A]) Last() A {
+	return b.last
 }
 
-func (a *block[A]) Addresses() Iterator[A] {
-	return addressIterator(a.first, a.last)
+func (b *block[A]) Addresses() Iterator[A] {
+	return addressIterator(b.first, b.last)
 }
 
-func (a *block[A]) Ranges() Iterator[AddressRange[A]] {
-	slice := []AddressRange[A]{a}
+func (b *block[A]) Ranges() Iterator[AddressRange[A]] {
+	slice := []AddressRange[A]{b}
 	return sliceIterator(slice)
 }
 
-// Creates [Block] from given operands
+func (b *block[A]) String() string {
+	return fmt.Sprintf("%s/%d", b.first.String(), b.MaskSize())
+}
+
+func (b *block[A]) Mask() A {
+	return subnet.Mask(b.first.Family(), b.MaskSize())
+}
+
+// Creates [Block].
+// Panics if mask does not cover network address or is out of range for address family.
 func NewBlock[A ip.Address[A]](network A, mask int) Block[A] {
 	fam := network.Family()
 	m := subnet.Mask(fam, mask)

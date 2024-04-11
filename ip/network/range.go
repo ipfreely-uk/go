@@ -1,6 +1,7 @@
 package network
 
 import (
+	"fmt"
 	"math/big"
 
 	"github.com/ipfreely-uk/go/ip"
@@ -40,6 +41,10 @@ func (a *addressRange[A]) Addresses() Iterator[A] {
 func (a *addressRange[A]) Ranges() Iterator[AddressRange[A]] {
 	slice := []AddressRange[A]{a}
 	return sliceIterator(slice)
+}
+
+func (e *addressRange[A]) String() string {
+	return fmt.Sprintf("%s-%s", e.first.String(), e.last.String())
 }
 
 // Creates new AddressRange.

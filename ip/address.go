@@ -14,7 +14,7 @@ const (
 type Address[A any] interface {
 	// Structs that conform to this interface must be produced by this package
 	sealed()
-	// IP address family
+	// IP address family - [V4] or [V6]
 	Family() Family[A]
 	// Address as bytes
 	Bytes() []byte
@@ -36,15 +36,15 @@ type Address[A any] interface {
 	Or(A) A
 	// Bitwise XOR
 	Xor(A) A
-	// Bit shift. Use negative int for left shift; use positive in for right shift.
+	// Bit shift. Use negative int for left shift; use positive int for right shift.
 	Shift(int) A
 	// Returns 1 if operand is less than this.
 	// Returns -1 if operand is more than this.
 	// Returns 0 if operand is equal.
 	Compare(A) int
-	// Similar to math/bits.LeadingZeros*
+	// Equivalent to math/bits.LeadingZeros
 	LeadingZeros() int
-	// Similar to math/bits.TrailingZeros*
+	// Equivalent to math/bits.TrailingZeros
 	TrailingZeros() int
 	// Canonical string form
 	String() string

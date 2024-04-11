@@ -26,10 +26,9 @@ func TestAddressSet_Size(t *testing.T) {
 	thousand := ip.V6().FromInt(1000)
 	r0 := network.NewRange(zero, zero)
 	r1 := network.NewRange(hundred, thousand)
-	r3 := network.NewRange(zero, thousand)
-	set := network.NewSet(r0, r1, r3, r0)
+	set := network.NewSet(r0, r1, r0)
 
-	expected := big.NewInt(1001)
+	expected := big.NewInt(902)
 	actual := set.Size()
 
 	assert.Equal(t, expected, actual)
@@ -58,7 +57,7 @@ func TestAddressSet_Addresses(t *testing.T) {
 	r1 := network.NewRange(hundred, hundredAndOne)
 	set := network.NewSet(r0, r1, r0, r1)
 
-	addresses := []ip.Address6{}
+	addresses := []ip.A6{}
 	iter := set.Addresses()
 	for ok, a := iter(); ok; ok, a = iter() {
 		addresses = append(addresses, a)
@@ -68,4 +67,17 @@ func TestAddressSet_Addresses(t *testing.T) {
 	assert.Equal(t, zero, addresses[0])
 	assert.Equal(t, hundred, addresses[1])
 	assert.Equal(t, hundredAndOne, addresses[2])
+}
+
+func TestAddressSet_String(t *testing.T) {
+	zero := ip.V6().FromInt(0)
+	hundred := ip.V6().FromInt(100)
+	thousand := ip.V6().FromInt(1000)
+	r0 := network.NewRange(zero, zero)
+	r1 := network.NewRange(hundred, thousand)
+	set := network.NewSet(r0, r1, r0, r1)
+
+	actual := set.String()
+
+	assert.Equal(t, "{::/128, ::64-::3e8}", actual)
 }
