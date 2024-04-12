@@ -29,7 +29,7 @@ _TODO_
 ## Links
 
  - [IPFreely.uk Website](https://ipfreely.uk)
- - [Source Code](https://github.com/ipfreely-uk/)
+ - [Source Code](https://github.com/ipfreely-uk/go)
  - [Documentation](https://pkg.go.dev/github.com/ipfreely-uk/go)
 
 ## Continuous Integration
