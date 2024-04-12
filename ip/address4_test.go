@@ -1,6 +1,7 @@
 package ip_test
 
 import (
+	"math/big"
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
@@ -139,4 +140,27 @@ func TestString(t *testing.T) {
 		actual := a.String()
 		assert.Equal(t, candidate.expected, actual)
 	}
+}
+
+func TestA4_Float64(t *testing.T) {
+	min := ip.MinAddress(ip.V4())
+	max := min.Not()
+	two := ip.V4().FromInt(2)
+	half := max.Divide(two)
+
+	expected, _ := big.NewInt(0).Float64()
+	actual := min.Float64()
+	assert.Equal(t, expected, actual)
+
+	expected, _ = ip.ToBigInt(max).Float64()
+	actual = max.Float64()
+	assert.Equal(t, expected, actual)
+
+	expected, _ = ip.ToBigInt(two).Float64()
+	actual = two.Float64()
+	assert.Equal(t, expected, actual)
+
+	expected, _ = ip.ToBigInt(half).Float64()
+	actual = half.Float64()
+	assert.Equal(t, expected, actual)
 }

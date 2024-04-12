@@ -1,6 +1,7 @@
 package ip_test
 
 import (
+	"math/big"
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
@@ -33,26 +34,61 @@ func TestSubtract6(t *testing.T) {
 }
 
 func TestMultiply6(t *testing.T) {
+	zero := ip.V6().FromInt(0)
+	one := ip.V6().FromInt(1)
 	two := ip.V6().FromInt(2)
-	expected := ip.V6().FromInt(4)
+	four := ip.V6().FromInt(4)
+
 	actual := two.Multiply(two)
-	assert.Equal(t, expected, actual)
+	assert.Equal(t, four, actual)
+
+	actual = four.Multiply(one)
+	assert.Equal(t, four, actual)
+
+	actual = one.Multiply(four)
+	assert.Equal(t, four, actual)
+
+	actual = four.Multiply(zero)
+	assert.Equal(t, zero, actual)
+
+	actual = zero.Multiply(four)
+	assert.Equal(t, zero, actual)
 }
 
 func TestDivide6(t *testing.T) {
+	zero := ip.V6().FromInt(0)
+	one := ip.V6().FromInt(1)
 	two := ip.V6().FromInt(2)
 	three := ip.V6().FromInt(3)
-	expected := ip.V6().FromInt(1)
+
 	actual := three.Divide(two)
-	assert.Equal(t, expected, actual)
+	assert.Equal(t, one, actual)
+
+	actual = three.Divide(one)
+	assert.Equal(t, three, actual)
+
+	actual = one.Divide(three)
+	assert.Equal(t, zero, actual)
+
+	actual = three.Divide(three)
+	assert.Equal(t, one, actual)
+
+	assert.Panics(t, func() { zero.Divide(zero) })
 }
 
 func TestMod6(t *testing.T) {
+	zero := ip.V6().FromInt(0)
+	one := ip.V6().FromInt(1)
 	two := ip.V6().FromInt(2)
 	three := ip.V6().FromInt(3)
-	expected := ip.V6().FromInt(1)
+
 	actual := three.Mod(two)
-	assert.Equal(t, expected, actual)
+	assert.Equal(t, one, actual)
+
+	actual = three.Mod(three)
+	assert.Equal(t, zero, actual)
+
+	assert.Panics(t, func() { zero.Mod(zero) })
 }
 
 func TestNot6(t *testing.T) {
@@ -159,4 +195,27 @@ func TestString6(t *testing.T) {
 		actual := a.String()
 		assert.Equal(t, candidate.expected, actual)
 	}
+}
+
+func TestA6_Float64(t *testing.T) {
+	min := ip.MinAddress(ip.V6())
+	max := min.Not()
+	two := ip.V6().FromInt(2)
+	half := max.Divide(two)
+
+	expected, _ := big.NewInt(0).Float64()
+	actual := min.Float64()
+	assert.Equal(t, expected, actual)
+
+	expected, _ = ip.ToBigInt(max).Float64()
+	actual = max.Float64()
+	assert.Equal(t, expected, actual)
+
+	expected, _ = ip.ToBigInt(two).Float64()
+	actual = two.Float64()
+	assert.Equal(t, expected, actual)
+
+	expected, _ = ip.ToBigInt(half).Float64()
+	actual = half.Float64()
+	assert.Equal(t, expected, actual)
 }
