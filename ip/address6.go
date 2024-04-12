@@ -70,7 +70,21 @@ func (a A6) Subtract(subtrahend A6) A6 {
 	}
 }
 
+func isZero(a A6) bool {
+	return a.high == 0 && a.low == 0
+}
+
+func isOne(a A6) bool {
+	return a.high == 0 && a.low == 1
+}
+
 func (a A6) Multiply(multiplicand A6) A6 {
+	if isZero(multiplicand) || isOne(a) {
+		return multiplicand
+	}
+	if isZero(a) || isOne(multiplicand) {
+		return a
+	}
 	this := ToBigInt(a)
 	that := ToBigInt(multiplicand)
 	max := ToBigInt(MaxAddress(a.Family()))
@@ -80,6 +94,16 @@ func (a A6) Multiply(multiplicand A6) A6 {
 }
 
 func (a A6) Divide(denominator A6) A6 {
+	if isZero(denominator) {
+		panic("divide by zero")
+	}
+	compared := a.Compare(denominator)
+	if compared == 0 {
+		return a.Family().FromInt(1)
+	}
+	if compared < 0 {
+		return a.Family().FromInt(0)
+	}
 	this := ToBigInt(a)
 	that := ToBigInt(denominator)
 	max := ToBigInt(MaxAddress(a.Family()))
@@ -89,6 +113,12 @@ func (a A6) Divide(denominator A6) A6 {
 }
 
 func (a A6) Mod(denominator A6) A6 {
+	if isZero(denominator) {
+		panic("divide by zero")
+	}
+	if isOne(denominator) || a == denominator {
+		return a.Family().FromInt(0)
+	}
 	this := ToBigInt(a)
 	that := ToBigInt(denominator)
 	result := this.Mod(this, that)
