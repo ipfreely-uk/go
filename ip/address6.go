@@ -176,6 +176,9 @@ func (a A6) String() string {
 }
 
 func (a A6) Float64() float64 {
+	if a.high == 0 {
+		return float64(a.low)
+	}
 	// TODO: something better
 	bi := ToBigInt(a)
 	f, _ := bi.Float64()
