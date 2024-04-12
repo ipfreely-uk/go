@@ -66,16 +66,9 @@ func log[A ip.Address[A]](address A) float64 {
 	if blex > 0 {
 		a = address.Shift(blex)
 	}
-	double := toFloat64(a)
-	res := math.Log(double)
+	res := math.Log(a.Float64())
 	if blex > 0 {
 		res = res + float64(blex)*log_2
 	}
 	return res
-}
-
-func toFloat64[A ip.Address[A]](address A) float64 {
-	bi := ip.ToBigInt(address)
-	f, _ := bi.Float64()
-	return f
 }

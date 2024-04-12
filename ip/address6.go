@@ -174,3 +174,10 @@ func (a A6) String() string {
 	addr, _ := netip.AddrFromSlice(b)
 	return addr.String()
 }
+
+func (a A6) Float64() float64 {
+	// TODO: something better
+	bi := ToBigInt(a)
+	f, _ := bi.Float64()
+	return f
+}

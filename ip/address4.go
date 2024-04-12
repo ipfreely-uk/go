@@ -127,3 +127,7 @@ func (a A4) String() string {
 	addr, _ := netip.AddrFromSlice(b)
 	return addr.String()
 }
+
+func (a A4) Float64() float64 {
+	return float64(a.value)
+}

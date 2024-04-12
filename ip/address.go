@@ -48,4 +48,6 @@ type Address[A any] interface {
 	TrailingZeros() int
 	// Canonical string form
 	String() string
+	// Approximation to float64
+	Float64() float64
 }
