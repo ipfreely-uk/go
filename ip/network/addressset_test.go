@@ -59,7 +59,7 @@ func TestAddressSet_Addresses(t *testing.T) {
 
 	addresses := []ip.A6{}
 	iter := set.Addresses()
-	for ok, a := iter(); ok; ok, a = iter() {
+	for a, exists := iter(); exists; a, exists = iter() {
 		addresses = append(addresses, a)
 	}
 

@@ -14,9 +14,9 @@ func TestEmpty(t *testing.T) {
 
 	assert.Equal(t, big.NewInt(0), empty.Size())
 	assert.False(t, empty.Contains(ip.MaxAddress(ip.V4())))
-	ok, _ := empty.Addresses()()
-	assert.False(t, ok)
-	ok, _ = empty.Ranges()()
-	assert.False(t, ok)
+	_, exists := empty.Addresses()()
+	assert.False(t, exists)
+	_, exists = empty.Ranges()()
+	assert.False(t, exists)
 	assert.Equal(t, "{}", empty.String())
 }

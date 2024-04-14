@@ -43,7 +43,7 @@ func (s *addressSet[A]) String() string {
 	buf.WriteString("{")
 	delim := ""
 	next := s.Ranges()
-	for ok, r := next(); ok; ok, r = next() {
+	for r, exists := next(); exists; r, exists = next() {
 		buf.WriteString(delim)
 		delim = ", "
 		buf.WriteString(r.String())

@@ -53,7 +53,7 @@ func TestRange_Addresses(t *testing.T) {
 
 	var count = 0
 	var last ip.A6
-	for ok, addr := actual(); ok; ok, addr = actual() {
+	for addr, exists := actual(); exists; addr, exists = actual() {
 		last = addr
 		count++
 	}
@@ -70,7 +70,7 @@ func TestRange_Ranges(t *testing.T) {
 
 	var count = 0
 	var last network.AddressRange[ip.A6]
-	for ok, addr := actual(); ok; ok, addr = actual() {
+	for addr, exists := actual(); exists; addr, exists = actual() {
 		last = addr
 		count++
 	}

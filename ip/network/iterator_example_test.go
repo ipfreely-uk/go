@@ -9,8 +9,8 @@ func ExampleIterator() {
 	first, _ := ip.V4().FromBytes(192, 168, 0, 1)
 	last, _ := ip.V4().FromBytes(192, 168, 0, 254)
 	assignable := network.NewRange(first, last)
-	addrs := assignable.Addresses()
-	for ok, address := addrs(); ok; ok, address = addrs() {
+	next := assignable.Addresses()
+	for address, exists := next(); exists; address, exists = next() {
 		println(address.String())
 	}
 }

@@ -6,19 +6,19 @@ import (
 )
 
 // Iterator function that returns whether element returned and element
-type Iterator[E any] func() (bool, E)
+type Iterator[E any] func() (E, bool)
 
 func emptyIterator[E any]() Iterator[E] {
-	return func() (bool, E) {
+	return func() (E, bool) {
 		var nothing E
-		return false, nothing
+		return nothing, false
 	}
 }
 
 func sliceIterator[E any](slice []E) Iterator[E] {
 	var index = 0
 
-	return func() (bool, E) {
+	return func() (E, bool) {
 		var present bool = false
 		var element E
 		if len(slice) != index {
@@ -26,7 +26,7 @@ func sliceIterator[E any](slice []E) Iterator[E] {
 			element = slice[index]
 			index++
 		}
-		return present, element
+		return element, present
 	}
 }
 
@@ -34,36 +34,36 @@ func addressIterator[A ip.Address[A]](first, last A) Iterator[A] {
 	var current A = first
 	var done bool = false
 
-	return func() (bool, A) {
+	return func() (A, bool) {
 		var element A
 		if done {
-			return false, element
+			return element, false
 		}
 		r := current
 		done = compare.Eq(current, last)
 		current = ip.Next(current)
-		return true, r
+		return r, true
 	}
 }
 
 func ranges2AddressIterator[A ip.Address[A]](slice []AddressRange[A]) Iterator[A] {
 	ranges := sliceIterator(slice)
-	rok, rnge := ranges()
+	rnge, rok := ranges()
 	addresses := rnge.Addresses()
 
-	return func() (bool, A) {
+	return func() (A, bool) {
 		var result A
 		for rok {
-			aok, result := addresses()
+			result, aok := addresses()
 			if aok {
-				return true, result
+				return result, true
 			}
-			rok, rnge = ranges()
+			rnge, rok = ranges()
 			if !rok {
 				break
 			}
 			addresses = rnge.Addresses()
 		}
-		return false, result
+		return result, false
 	}
 }

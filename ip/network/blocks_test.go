@@ -22,18 +22,18 @@ func TestBlocks(t *testing.T) {
 
 		nextBlock := network.Blocks(input)
 
-		ok, actual := nextBlock()
-		assert.True(t, ok)
+		actual, exists := nextBlock()
+		assert.True(t, exists)
 		assert.Equal(t, expectedFirst0, actual.First())
 		assert.Equal(t, expectedLast0, actual.Last())
 
-		ok, actual = nextBlock()
-		assert.True(t, ok)
+		actual, exists = nextBlock()
+		assert.True(t, exists)
 		assert.Equal(t, expectedFirst1, actual.First())
 		assert.Equal(t, expectedLast1, actual.Last())
 
-		ok, _ = nextBlock()
-		assert.False(t, ok)
+		_, exists = nextBlock()
+		assert.False(t, exists)
 	}
 	{
 		family := ip.V6()
@@ -47,18 +47,18 @@ func TestBlocks(t *testing.T) {
 
 		nextBlock := network.Blocks(input)
 
-		ok, actual := nextBlock()
-		assert.True(t, ok)
+		actual, exists := nextBlock()
+		assert.True(t, exists)
 		assert.Equal(t, expectedFirst0, actual.First())
 		assert.Equal(t, expectedLast0, actual.Last())
 
-		ok, actual = nextBlock()
-		assert.True(t, ok)
+		actual, exists = nextBlock()
+		assert.True(t, exists)
 		assert.Equal(t, expectedFirst1, actual.First())
 		assert.Equal(t, expectedLast1, actual.Last())
 
-		ok, _ = nextBlock()
-		assert.False(t, ok)
+		_, exists = nextBlock()
+		assert.False(t, exists)
 	}
 	{
 		family := ip.V6()
@@ -72,18 +72,18 @@ func TestBlocks(t *testing.T) {
 
 		nextBlock := network.Blocks(input)
 
-		ok, actual := nextBlock()
-		assert.True(t, ok)
+		actual, exists := nextBlock()
+		assert.True(t, exists)
 		assert.Equal(t, expectedFirst0, actual.First())
 		assert.Equal(t, expectedLast0, actual.Last())
 
-		ok, actual = nextBlock()
-		assert.True(t, ok)
+		actual, exists = nextBlock()
+		assert.True(t, exists)
 		assert.Equal(t, expectedFirst1, actual.First())
 		assert.Equal(t, expectedLast1, actual.Last())
 
-		ok, _ = nextBlock()
-		assert.False(t, ok)
+		_, exists = nextBlock()
+		assert.False(t, exists)
 	}
 	{
 		family := ip.V4()
@@ -97,18 +97,18 @@ func TestBlocks(t *testing.T) {
 
 		nextBlock := network.Blocks(input)
 
-		ok, actual := nextBlock()
-		assert.True(t, ok)
+		actual, exists := nextBlock()
+		assert.True(t, exists)
 		assert.Equal(t, expectedFirst0, actual.First())
 		assert.Equal(t, expectedLast0, actual.Last())
 
-		ok, actual = nextBlock()
-		assert.True(t, ok)
+		actual, exists = nextBlock()
+		assert.True(t, exists)
 		assert.Equal(t, expectedFirst1, actual.First())
 		assert.Equal(t, expectedLast1, actual.Last())
 
-		ok, _ = nextBlock()
-		assert.False(t, ok)
+		_, exists = nextBlock()
+		assert.False(t, exists)
 	}
 	{
 		family := ip.V4()
@@ -122,18 +122,18 @@ func TestBlocks(t *testing.T) {
 
 		nextBlock := network.Blocks(input)
 
-		ok, actual := nextBlock()
-		assert.True(t, ok)
+		actual, exists := nextBlock()
+		assert.True(t, exists)
 		assert.Equal(t, expectedFirst0, actual.First())
 		assert.Equal(t, expectedLast0, actual.Last())
 
-		ok, actual = nextBlock()
-		assert.True(t, ok)
+		actual, exists = nextBlock()
+		assert.True(t, exists)
 		assert.Equal(t, expectedFirst1, actual.First())
 		assert.Equal(t, expectedLast1, actual.Last())
 
-		ok, _ = nextBlock()
-		assert.False(t, ok)
+		_, exists = nextBlock()
+		assert.False(t, exists)
 	}
 	{
 		family := ip.V4()
@@ -145,12 +145,12 @@ func TestBlocks(t *testing.T) {
 
 		nextBlock := network.Blocks(input)
 
-		ok, actual := nextBlock()
-		assert.True(t, ok)
+		actual, exists := nextBlock()
+		assert.True(t, exists)
 		assert.Equal(t, expectedFirst0, actual.First())
 		assert.Equal(t, expectedLast0, actual.Last())
 
-		ok, _ = nextBlock()
-		assert.False(t, ok)
+		_, exists = nextBlock()
+		assert.False(t, exists)
 	}
 }

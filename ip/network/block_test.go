@@ -48,7 +48,7 @@ func TestBlock_Addresses(t *testing.T) {
 	count := big.NewInt(0)
 	one := big.NewInt(1)
 	next := actual.Addresses()
-	for ok, _ := next(); ok; ok, _ = next() {
+	for _, exists := next(); exists; _, exists = next() {
 		count = count.Add(count, one)
 	}
 	assert.Equal(t, actual.Size(), count)
@@ -61,7 +61,7 @@ func TestBlock_Ranges(t *testing.T) {
 	count := big.NewInt(0)
 	one := big.NewInt(1)
 	next := actual.Ranges()
-	for ok, _ := next(); ok; ok, _ = next() {
+	for _, exists := next(); exists; _, exists = next() {
 		count = count.Add(count, one)
 	}
 	assert.Equal(t, one, count)

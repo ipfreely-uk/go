@@ -12,7 +12,7 @@ import (
 var ipv4Masks []ip.A4 = allMasks(ip.V4())
 var ipv6Masks []ip.A6 = allMasks(ip.V6())
 
-// Creates mask of given bit size.
+// Mask of given bit size.
 // Panics if mask bits exceeds [ip.Family.Width] or is less than zero.
 func Mask[A ip.Address[A]](family ip.Family[A], bits int) A {
 	validateBits(family, bits)
@@ -47,17 +47,14 @@ func AddressCount[A ip.Address[A]](family ip.Family[A], bits int) *big.Int {
 // Returns between 0 and [ip.Family] bit width inclusive if first and last form valid CIDR block.
 // Returns -1 if first and last do not form valid CIDR block.
 func MaskSize[A ip.Address[A]](first, last A) int {
-	println(first.String(), last.String())
 	fam := first.Family()
 	xor := first.Xor(last)
-	println(xor.String())
 	zero := fam.FromInt(0)
 	if !compare.Eq(xor.And(first), zero) || !compare.Eq(xor.And(last), xor) {
 		return -1
 	}
 	bits := fam.Width() - xor.Not().TrailingZeros()
 	mask := Mask(fam, bits)
-	println(mask.String())
 	if compare.Eq(xor.And(mask), zero) {
 		return bits
 	}

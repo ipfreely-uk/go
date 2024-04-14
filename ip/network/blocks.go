@@ -30,9 +30,9 @@ func blockIterator[A ip.Address[A]](start, end A) Iterator[Block[A]] {
 	done := false
 	width := start.Family().Width()
 
-	return func() (bool, Block[A]) {
+	return func() (Block[A], bool) {
 		if done {
-			return false, nil
+			return nil, false
 		}
 		maxSize := width - current.TrailingZeros()
 		size := ip.Next(end.Subtract(current))
@@ -46,7 +46,7 @@ func blockIterator[A ip.Address[A]](start, end A) Iterator[Block[A]] {
 		} else {
 			current = ip.Next(last)
 		}
-		return true, block
+		return block, true
 	}
 }
 
