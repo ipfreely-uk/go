@@ -12,9 +12,9 @@ func ExampleFromBytes() {
 		println("Not address:", err)
 	}
 	switch a := address.(type) {
-	case ip.A4:
+	case ip.Addr4:
 		println("IPv4 address:", a.String())
-	case ip.A6:
+	case ip.Addr6:
 		println("IPv6 address", a.String())
 	}
 }
@@ -25,9 +25,9 @@ func ExampleMustFromBytes() {
 	address := ip.MustFromBytes(nip.AsSlice()...)
 
 	switch a := address.(type) {
-	case ip.A4:
+	case ip.Addr4:
 		println("IPv4 address:", a.String())
-	case ip.A6:
+	case ip.Addr6:
 		println("IPv6 address", a.String())
 	}
 }
@@ -40,9 +40,9 @@ func ExampleParseUnknown() {
 			println("Not address:", err)
 		}
 		switch a := address.(type) {
-		case ip.A4:
+		case ip.Addr4:
 			println("IPv4 address:", a.String())
-		case ip.A6:
+		case ip.Addr6:
 			println("IPv6 address:", a.String())
 		}
 	}

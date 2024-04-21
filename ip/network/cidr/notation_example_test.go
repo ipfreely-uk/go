@@ -31,9 +31,9 @@ func ExampleParseUnknown() {
 			panic(err)
 		}
 		switch addresses := block.(type) {
-		case network.Block[ip.A4]:
+		case network.Block[ip.Addr4]:
 			printRangeDetails(addresses)
-		case network.Block[ip.A6]:
+		case network.Block[ip.Addr6]:
 			printRangeDetails(addresses)
 		}
 	}

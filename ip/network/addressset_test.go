@@ -57,7 +57,7 @@ func TestAddressSet_Addresses(t *testing.T) {
 	r1 := network.NewRange(hundred, hundredAndOne)
 	set := network.NewSet(r0, r1, r0, r1)
 
-	addresses := []ip.A6{}
+	addresses := []ip.Addr6{}
 	iter := set.Addresses()
 	for a, exists := iter(); exists; a, exists = iter() {
 		addresses = append(addresses, a)

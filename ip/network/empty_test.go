@@ -10,7 +10,7 @@ import (
 )
 
 func TestEmpty(t *testing.T) {
-	empty := network.NewSet[ip.A4]()
+	empty := network.NewSet[ip.Addr4]()
 
 	assert.Equal(t, big.NewInt(0), empty.Size())
 	assert.False(t, empty.Contains(ip.MaxAddress(ip.V4())))

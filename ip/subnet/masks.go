@@ -9,8 +9,8 @@ import (
 	"github.com/ipfreely-uk/go/ip/compare"
 )
 
-var ipv4Masks []ip.A4 = allMasks(ip.V4())
-var ipv6Masks []ip.A6 = allMasks(ip.V6())
+var ipv4Masks []ip.Addr4 = allMasks(ip.V4())
+var ipv6Masks []ip.Addr6 = allMasks(ip.V6())
 
 // Mask of given bit size.
 // Panics if mask bits exceeds [ip.Family.Width] or is less than zero.
