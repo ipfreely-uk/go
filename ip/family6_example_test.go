@@ -12,6 +12,8 @@ func ExampleV6() {
 	bytes[2] = 0xDB
 	bytes[3] = 0x80
 	bytes[15] = 1
-	address, _ := family.FromBytes(bytes...)
+
+	address := family.MustFromBytes(bytes...)
+
 	println(address.String())
 }

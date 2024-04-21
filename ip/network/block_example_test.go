@@ -9,7 +9,7 @@ import (
 )
 
 func ExampleNewBlock() {
-	netAddress, _ := ip.Parse(ip.V6(), "2001:db8::")
+	netAddress := ip.MustParse(ip.V6(), "2001:db8::")
 
 	block := network.NewBlock(netAddress, 32)
 
@@ -19,8 +19,8 @@ func ExampleNewBlock() {
 	println("Size", humanize.BigComma(block.Size()))
 }
 
-func ExampleBlock_Mask() {
-	netAddress, _ := ip.Parse(ip.V6(), "2001:db8:cafe::")
+func ExampleBlock_second() {
+	netAddress := ip.MustParse(ip.V6(), "2001:db8:cafe::")
 	block := network.NewBlock(netAddress, 56)
 
 	randomAddr := randomAddressFrom(block)
