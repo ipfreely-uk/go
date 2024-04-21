@@ -28,70 +28,70 @@ func (a Addr4) Bytes() []byte {
 	}
 }
 
-// Bitwise NOT
+// See [Address]
 func (a Addr4) Not() Addr4 {
 	return Addr4{
 		^a.value,
 	}
 }
 
-// Addition with overflow
+// See [Address]
 func (a Addr4) Add(addend Addr4) Addr4 {
 	return Addr4{
 		a.value + addend.value,
 	}
 }
 
-// Subtraction with underflow
+// See [Address]
 func (a Addr4) Subtract(addend Addr4) Addr4 {
 	return Addr4{
 		a.value - addend.value,
 	}
 }
 
-// Multiplication with overflow
+// See [Address]
 func (a Addr4) Multiply(multiplicand Addr4) Addr4 {
 	return Addr4{
 		a.value * multiplicand.value,
 	}
 }
 
-// Division
+// See [Address]
 func (a Addr4) Divide(denominator Addr4) Addr4 {
 	return Addr4{
 		a.value / denominator.value,
 	}
 }
 
-// Modulus
+// See [Address]
 func (a Addr4) Mod(denominator Addr4) Addr4 {
 	return Addr4{
 		a.value % denominator.value,
 	}
 }
 
-// Bitwise AND
+// See [Address]
 func (a Addr4) And(operand Addr4) Addr4 {
 	return Addr4{
 		a.value & operand.value,
 	}
 }
 
-// Bitwise OR
+// See [Address]
 func (a Addr4) Or(operand Addr4) Addr4 {
 	return Addr4{
 		a.value | operand.value,
 	}
 }
 
-// Bitwise XOR
+// See [Address]
 func (a Addr4) Xor(operand Addr4) Addr4 {
 	return Addr4{
 		a.value ^ operand.value,
 	}
 }
 
-// Bitwise shift
+// See [Address]
 func (a Addr4) Shift(bits int) Addr4 {
 	bits = bits % a.Family().Width()
 	var v uint32
@@ -105,6 +105,7 @@ func (a Addr4) Shift(bits int) Addr4 {
 	}
 }
 
+// See [Address]
 func (a Addr4) Compare(other Addr4) int {
 	if a.value < other.value {
 		return -1
@@ -115,20 +116,24 @@ func (a Addr4) Compare(other Addr4) int {
 	return 0
 }
 
+// See [Address]
 func (a Addr4) LeadingZeros() int {
 	return bits.LeadingZeros32(a.value)
 }
 
+// See [Address]
 func (a Addr4) TrailingZeros() int {
 	return bits.TrailingZeros32(a.value)
 }
 
+// See [Address]
 func (a Addr4) String() string {
 	b := a.Bytes()
 	addr, _ := netip.AddrFromSlice(b)
 	return addr.String()
 }
 
+// See [Address]
 func (a Addr4) Float64() float64 {
 	return float64(a.value)
 }
