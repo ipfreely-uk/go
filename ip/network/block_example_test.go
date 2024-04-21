@@ -19,7 +19,7 @@ func ExampleNewBlock() {
 	println("Size", humanize.BigComma(block.Size()))
 }
 
-func ExampleBlock_second() {
+func ExampleBlock() {
 	netAddress := ip.MustParse(ip.V6(), "2001:db8:cafe::")
 	block := network.NewBlock(netAddress, 56)
 
@@ -33,9 +33,9 @@ func randomAddressFrom[A ip.Address[A]](netBlock network.Block[A]) A {
 	family := netAddr.Family()
 	r := randomAddress(family)
 
-	mask := netBlock.Mask()
+	iMask := netBlock.Mask().Not()
 
-	return r.Xor(mask).Or(netAddr)
+	return r.Or(iMask).Or(netAddr)
 }
 
 func randomAddress[A ip.Address[A]](f ip.Family[A]) A {
