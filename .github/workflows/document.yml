@@ -12,4 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: pkgsite
-      run: curl https://proxy.golang.org/github.com/ipfreely-uk/go/@v/${{  github.ref_name }}.info
+      # prompts pkgsite to scan repo for new tag
+      # curl will always return error code because 404
+      run: curl https://proxy.golang.org/github.com/ipfreely-uk/go/@v/${{  github.ref_name }}.info || true
