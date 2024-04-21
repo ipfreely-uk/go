@@ -35,5 +35,4 @@ _TODO_
 ## Continuous Integration
 
 [![Go](https://github.com/ipfreely-uk/go/actions/workflows/go.yml/badge.svg)](https://github.com/ipfreely-uk/go/actions/workflows/go.yml)
-[![Document](https://github.com/ipfreely-uk/go/actions/workflows/document.yml/badge.svg)](https://github.com/ipfreely-uk/go/actions/workflows/document.yml)
 [![Go Reference](https://pkg.go.dev/badge/github.com/ipfreely-uk/go.svg)](https://pkg.go.dev/github.com/ipfreely-uk/go)
