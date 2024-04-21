@@ -15,5 +15,5 @@ require (
 )
 
 retract (
-	[v0.0.0-alpha, v0.0.5-alpha] // old alpha builds
+	[v0.0.0-alpha, v0.0.7-alpha] // old alpha builds
 )
