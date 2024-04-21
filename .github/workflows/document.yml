@@ -1,0 +1,15 @@
+# https://pkg.go.dev/about#adding-a-package
+
+name: Document
+
+on:
+  push:
+      tags:
+          - '*'
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+    - name: pkgsite
+      run: curl https://proxy.golang.org/github.com/ipfreely-uk/go/${{  github.ref_name }}.info

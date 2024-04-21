@@ -1,2 +1,2 @@
-// Network ranges and sets.
+// Network ranges and IP address sets.
 package network

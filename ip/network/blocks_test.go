@@ -153,4 +153,16 @@ func TestBlocks(t *testing.T) {
 		_, exists = nextBlock()
 		assert.False(t, exists)
 	}
+	{
+		first := ip.V6().FromInt(999)
+		last := ip.V6().FromInt(0).Not()
+		input := network.NewRange(first, last)
+
+		next := network.Blocks(input)
+
+		for block, exists := next(); exists; block, exists = next() {
+			assert.True(t, input.Contains(block.First()))
+			assert.True(t, input.Contains(block.Last()))
+		}
+	}
 }

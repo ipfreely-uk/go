@@ -18,7 +18,7 @@ func ExampleNewSet() {
 	println("Rationalized ranges:")
 	next := addresses.Ranges()
 	for aRange, exists := next(); exists; aRange, exists = next() {
-		println(aRange.First().String(), "-", aRange.Last().String())
+		println(aRange.String())
 	}
 }
 

@@ -3,6 +3,7 @@ package network_test
 import (
 	"crypto/rand"
 
+	humanize "github.com/dustin/go-humanize"
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ip/network"
 )
@@ -14,8 +15,8 @@ func ExampleNewBlock() {
 
 	println("Block", block.String())
 	println("First", block.First().String())
-	println("Last", block.First().String())
-	println("Size", block.Size().String())
+	println("Last", block.Last().String())
+	println("Size", humanize.BigComma(block.Size()))
 }
 
 func ExampleBlock_Mask() {

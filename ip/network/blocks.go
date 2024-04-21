@@ -36,7 +36,8 @@ func blockIterator[A ip.Address[A]](start, end A) Iterator[Block[A]] {
 		}
 		maxSize := width - current.TrailingZeros()
 		size := ip.Next(end.Subtract(current))
-		x := log(size) / log_2
+		l := math.Log(size.Float64())
+		x := l / log_2
 		maxDiff := int(width - int(math.Floor(x)))
 		mask := max(maxSize, maxDiff)
 		block := NewBlock(current, mask)
@@ -55,20 +56,4 @@ func max(a, b int) int {
 		return a
 	}
 	return b
-}
-
-func log[A ip.Address[A]](address A) float64 {
-	MAX_DIGITS_2 := 977
-
-	bitlen := address.Family().Width() - address.LeadingZeros()
-	blex := bitlen - MAX_DIGITS_2
-	a := address
-	if blex > 0 {
-		a = address.Shift(blex)
-	}
-	res := math.Log(a.Float64())
-	if blex > 0 {
-		res = res + float64(blex)*log_2
-	}
-	return res
 }
