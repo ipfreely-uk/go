@@ -34,6 +34,6 @@ type Block[A ip.Address[A]] interface {
 	AddressRange[A]
 	// Mask size in bits
 	MaskSize() int
-	// Mask as [ip.Address]
+	// Mask as IP address
 	Mask() A
 }

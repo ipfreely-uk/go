@@ -2,8 +2,8 @@ package compare
 
 // Generic comparison interface
 type Comparable[C any] interface {
-	// Returns -1 if operand less; 0  if operand equal; 1  if operand greater
-	Compare(C) int
+	// Returns -1 if operand greater; 0 if operand equal; 1 if operand less
+	Compare(operand C) int
 }
 
 // Convenience function for testing equality

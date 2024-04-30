@@ -13,9 +13,9 @@ func ExampleMask() {
 	maskBits := 24
 	mask := subnet.Mask(ip.V4(), maskBits)
 
-	println("First: %s", network.String())
-	println("Last: %s", mask.Not().Or(network).String())
-	println("Mask: %s", mask.String())
+	println("First:", network.String())
+	println("Last:", mask.Not().Or(network).String())
+	println("Mask:", mask.String())
 }
 
 func ExampleMask_second() {
@@ -55,7 +55,7 @@ func ExampleMaskSize() {
 	maskBits := subnet.MaskSize(first, last)
 	mask := subnet.Mask(family, maskBits)
 
-	println(maskBits, "==", mask.String())
+	println(fmt.Sprintf("/%d", maskBits), "==", mask.String())
 }
 
 func ExampleMaskSize_second() {

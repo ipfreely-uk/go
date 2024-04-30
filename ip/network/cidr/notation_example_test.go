@@ -1,6 +1,7 @@
 package cidr_test
 
 import (
+	"github.com/dustin/go-humanize"
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ip/network"
 	"github.com/ipfreely-uk/go/ip/network/cidr"
@@ -42,6 +43,6 @@ func ExampleParseUnknown() {
 func printRangeDetails[A ip.Address[A]](addresses network.AddressRange[A]) {
 	println("Start:", addresses.First().String())
 	println("End:", addresses.Last().String())
-	println("Addresses:", addresses.Size().String())
+	println("Addresses:", humanize.BigComma(addresses.Size()))
 	println()
 }
