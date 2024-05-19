@@ -54,6 +54,10 @@ func (b *block[A]) Mask() A {
 	return subnet.Mask(b.first.Family(), b.MaskSize())
 }
 
+func (b *block[A]) CidrNotation() string {
+	return b.String()
+}
+
 // Creates [Block].
 // Panics if mask does not cover network address or is out of range for address family.
 func NewBlock[A ip.Address[A]](network A, mask int) Block[A] {

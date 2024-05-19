@@ -11,7 +11,7 @@ import (
 // TODO: can replace with constant
 var log_2 = math.Log(2.0)
 
-// Subdivides [Range] into valid CIDR blocks
+// Subdivides [AddressRange] into valid CIDR blocks
 func Blocks[A ip.Address[A]](r AddressRange[A]) Iterator[Block[A]] {
 	first := r.First()
 	last := r.Last()

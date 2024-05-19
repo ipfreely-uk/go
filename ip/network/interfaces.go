@@ -36,4 +36,6 @@ type Block[A ip.Address[A]] interface {
 	MaskSize() int
 	// Mask as IP address
 	Mask() A
+	// The block in CIDR notation.
+	CidrNotation() string
 }

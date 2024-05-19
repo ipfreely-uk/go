@@ -7,13 +7,6 @@ import (
 	"github.com/ipfreely-uk/go/ip/network/cidr"
 )
 
-func ExampleNotation() {
-	address, _ := ip.V4().FromBytes(192, 168, 0, 1)
-	single := network.NewBlock(address, address.Family().Width())
-	notation := cidr.Notation(single)
-	println(notation)
-}
-
 func ExampleParse() {
 	reservedForDocumentation, _ := cidr.Parse(ip.V6(), "2001:db8::/32")
 	printRangeDetails(reservedForDocumentation)
