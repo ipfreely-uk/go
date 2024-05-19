@@ -31,11 +31,9 @@ func ExampleBlock() {
 func randomAddressFrom[A ip.Address[A]](netBlock network.Block[A]) A {
 	netAddr := netBlock.First()
 	family := netAddr.Family()
-	r := randomAddress(family)
+	inverseMask := netBlock.Mask().Not()
 
-	iMask := netBlock.Mask().Not()
-
-	return r.Or(iMask).Or(netAddr)
+	return randomAddress(family).And(inverseMask).Or(netAddr)
 }
 
 func randomAddress[A ip.Address[A]](f ip.Family[A]) A {
