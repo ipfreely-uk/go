@@ -1,7 +1,6 @@
 package ip_test
 
 import (
-	"math/big"
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
@@ -198,24 +197,38 @@ func TestString6(t *testing.T) {
 }
 
 func TestA6_Float64(t *testing.T) {
-	min := ip.MinAddress(ip.V6())
+	v6 := ip.V6()
+	min := ip.MinAddress(v6)
 	max := min.Not()
-	two := ip.V6().FromInt(2)
-	half := max.Divide(two)
+	two := v6.FromInt(2)
+	a1 := ip.MustParse(v6, "::ffff:ffff")
+	a2 := ip.MustParse(v6, "::ffff:ffff:ffff:ffff")
+	a3 := ip.MustParse(v6, "::ffff:ffff:ffff:ffff:ffff:ffff")
+	a4 := ip.MustParse(v6, "ffff:ffff::")
+	a5 := ip.MustParse(v6, "ffff:ffff:ffff:ffff::")
+	a6 := ip.MustParse(v6, "ffff:ffff:ffff:ffff:ffff:ffff::")
+	a7 := ip.MustParse(v6, "cafe:babe:dead:d00d:fee1:cafe:cafe:cafe")
+	a8 := ip.MustParse(v6, "::ffff:ffff:ffff:ffff:ffff:f000")
+	a9 := ip.MustParse(v6, "f000:ffff:ffff:ffff:ffff:ffff::")
 
-	expected, _ := big.NewInt(0).Float64()
-	actual := min.Float64()
-	assert.Equal(t, expected, actual)
+	tests := []ip.Addr6{
+		min,
+		max,
+		two,
+		a1,
+		a2,
+		a3,
+		a4,
+		a5,
+		a6,
+		a7,
+		a8,
+		a9,
+	}
 
-	expected, _ = ip.ToBigInt(max).Float64()
-	actual = max.Float64()
-	assert.Equal(t, expected, actual)
-
-	expected, _ = ip.ToBigInt(two).Float64()
-	actual = two.Float64()
-	assert.Equal(t, expected, actual)
-
-	expected, _ = ip.ToBigInt(half).Float64()
-	actual = half.Float64()
-	assert.Equal(t, expected, actual)
+	for _, address := range tests {
+		expected, _ := ip.ToBigInt(address).Float64()
+		actual := address.Float64()
+		assert.Equal(t, expected, actual, address.String())
+	}
 }
