@@ -2,12 +2,41 @@ package ip_test
 
 import (
 	"math/big"
+	"math/rand"
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
 
 	"github.com/stretchr/testify/assert"
 )
+
+func TestMaths4(t *testing.T) {
+	v4 := ip.V4()
+
+	values := []ip.Addr4{
+		ip.MinAddress(v4),
+		ip.MaxAddress(v4),
+		ip.MustParse(v4, "255.0.0.0"),
+		ip.MustParse(v4, "0.0.0.255"),
+		ip.MustParse(v4, "0.0.0.1"),
+		ip.MustParse(v4, "0.0.0.2"),
+	}
+
+	bytes := make([]byte, v4.Width()/8)
+	ran := rand.New(rand.NewSource(0))
+	for i := 0; i < 200; i++ {
+		_, err := ran.Read(bytes)
+		if err != nil {
+			t.Fail()
+			return
+		}
+
+		a := v4.MustFromBytes(bytes...)
+		values = append(values, a)
+	}
+
+	testMaths(t, values)
+}
 
 func TestAdd(t *testing.T) {
 	one := ip.V4().FromInt(1)

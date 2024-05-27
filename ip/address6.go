@@ -1,9 +1,17 @@
 package ip
 
 import (
+	"math/big"
 	"math/bits"
 	"net/netip"
 )
+
+var size6 = func() *big.Int {
+	zero := Addr6{}
+	max := zero.Not()
+	n := ToBigInt(max)
+	return n.Add(n, big.NewInt(1))
+}()
 
 // Immutable 128bit unsigned integer IP [Address] representation
 type Addr6 struct {
@@ -93,8 +101,7 @@ func (a Addr6) Multiply(multiplicand Addr6) Addr6 {
 	}
 	this := ToBigInt(a)
 	that := ToBigInt(multiplicand)
-	max := ToBigInt(MaxAddress(a.Family()))
-	result := this.Mul(this, that).Mod(this, max)
+	result := this.Mul(this, that).Mod(this, size6)
 	address, _ := FromBigInt(a.Family(), result)
 	return address
 }
@@ -113,8 +120,7 @@ func (a Addr6) Divide(denominator Addr6) Addr6 {
 	}
 	this := ToBigInt(a)
 	that := ToBigInt(denominator)
-	max := ToBigInt(MaxAddress(a.Family()))
-	result, _ := this.DivMod(this, that, max)
+	result := this.Div(this, that)
 	address, _ := FromBigInt(a.Family(), result)
 	return address
 }

@@ -1,12 +1,42 @@
 package ip_test
 
 import (
+	"math/rand"
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
 
 	"github.com/stretchr/testify/assert"
 )
+
+func TestMaths6(t *testing.T) {
+	v6 := ip.V6()
+
+	values := []ip.Addr6{
+		ip.MinAddress(v6),
+		ip.MaxAddress(v6),
+		ip.MustParse(v6, "::ffff:ffff:ffff:ffff"),
+		ip.MustParse(v6, "ffff:ffff:ffff:ffff::"),
+		ip.MustParse(v6, "::1"),
+		ip.MustParse(v6, "::2"),
+		ip.MustParse(v6, "fe80::"),
+	}
+
+	bytes := make([]byte, v6.Width()/8)
+	ran := rand.New(rand.NewSource(0))
+	for i := 0; i < 200; i++ {
+		_, err := ran.Read(bytes)
+		if err != nil {
+			t.Fail()
+			return
+		}
+
+		a := v6.MustFromBytes(bytes...)
+		values = append(values, a)
+	}
+
+	testMaths(t, values)
+}
 
 func TestAdd6(t *testing.T) {
 	one := ip.V6().FromInt(1)
@@ -37,6 +67,7 @@ func TestMultiply6(t *testing.T) {
 	one := ip.V6().FromInt(1)
 	two := ip.V6().FromInt(2)
 	four := ip.V6().FromInt(4)
+	max := zero.Not()
 
 	actual := two.Multiply(two)
 	assert.Equal(t, four, actual)
@@ -52,6 +83,9 @@ func TestMultiply6(t *testing.T) {
 
 	actual = zero.Multiply(four)
 	assert.Equal(t, zero, actual)
+
+	actual = max.Multiply(two)
+	assert.Equal(t, max.Add(max), actual)
 }
 
 func TestDivide6(t *testing.T) {
@@ -59,6 +93,7 @@ func TestDivide6(t *testing.T) {
 	one := ip.V6().FromInt(1)
 	two := ip.V6().FromInt(2)
 	three := ip.V6().FromInt(3)
+	max := zero.Not()
 
 	actual := three.Divide(two)
 	assert.Equal(t, one, actual)
@@ -73,6 +108,10 @@ func TestDivide6(t *testing.T) {
 	assert.Equal(t, one, actual)
 
 	assert.Panics(t, func() { zero.Divide(zero) })
+
+	remainder := max.Mod(two)
+	actual = max.Divide(two).Multiply(two).Add(remainder)
+	assert.Equal(t, max, actual)
 }
 
 func TestMod6(t *testing.T) {
