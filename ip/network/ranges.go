@@ -16,8 +16,7 @@ func Adjacent[A ip.Address[A]](r0, r1 AddressRange[A]) bool {
 }
 
 func lastNextToFirst[A ip.Address[A]](last, first A) bool {
-	zero := last.Family().FromInt(0)
-	return !compare.Eq(zero, first) && compare.Eq(last, ip.Prev(first))
+	return compare.Eq(last, ip.Prev(first)) && !compare.Eq(last.Family().FromInt(0), first)
 }
 
 // Tests if [Range]s either [Intersect] or are [Adjacent]
