@@ -62,6 +62,9 @@ func (b *block[A]) CidrNotation() string {
 // Panics if mask does not cover network address or is out of range for address family.
 func NewBlock[A ip.Address[A]](network A, mask int) Block[A] {
 	fam := network.Family()
+	if fam.Width() == mask {
+		return &single[A]{network}
+	}
 	m := subnet.Mask(fam, mask)
 	if !compare.Eq(network, m.And(network)) {
 		msg := fmt.Sprintf("mask %s does not cover %s", m.String(), network.String())
