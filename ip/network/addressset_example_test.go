@@ -1,9 +1,15 @@
 package network_test
 
 import (
+	"testing"
+
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ip/network"
 )
+
+func TestExampleNewSet(t *testing.T) {
+	ExampleNewSet()
+}
 
 func ExampleNewSet() {
 	family := ip.V4()

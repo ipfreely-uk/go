@@ -2,9 +2,14 @@ package ip_test
 
 import (
 	"net/netip"
+	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
 )
+
+func TestExampleFromBytes(t *testing.T) {
+	ExampleFromBytes()
+}
 
 func ExampleFromBytes() {
 	address, err := ip.FromBytes(192, 0, 2, 1)
@@ -19,6 +24,10 @@ func ExampleFromBytes() {
 	}
 }
 
+func TestExampleMustFromBytes(t *testing.T) {
+	ExampleMustFromBytes()
+}
+
 func ExampleMustFromBytes() {
 	nip := netip.MustParseAddr("2001:db8::")
 
@@ -30,6 +39,10 @@ func ExampleMustFromBytes() {
 	case ip.Addr6:
 		println("IPv6 address", a.String())
 	}
+}
+
+func TestExampleParseUnknown(t *testing.T) {
+	ExampleParseUnknown()
 }
 
 func ExampleParseUnknown() {

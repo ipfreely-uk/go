@@ -2,10 +2,15 @@ package ip_test
 
 import (
 	"math/big"
+	"testing"
 
 	"github.com/dustin/go-humanize"
 	"github.com/ipfreely-uk/go/ip"
 )
+
+func TestExampleToBigInt(t *testing.T) {
+	ExampleToBigInt()
+}
 
 func ExampleToBigInt() {
 	printNumberOfAddresses(ip.MinAddress(ip.V4()), ip.MaxAddress(ip.V4()))

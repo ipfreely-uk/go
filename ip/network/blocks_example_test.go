@@ -1,9 +1,15 @@
 package network_test
 
 import (
+	"testing"
+
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ip/network"
 )
+
+func TestExampleBlocks(t *testing.T) {
+	ExampleBlocks()
+}
 
 func ExampleBlocks() {
 	first := ip.V4().MustFromBytes(192, 0, 2, 101)

@@ -1,8 +1,14 @@
 package ip_test
 
 import (
+	"testing"
+
 	"github.com/ipfreely-uk/go/ip"
 )
+
+func TestExampleV6(t *testing.T) {
+	ExampleV6()
+}
 
 func ExampleV6() {
 	family := ip.V6()

@@ -2,11 +2,16 @@ package network_test
 
 import (
 	"crypto/rand"
+	"testing"
 
 	humanize "github.com/dustin/go-humanize"
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ip/network"
 )
+
+func TestExampleNewBlock(t *testing.T) {
+	ExampleNewBlock()
+}
 
 func ExampleNewBlock() {
 	netAddress := ip.MustParse(ip.V6(), "2001:db8::")

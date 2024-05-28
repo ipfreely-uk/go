@@ -2,11 +2,17 @@ package subnet_test
 
 import (
 	"fmt"
+	"testing"
 
 	"github.com/dustin/go-humanize"
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ip/subnet"
 )
+
+func TestExampleMask(t *testing.T) {
+	ExampleMask()
+	ExampleMask_second()
+}
 
 func ExampleMask() {
 	network := ip.V4().MustFromBytes(192, 168, 0, 0)
@@ -33,6 +39,10 @@ func printAllMasks[A ip.Address[A]](f ip.Family[A]) {
 	}
 }
 
+func TestExampleAddressCount(t *testing.T) {
+	ExampleAddressCount()
+}
+
 func ExampleAddressCount() {
 	printSubnetSizesForMasks(ip.V4())
 	printSubnetSizesForMasks(ip.V6())
@@ -44,6 +54,11 @@ func printSubnetSizesForMasks[A ip.Address[A]](family ip.Family[A]) {
 		msg := fmt.Sprintf("IPv%d /%d == %s", family.Version(), mask, humanize.BigComma(count))
 		println(msg)
 	}
+}
+
+func TestExampleMaskSize(t *testing.T) {
+	ExampleMaskSize()
+	ExampleMaskSize_second()
 }
 
 func ExampleMaskSize() {

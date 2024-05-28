@@ -1,9 +1,15 @@
 package network_test
 
 import (
+	"testing"
+
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ip/network"
 )
+
+func TestExampleIterator(t *testing.T) {
+	ExampleIterator()
+}
 
 func ExampleIterator() {
 	first := ip.V4().MustFromBytes(192, 168, 0, 1)

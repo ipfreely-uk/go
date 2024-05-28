@@ -1,15 +1,25 @@
 package cidr_test
 
 import (
+	"testing"
+
 	"github.com/dustin/go-humanize"
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ip/network"
 	"github.com/ipfreely-uk/go/ip/network/cidr"
 )
 
+func TestExampleParse(t *testing.T) {
+	ExampleParse()
+}
+
 func ExampleParse() {
 	reservedForDocumentation, _ := cidr.Parse(ip.V6(), "2001:db8::/32")
 	printRangeDetails(reservedForDocumentation)
+}
+
+func TestExampleParseUnknown(t *testing.T) {
+	ExampleParseUnknown()
 }
 
 func ExampleParseUnknown() {
