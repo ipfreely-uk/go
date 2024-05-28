@@ -1,6 +1,7 @@
 package network_test
 
 import (
+	"math/rand"
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
@@ -164,5 +165,40 @@ func TestBlocks(t *testing.T) {
 			assert.True(t, input.Contains(block.First()))
 			assert.True(t, input.Contains(block.Last()))
 		}
+	}
+}
+
+func TestBlockIteration(t *testing.T) {
+	makeAndWalkBlocks(t, ip.V4())
+	makeAndWalkBlocks(t, ip.V6())
+}
+
+func makeAndWalkBlocks[A ip.Address[A]](t *testing.T, family ip.Family[A]) {
+	src := rand.New(rand.NewSource(0))
+	buf := make([]byte, family.Width()/8)
+
+	prev := family.MustFromBytes(buf...)
+	for i := 0; i < 200; i++ {
+		_, err := src.Read(buf)
+		assert.Nil(t, err)
+
+		next := family.MustFromBytes(buf...)
+		walkBlocks(t, prev, next)
+
+		prev = next
+	}
+}
+
+func walkBlocks[A ip.Address[A]](t *testing.T, a1, a2 A) {
+	r := network.NewRange(a1, a2)
+	nextBlock := network.Blocks(r)
+
+	prev, _ := nextBlock()
+
+	for block, exists := nextBlock(); exists; block, exists = nextBlock() {
+		assert.True(t, network.Adjacent(prev, block))
+		assert.False(t, network.Intersect(prev, block))
+
+		prev = block
 	}
 }

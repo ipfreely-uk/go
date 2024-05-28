@@ -73,3 +73,10 @@ func TestBlock_Mask(t *testing.T) {
 	expected := subnet.Mask(ip.V4(), 24)
 	assert.Equal(t, expected, actual)
 }
+
+func TestBlock_CidrNotation(t *testing.T) {
+	address, _ := ip.V4().FromBytes(192, 168, 0, 0)
+	actual := network.NewBlock(address, 24).CidrNotation()
+	expected := "192.168.0.0/24"
+	assert.Equal(t, expected, actual)
+}
