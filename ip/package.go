@@ -6,6 +6,4 @@
 //
 // Use [Family_FromBytes] or [FromBytes] to obtain [Address] from `[]byte`.
 // Use [Parse] or [ParseUnknown] to obtain [Address] from `string`.
-//
-// Interfaces in this package cannot be implemented outside it.
 package ip

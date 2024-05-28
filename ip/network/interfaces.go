@@ -30,6 +30,7 @@ type AddressRange[A ip.Address[A]] interface {
 }
 
 // Immutable RFC-4632 CIDR block.
+// Roughly equivalent to the `netip.Prefix` type.
 type Block[A ip.Address[A]] interface {
 	AddressRange[A]
 	// Mask size in bits
