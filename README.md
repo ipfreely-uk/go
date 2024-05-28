@@ -1,5 +1,3 @@
-ALL CODE IN ALPHA STATE
-
 # IPFreely.uk
 
 IP address manipulation library written in Go.
@@ -21,10 +19,18 @@ Add an import statement to [go.mod](https://go.dev/doc/modules/gomod-ref) to uti
 
 ## Versus Standard Library
 
-Selective comparison with standard library types in
-[net](https://pkg.go.dev/net@go1.22.2) and [netip](https://pkg.go.dev/net/netip@go1.22.2).
+Selective comparison with standard library types in [netip](https://pkg.go.dev/net/netip).
 
-_TODO_
+| Feature                | IPFreely.uk | netip |
+| -----------------------|-------------|-------|
+| Immutable Types        | Y           | Y     |
+| Categorization         |             | Y     |
+| Generic Types          | Y           |       |
+| Arithmetic/Bitwise Ops | Y           |       |
+| IPv6 Zones             |             | Y     |
+| CIDR Blocks            | Y           | Y     |
+| Arbitrary Ranges/Sets  | Y           |       |
+| Iteration              | Y           |       |
 
 ## Links
 
