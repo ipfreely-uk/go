@@ -5,30 +5,27 @@ import (
 	"github.com/ipfreely-uk/go/ip/compare"
 )
 
-// Ranges overlap in any way
+// Test if [Range]s have common elements
 func Intersect[A ip.Address[A]](r0, r1 AddressRange[A]) bool {
 	return r0.Contains(r1.First()) || r0.Contains(r1.Last()) || r1.Contains(r0.First()) || r1.Contains(r0.Last())
 }
 
-// Ranges are one element from overlap
+// Tests if [Range]s are one element from overlap
 func Adjacent[A ip.Address[A]](r0, r1 AddressRange[A]) bool {
 	return lastNextToFirst(r0.Last(), r1.First()) || lastNextToFirst(r1.Last(), r0.First())
 }
 
 func lastNextToFirst[A ip.Address[A]](last, first A) bool {
 	zero := last.Family().FromInt(0)
-	if zero.Compare(first) == 0 {
-		return false
-	}
-	return ip.Prev(first).Compare(last) == 0
+	return !compare.Eq(zero, first) && compare.Eq(last, ip.Prev(first))
 }
 
-// Ranges either [Intersect] or are [Adjacent]
+// Tests if [Range]s either [Intersect] or are [Adjacent]
 func Contiguous[A ip.Address[A]](r0, r1 AddressRange[A]) bool {
 	return Intersect(r0, r1) || Adjacent(r0, r1)
 }
 
-// Joins ranges using least and greatest elements.
+// Joins ranges using least and greatest elements from both.
 // Ranges do not have to be contiguous.
 func Join[A ip.Address[A]](r0, r1 AddressRange[A]) AddressRange[A] {
 	first := compare.Min(r0.First(), r1.First())

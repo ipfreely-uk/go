@@ -54,6 +54,7 @@ func TestAdjacent(t *testing.T) {
 	assert.False(t, network.Adjacent(one_ten, two_hundred))
 	assert.False(t, network.Adjacent(internet, two_hundred))
 	assert.False(t, network.Adjacent(two_hundred, two_hundred))
+	assert.False(t, network.Adjacent(internet, internet))
 	assert.True(t, network.Adjacent(one_one, two_two))
 	assert.True(t, network.Adjacent(one_one, two_hundred))
 	assert.True(t, network.Adjacent(two_hundred, one_one))
