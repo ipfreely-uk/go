@@ -5,7 +5,6 @@ import (
 
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ip/compare"
-	"github.com/ipfreely-uk/go/ip/subnet"
 )
 
 // TODO: can replace with constant
@@ -15,7 +14,7 @@ var log_2 = math.Log(2.0)
 func Blocks[A ip.Address[A]](r AddressRange[A]) Iterator[Block[A]] {
 	first := r.First()
 	last := r.Last()
-	mask := subnet.MaskSize(first, last)
+	mask := ip.SubnetMaskSize(first, last)
 	if mask >= 0 {
 		block := NewBlock(first, mask)
 		slice := []Block[A]{block}

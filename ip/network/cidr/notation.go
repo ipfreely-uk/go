@@ -9,7 +9,6 @@ import (
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ip/compare"
 	"github.com/ipfreely-uk/go/ip/network"
-	"github.com/ipfreely-uk/go/ip/subnet"
 )
 
 // Parses CIDR notation
@@ -34,7 +33,7 @@ func Parse[A ip.Address[A]](f ip.Family[A], notation string) (network.Block[A], 
 		msg := fmt.Sprintf("%s has invalid mask", notation)
 		return nil, errors.New(msg)
 	}
-	m := subnet.Mask(address.Family(), mask)
+	m := ip.SubnetMask(address.Family(), mask)
 	if !compare.Eq(address, m.And(address)) {
 		msg := fmt.Sprintf("%s has invalid mask", notation)
 		return nil, errors.New(msg)

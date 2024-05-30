@@ -6,7 +6,6 @@ import (
 
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ip/compare"
-	"github.com/ipfreely-uk/go/ip/subnet"
 )
 
 type block[A ip.Address[A]] struct {
@@ -15,7 +14,7 @@ type block[A ip.Address[A]] struct {
 }
 
 func (b *block[A]) MaskSize() int {
-	return subnet.MaskSize(b.first, b.last)
+	return ip.SubnetMaskSize(b.first, b.last)
 }
 
 func (b *block[A]) Contains(address A) bool {
@@ -51,7 +50,7 @@ func (b *block[A]) String() string {
 }
 
 func (b *block[A]) Mask() A {
-	return subnet.Mask(b.first.Family(), b.MaskSize())
+	return ip.SubnetMask(b.first.Family(), b.MaskSize())
 }
 
 func (b *block[A]) CidrNotation() string {
@@ -65,7 +64,7 @@ func NewBlock[A ip.Address[A]](network A, mask int) Block[A] {
 	if fam.Width() == mask {
 		return &single[A]{network}
 	}
-	m := subnet.Mask(fam, mask)
+	m := ip.SubnetMask(fam, mask)
 	if !compare.Eq(network, m.And(network)) {
 		msg := fmt.Sprintf("mask %s does not cover %s", m.String(), network.String())
 		panic(msg)

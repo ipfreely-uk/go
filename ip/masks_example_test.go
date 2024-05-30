@@ -1,4 +1,4 @@
-package subnet_test
+package ip_test
 
 import (
 	"fmt"
@@ -6,26 +6,36 @@ import (
 
 	"github.com/dustin/go-humanize"
 	"github.com/ipfreely-uk/go/ip"
-	"github.com/ipfreely-uk/go/ip/subnet"
+	"github.com/ipfreely-uk/go/ip/compare"
 )
 
-func TestExampleMask(t *testing.T) {
-	ExampleMask()
-	ExampleMask_second()
+func TestExampleSubnetMask(t *testing.T) {
+	ExampleSubnetMask()
+	ExampleSubnetMask_second()
 }
 
-func ExampleMask() {
-	network := ip.V4().MustFromBytes(192, 168, 0, 0)
+func ExampleSubnetMask() {
+	network := ip.V4().MustFromBytes(192, 0, 2, 128)
+	printNetworkDetails(network, 26)
+}
 
-	maskBits := 24
-	mask := subnet.Mask(ip.V4(), maskBits)
+func printNetworkDetails[A ip.Address[A]](network A, maskBits int) {
+	fam := network.Family()
+	mask := ip.SubnetMask(fam, maskBits)
+	inverseMask := mask.Not()
 
-	println("First:", network.String())
-	println("Last:", mask.Not().Or(network).String())
+	zero := fam.FromInt(0)
+	if !compare.Eq(mask.And(inverseMask), zero) {
+		panic("Mask does not cover network address")
+	}
+
+	println("First Address:", network.String())
+	println("Last Address:", network.Or(inverseMask).String())
 	println("Mask:", mask.String())
+	println(fmt.Sprintf("CIDR Notation: %s/%d", network.String(), maskBits))
 }
 
-func ExampleMask_second() {
+func ExampleSubnetMask_second() {
 	printAllMasks(ip.V4())
 	printAllMasks(ip.V6())
 }
@@ -33,7 +43,7 @@ func ExampleMask_second() {
 func printAllMasks[A ip.Address[A]](f ip.Family[A]) {
 	println(fmt.Sprintf("IPv%d", f.Version()))
 	for bits := 0; bits <= f.Width(); bits++ {
-		mask := subnet.Mask(f, bits)
+		mask := ip.SubnetMask(f, bits)
 		cidrTail := fmt.Sprintf("/%d", bits)
 		println(mask.String(), "==", cidrTail)
 	}
@@ -50,7 +60,7 @@ func ExampleAddressCount() {
 
 func printSubnetSizesForMasks[A ip.Address[A]](family ip.Family[A]) {
 	for mask := 0; mask <= family.Width(); mask++ {
-		count := subnet.AddressCount(family, mask)
+		count := ip.SubnetAddressCount(family, mask)
 		msg := fmt.Sprintf("IPv%d /%d == %s", family.Version(), mask, humanize.BigComma(count))
 		println(msg)
 	}
@@ -66,8 +76,8 @@ func ExampleMaskSize() {
 	first := family.MustFromBytes(192, 0, 2, 0)
 	last := family.MustFromBytes(192, 0, 2, 255)
 
-	maskBits := subnet.MaskSize(first, last)
-	mask := subnet.Mask(family, maskBits)
+	maskBits := ip.SubnetMaskSize(first, last)
+	mask := ip.SubnetMask(family, maskBits)
 
 	println(fmt.Sprintf("/%d", maskBits), "==", mask.String())
 }
@@ -77,7 +87,7 @@ func ExampleMaskSize_second() {
 	first := family.MustFromBytes(192, 0, 2, 0)
 	last := family.MustFromBytes(192, 0, 2, 255)
 
-	maskBits := subnet.MaskSize(first, last)
+	maskBits := ip.SubnetMaskSize(first, last)
 	if maskBits != -1 {
 		cidrNotation := fmt.Sprintf("%s/%d", first.String(), maskBits)
 		println(first.String(), "-", last.String(), " is valid subnet ", cidrNotation)

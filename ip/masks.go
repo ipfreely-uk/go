@@ -1,24 +1,23 @@
-package subnet
+package ip
 
 import (
 	"fmt"
 	"math/big"
 	"reflect"
 
-	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ip/compare"
 )
 
-var ipv4Masks []ip.Addr4 = allMasks(ip.V4())
-var ipv6Masks []ip.Addr6 = allMasks(ip.V6())
+var ipv4Masks []Addr4 = allMasks(V4())
+var ipv6Masks []Addr6 = allMasks(V6())
 
-// Mask of given bit size.
-// Panics if mask bits exceeds [ip.Family.Width] or is less than zero.
-func Mask[A ip.Address[A]](family ip.Family[A], bits int) A {
+// Subnet mask of given bit size.
+// Panics if mask bits exceeds [Family_Width] or is less than zero.
+func SubnetMask[A Address[A]](family Family[A], bits int) A {
 	validateBits(family, bits)
 
 	var r any
-	if family.Version() == ip.Version4 {
+	if family.Version() == Version4 {
 		r = ipv4Masks[bits]
 	} else {
 		r = ipv6Masks[bits]
@@ -26,7 +25,7 @@ func Mask[A ip.Address[A]](family ip.Family[A], bits int) A {
 	return reflect.ValueOf(r).Interface().(A)
 }
 
-func validateBits[A ip.Address[A]](family ip.Family[A], bits int) {
+func validateBits[A Address[A]](family Family[A], bits int) {
 	width := family.Width()
 	if bits < 0 || bits > width {
 		msg := fmt.Sprintf("wanted 0-%d for IPv%d; got %d", family.Width(), family.Version(), bits)
@@ -36,7 +35,7 @@ func validateBits[A ip.Address[A]](family ip.Family[A], bits int) {
 
 // Number of addresses in subnet with given bit mask size.
 // Panics if mask bits exceeds width of family or is less than zero.
-func AddressCount[A ip.Address[A]](family ip.Family[A], bits int) *big.Int {
+func SubnetAddressCount[A Address[A]](family Family[A], bits int) *big.Int {
 	validateBits(family, bits)
 	size := big.NewInt(int64(family.Width() - bits))
 	two := big.NewInt(2)
@@ -44,9 +43,9 @@ func AddressCount[A ip.Address[A]](family ip.Family[A], bits int) *big.Int {
 }
 
 // Mask size in bits.
-// Returns between 0 and [ip.Family] bit width inclusive if first and last form valid CIDR block.
+// Returns between 0 and [Family] bit width inclusive if first and last form valid CIDR block.
 // Returns -1 if first and last do not form valid CIDR block.
-func MaskSize[A ip.Address[A]](first, last A) int {
+func SubnetMaskSize[A Address[A]](first, last A) int {
 	fam := first.Family()
 	xor := first.Xor(last)
 	zero := fam.FromInt(0)
@@ -54,14 +53,14 @@ func MaskSize[A ip.Address[A]](first, last A) int {
 		return -1
 	}
 	bits := fam.Width() - xor.Not().TrailingZeros()
-	mask := Mask(fam, bits)
+	mask := SubnetMask(fam, bits)
 	if compare.Eq(xor.And(mask), zero) {
 		return bits
 	}
 	return -1
 }
 
-func allMasks[A ip.Address[A]](family ip.Family[A]) []A {
+func allMasks[A Address[A]](family Family[A]) []A {
 	masks := []A{}
 	for i := 0; i <= family.Width(); i++ {
 		masks = append(masks, makeMask(family, i))
@@ -69,7 +68,7 @@ func allMasks[A ip.Address[A]](family ip.Family[A]) []A {
 	return masks
 }
 
-func makeMask[A ip.Address[A]](family ip.Family[A], bits int) A {
+func makeMask[A Address[A]](family Family[A], bits int) A {
 	validateBits(family, bits)
 
 	bytes := family.Width() / 8

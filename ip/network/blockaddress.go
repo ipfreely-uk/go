@@ -6,7 +6,6 @@ import (
 
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ip/compare"
-	"github.com/ipfreely-uk/go/ip/subnet"
 )
 
 type single[A ip.Address[A]] struct {
@@ -47,7 +46,7 @@ func (b *single[A]) String() string {
 }
 
 func (b *single[A]) Mask() A {
-	return subnet.Mask(b.address.Family(), b.MaskSize())
+	return ip.SubnetMask(b.address.Family(), b.MaskSize())
 }
 
 func (b *single[A]) CidrNotation() string {

@@ -6,7 +6,6 @@ import (
 
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ip/network"
-	"github.com/ipfreely-uk/go/ip/subnet"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -44,13 +43,13 @@ func TestBlock_Size(t *testing.T) {
 	{
 		address, _ := ip.V4().FromBytes(192, 168, 0, 0)
 		actual := network.NewBlock(address, 24).Size()
-		expected := subnet.AddressCount(ip.V4(), 24)
+		expected := ip.SubnetAddressCount(ip.V4(), 24)
 		assert.Equal(t, expected, actual)
 	}
 	{
 		address := ip.MustParse(ip.V6(), "fe80::")
 		actual := network.NewBlock(address, 128).Size()
-		expected := subnet.AddressCount(ip.V6(), 128)
+		expected := ip.SubnetAddressCount(ip.V6(), 128)
 		assert.Equal(t, expected, actual)
 	}
 }
@@ -128,13 +127,13 @@ func TestBlock_Mask(t *testing.T) {
 	{
 		address, _ := ip.V4().FromBytes(192, 168, 0, 0)
 		actual := network.NewBlock(address, 24).Mask()
-		expected := subnet.Mask(ip.V4(), 24)
+		expected := ip.SubnetMask(ip.V4(), 24)
 		assert.Equal(t, expected, actual)
 	}
 	{
 		address := ip.MustParse(ip.V6(), "fe80::")
 		actual := network.NewBlock(address, 128).Mask()
-		expected := subnet.Mask(ip.V6(), 128)
+		expected := ip.SubnetMask(ip.V6(), 128)
 		assert.Equal(t, expected, actual)
 	}
 }
