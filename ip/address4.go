@@ -12,9 +12,14 @@ type Addr4 struct {
 
 func (a Addr4) sealed() {}
 
+// Returns [Version4]
+func (a Addr4) Version() Version {
+	a.sealed()
+	return Version4
+}
+
 // Returns [V4]
 func (a Addr4) Family() Family[Addr4] {
-	a.sealed()
 	return V4()
 }
 

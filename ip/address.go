@@ -14,6 +14,8 @@ const (
 type Address[A any] interface {
 	// Structs that conform to this interface must be produced by this package
 	sealed()
+	// IP address version
+	Version() Version
 	// IP address family - [V4] or [V6]
 	Family() Family[A]
 	// Address as bytes
@@ -50,4 +52,16 @@ type Address[A any] interface {
 	String() string
 	// Approximation to float64
 	Float64() float64
+}
+
+// Simplified form of [Address] without generics.
+type Unknown interface {
+	// Structs that conform to this interface must be produced by this package
+	sealed()
+	// IP address version
+	Version() Version
+	// Address as bytes
+	Bytes() []byte
+	// Canonical string form
+	String() string
 }

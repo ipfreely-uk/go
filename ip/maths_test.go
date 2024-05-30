@@ -30,6 +30,8 @@ func testMaths[A ip.Address[A]](t *testing.T, addresses []A) {
 		expected, _ := ip.ToBigInt(a).Float64()
 		actual := a.Float64()
 		assert.Equal(t, expected, actual, a.String())
+
+		assert.Equal(t, a.Version(), a.Family().Version())
 	}
 
 	for _, a := range addresses {
