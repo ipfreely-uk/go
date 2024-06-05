@@ -24,9 +24,9 @@ type AddressSet[A ip.Address[A]] interface {
 type AddressRange[A ip.Address[A]] interface {
 	AddressSet[A]
 	// Least address
-	First() A
+	First() (address A)
 	// Greatest address
-	Last() A
+	Last() (address A)
 }
 
 // Immutable RFC-4632 CIDR block.
@@ -34,9 +34,9 @@ type AddressRange[A ip.Address[A]] interface {
 type Block[A ip.Address[A]] interface {
 	AddressRange[A]
 	// Mask size in bits
-	MaskSize() int
+	MaskSize() (bits int)
 	// Mask as IP address
-	Mask() A
+	Mask() (address A)
 	// The block in CIDR notation.
 	CidrNotation() string
 }

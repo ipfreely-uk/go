@@ -6,7 +6,7 @@ import (
 )
 
 // Parses address string
-func Parse[A Address[A]](family Family[A], candidate string) (A, error) {
+func Parse[A Address[A]](family Family[A], candidate string) (address A, err error) {
 	parsed, err := netip.ParseAddr(candidate)
 	if err != nil {
 		return family.FromInt(0), err
@@ -15,7 +15,7 @@ func Parse[A Address[A]](family Family[A], candidate string) (A, error) {
 }
 
 // As [Parse] but panics on error
-func MustParse[A Address[A]](family Family[A], candidate string) A {
+func MustParse[A Address[A]](family Family[A], candidate string) (address A) {
 	a, err := Parse(family, candidate)
 	if err != nil {
 		panic(err)

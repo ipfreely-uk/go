@@ -11,10 +11,10 @@ type Family[A any] interface {
 	Width() int
 	// Create address from bytes.
 	// Returns error if slice is not [Width]/8 bytes.
-	FromBytes(...byte) (A, error)
+	FromBytes(...byte) (address A, err error)
 	// As FromBytes but panics on error
-	MustFromBytes(...byte) A
+	MustFromBytes(...byte) (address A)
 	// Create address from unsigned integer.
 	// All values are valid.
-	FromInt(i uint32) A
+	FromInt(i uint32) (address A)
 }

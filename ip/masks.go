@@ -13,7 +13,7 @@ var ipv6Masks []Addr6 = allMasks(V6())
 
 // Subnet mask of given bit size.
 // Panics if mask bits exceeds [Family_Width] or is less than zero.
-func SubnetMask[A Address[A]](family Family[A], bits int) A {
+func SubnetMask[A Address[A]](family Family[A], bits int) (mask A) {
 	validateBits(family, bits)
 
 	var r any
@@ -35,7 +35,7 @@ func validateBits[A Address[A]](family Family[A], bits int) {
 
 // Number of addresses in subnet with given bit mask size.
 // Panics if mask bits exceeds width of family or is less than zero.
-func SubnetAddressCount[A Address[A]](family Family[A], bits int) *big.Int {
+func SubnetAddressCount[A Address[A]](family Family[A], bits int) (count *big.Int) {
 	validateBits(family, bits)
 	size := big.NewInt(int64(family.Width() - bits))
 	two := big.NewInt(2)
@@ -45,17 +45,17 @@ func SubnetAddressCount[A Address[A]](family Family[A], bits int) *big.Int {
 // Mask size in bits.
 // Returns between 0 and [Family] bit width inclusive if first and last form valid CIDR block.
 // Returns -1 if first and last do not form valid CIDR block.
-func SubnetMaskSize[A Address[A]](first, last A) int {
+func SubnetMaskSize[A Address[A]](first, last A) (bits int) {
 	fam := first.Family()
 	xor := first.Xor(last)
 	zero := fam.FromInt(0)
 	if !compare.Eq(xor.And(first), zero) || !compare.Eq(xor.And(last), xor) {
 		return -1
 	}
-	bits := fam.Width() - xor.Not().TrailingZeros()
-	mask := SubnetMask(fam, bits)
+	bitz := fam.Width() - xor.Not().TrailingZeros()
+	mask := SubnetMask(fam, bitz)
 	if compare.Eq(xor.And(mask), zero) {
-		return bits
+		return bitz
 	}
 	return -1
 }

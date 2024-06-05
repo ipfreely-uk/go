@@ -51,7 +51,7 @@ type Address[A any] interface {
 	// Canonical string form
 	String() string
 	// Approximation to float64
-	Float64() float64
+	Float64() (approximation float64)
 }
 
 // Simplified form of [Address] without generics.

@@ -6,7 +6,7 @@ import (
 )
 
 // Iterator function that returns whether element returned and element
-type Iterator[E any] func() (E, bool)
+type Iterator[E any] func() (element E, exists bool)
 
 func emptyIterator[E any]() Iterator[E] {
 	return func() (E, bool) {
