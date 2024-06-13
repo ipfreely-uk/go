@@ -14,8 +14,6 @@ Add an import statement to [go.mod](https://go.dev/doc/modules/gomod-ref) to uti
 | `import github.com/ipfreely-uk/go/ip`              | Core IP address types                   |
 | `import github.com/ipfreely-uk/go/ip/compare`      | Generic comparison types and functions  |
 | `import github.com/ipfreely-uk/go/ip/network`      | IP address collection & iteration types |
-| `import github.com/ipfreely-uk/go/ip/network/cidr` | CIDR notation functions                 |
-| `import github.com/ipfreely-uk/go/ip/subnet`       | CIDR subnet functions                   |
 
 ## Versus Standard Library
 
