@@ -7,46 +7,63 @@ import (
 	"strings"
 
 	"github.com/ipfreely-uk/go/ip"
-	"github.com/ipfreely-uk/go/ip/compare"
 )
 
 // Parses CIDR notation
 func ParseCIDRNotation[A ip.Address[A]](f ip.Family[A], notation string) (Block[A], error) {
-	split := strings.LastIndex(notation, "/")
-	if split < 0 {
-		msg := fmt.Sprintf("%s not CIDR notation", notation)
-		return nil, errors.New(msg)
+	addressPart, mask, err := splitCidr(notation)
+	if err != nil {
+		return nil, err
 	}
-	addressPart := notation[:split]
 	address, err := ip.Parse(f, addressPart)
 	if err != nil {
 		return nil, err
 	}
-	maskPart := notation[split+1:]
-	mask, err := strconv.Atoi(maskPart)
-	if err != nil {
-		return nil, err
-	}
-	// TODO: too many repeated checks; make Block API better
-	if mask < 0 || mask > address.Family().Width() {
-		msg := fmt.Sprintf("%s has invalid mask", notation)
-		return nil, errors.New(msg)
-	}
-	m := ip.SubnetMask(address.Family(), mask)
-	if !compare.Eq(address, m.And(address)) {
+	if !ip.SubnetMaskCovers(mask, address) {
 		msg := fmt.Sprintf("%s has invalid mask", notation)
 		return nil, errors.New(msg)
 	}
 	return NewBlock(address, mask), nil
 }
 
+func splitCidr(notation string) (addr string, maskBits int, err error) {
+	var address string
+	var mask int
+	split := strings.LastIndex(notation, "/")
+	if split < 0 {
+		msg := fmt.Sprintf("%s not CIDR notation", notation)
+		return address, mask, errors.New(msg)
+	}
+	address = notation[:split]
+	maskPart := notation[split+1:]
+	mask, err = strconv.Atoi(maskPart)
+	return address, mask, err
+}
+
 // Parses CIDR notation where IP address family is unknown.
 // Returns error if operand is not valid CIDR notation.
-// Returns [Block] when oprand is valid.
-func ParseUnknownCIDRNotation(notation string) (any, error) {
-	b, err := ParseCIDRNotation(ip.V4(), notation)
-	if err == nil {
-		return b, err
+func ParseUnknownCIDRNotation(notation string) (netAddress ip.Untyped, maskBits int, err error) {
+	var addr ip.Untyped
+	var mask int
+
+	addressPart, mask, err := splitCidr(notation)
+	if err != nil {
+		return addr, mask, err
 	}
-	return ParseCIDRNotation(ip.V6(), notation)
+	address, err := ip.ParseUnknown(addressPart)
+	if err != nil {
+		return addr, mask, err
+	}
+	cover := false
+	switch a := address.(type) {
+	case ip.Addr4:
+		cover = ip.SubnetMaskCovers(mask, a)
+	case ip.Addr6:
+		cover = ip.SubnetMaskCovers(mask, a)
+	}
+	if !cover {
+		msg := fmt.Sprintf("%s has invalid mask", notation)
+		return address, mask, errors.New(msg)
+	}
+	return address, mask, err
 }

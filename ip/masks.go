@@ -101,3 +101,16 @@ func makeMask[A Address[A]](family Family[A], bits int) A {
 	mask, _ := family.FromBytes(arr...)
 	return mask
 }
+
+func SubnetMaskCovers[A Address[A]](maskBits int, address A) bool {
+	if maskBits < 0 {
+		return false
+	}
+	fam := address.Family()
+	if maskBits > fam.Width() {
+		return false
+	}
+	zero := fam.FromInt(0)
+	iMask := SubnetMask(fam, maskBits).Not()
+	return iMask.And(address).Compare(zero) == 0
+}

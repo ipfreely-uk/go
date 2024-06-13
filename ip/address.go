@@ -55,7 +55,7 @@ type Address[A any] interface {
 }
 
 // Simplified form of [Address] without generics.
-type Unknown interface {
+type Untyped interface {
 	// Structs that conform to this interface must be produced by this package
 	sealed()
 	// IP address version

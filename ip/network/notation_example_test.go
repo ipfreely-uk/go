@@ -8,20 +8,20 @@ import (
 	"github.com/ipfreely-uk/go/ip/network"
 )
 
-func TestExampleParse(t *testing.T) {
-	ExampleParse()
+func TestExampleParseCIDRNotation(t *testing.T) {
+	ExampleParseCIDRNotation()
 }
 
-func ExampleParse() {
+func ExampleParseCIDRNotation() {
 	reservedForDocumentation, _ := network.ParseCIDRNotation(ip.V6(), "2001:db8::/32")
 	printRangeDetails(reservedForDocumentation)
 }
 
-func TestExampleParseUnknown(t *testing.T) {
-	ExampleParseUnknown()
+func TestExampleParseUnknownCIDRNotation(t *testing.T) {
+	ExampleParseUnknownCIDRNotation()
 }
 
-func ExampleParseUnknown() {
+func ExampleParseUnknownCIDRNotation() {
 	reservedForDocumentation := []string{
 		"192.0.2.0/24",
 		"198.51.100.0/24",
@@ -29,15 +29,15 @@ func ExampleParseUnknown() {
 		"2001:db8::/32",
 	}
 	for _, notation := range reservedForDocumentation {
-		block, err := network.ParseUnknownCIDRNotation(notation)
+		address, mask, err := network.ParseUnknownCIDRNotation(notation)
 		if err != nil {
 			panic(err)
 		}
-		switch addresses := block.(type) {
-		case network.Block[ip.Addr4]:
-			printRangeDetails(addresses)
-		case network.Block[ip.Addr6]:
-			printRangeDetails(addresses)
+		switch a := address.(type) {
+		case ip.Addr4:
+			printRangeDetails(network.NewBlock(a, mask))
+		case ip.Addr6:
+			printRangeDetails(network.NewBlock(a, mask))
 		}
 	}
 }

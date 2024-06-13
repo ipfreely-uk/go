@@ -24,7 +24,7 @@ func MustParse[A Address[A]](family Family[A], candidate string) (address A) {
 }
 
 // Parse IP address string from unknown family
-func ParseUnknown(candidate string) (Unknown, error) {
+func ParseUnknown(candidate string) (Untyped, error) {
 	parsed, err := netip.ParseAddr(candidate)
 	if err != nil {
 		return nil, err
@@ -33,7 +33,7 @@ func ParseUnknown(candidate string) (Unknown, error) {
 }
 
 // As [ParseUnknown] but panics on error
-func MustParseUnknown(candidate string) Unknown {
+func MustParseUnknown(candidate string) Untyped {
 	a, err := ParseUnknown(candidate)
 	if err != nil {
 		panic(err)
@@ -42,7 +42,7 @@ func MustParseUnknown(candidate string) Unknown {
 }
 
 // Parse IP address bytes from unknown family
-func FromBytes(address ...byte) (Unknown, error) {
+func FromBytes(address ...byte) (Untyped, error) {
 	length := len(address)
 	if length == 4 {
 		return V4().FromBytes(address...)
@@ -54,7 +54,7 @@ func FromBytes(address ...byte) (Unknown, error) {
 }
 
 // As [FromBytes] but panics on error
-func MustFromBytes(address ...byte) Unknown {
+func MustFromBytes(address ...byte) Untyped {
 	a, err := FromBytes(address...)
 	if err != nil {
 		panic(err)
