@@ -13,7 +13,8 @@ func TestExampleParseCIDRNotation(t *testing.T) {
 }
 
 func ExampleParseCIDRNotation() {
-	reservedForDocumentation, _ := network.ParseCIDRNotation(ip.V6(), "2001:db8::/32")
+	address, mask, _ := network.ParseCIDRNotation(ip.V6(), "2001:db8::/32")
+	reservedForDocumentation := network.NewBlock(address, mask)
 	printRangeDetails(reservedForDocumentation)
 }
 

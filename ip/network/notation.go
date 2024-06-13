@@ -10,20 +10,23 @@ import (
 )
 
 // Parses CIDR notation
-func ParseCIDRNotation[A ip.Address[A]](f ip.Family[A], notation string) (Block[A], error) {
+func ParseCIDRNotation[A ip.Address[A]](f ip.Family[A], notation string) (netAddress A, maskBits int, err error) {
+	var address A
+	var mask int
+
 	addressPart, mask, err := splitCidr(notation)
 	if err != nil {
-		return nil, err
+		return address, mask, err
 	}
-	address, err := ip.Parse(f, addressPart)
+	address, err = ip.Parse(f, addressPart)
 	if err != nil {
-		return nil, err
+		return address, mask, err
 	}
 	if !ip.SubnetMaskCovers(mask, address) {
 		msg := fmt.Sprintf("%s has invalid mask", notation)
-		return nil, errors.New(msg)
+		return address, mask, errors.New(msg)
 	}
-	return NewBlock(address, mask), nil
+	return address, mask, nil
 }
 
 func splitCidr(notation string) (addr string, maskBits int, err error) {

@@ -16,9 +16,10 @@ func TestParseCIDRNotation(t *testing.T) {
 			"192.168.0.0/32",
 		}
 		for _, c := range legal {
-			b, err := network.ParseCIDRNotation(ip.V4(), c)
+			a, m, err := network.ParseCIDRNotation(ip.V4(), c)
 			assert.Nil(t, err)
-			assert.NotNil(t, b)
+			cidr := fmt.Sprintf("%s/%d", a, m)
+			assert.Equal(t, c, cidr)
 		}
 	}
 	{
@@ -27,9 +28,10 @@ func TestParseCIDRNotation(t *testing.T) {
 			"::/128",
 		}
 		for _, c := range legal {
-			b, err := network.ParseCIDRNotation(ip.V6(), c)
+			a, m, err := network.ParseCIDRNotation(ip.V6(), c)
 			assert.Nil(t, err)
-			assert.NotNil(t, b)
+			cidr := fmt.Sprintf("%s/%d", a, m)
+			assert.Equal(t, c, cidr)
 		}
 	}
 	{
@@ -43,11 +45,11 @@ func TestParseCIDRNotation(t *testing.T) {
 			"::/129",
 		}
 		for _, c := range illegal {
-			_, err := network.ParseCIDRNotation(ip.V4(), c)
+			_, _, err := network.ParseCIDRNotation(ip.V4(), c)
 			assert.NotNil(t, err)
 		}
 		for _, c := range illegal {
-			_, err := network.ParseCIDRNotation(ip.V6(), c)
+			_, _, err := network.ParseCIDRNotation(ip.V6(), c)
 			assert.NotNil(t, err)
 		}
 	}
