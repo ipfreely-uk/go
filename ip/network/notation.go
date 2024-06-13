@@ -1,4 +1,4 @@
-package cidr
+package network
 
 import (
 	"errors"
@@ -8,11 +8,10 @@ import (
 
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ip/compare"
-	"github.com/ipfreely-uk/go/ip/network"
 )
 
 // Parses CIDR notation
-func Parse[A ip.Address[A]](f ip.Family[A], notation string) (network.Block[A], error) {
+func ParseCIDRNotation[A ip.Address[A]](f ip.Family[A], notation string) (Block[A], error) {
 	split := strings.LastIndex(notation, "/")
 	if split < 0 {
 		msg := fmt.Sprintf("%s not CIDR notation", notation)
@@ -38,18 +37,16 @@ func Parse[A ip.Address[A]](f ip.Family[A], notation string) (network.Block[A], 
 		msg := fmt.Sprintf("%s has invalid mask", notation)
 		return nil, errors.New(msg)
 	}
-	return network.NewBlock(address, mask), nil
+	return NewBlock(address, mask), nil
 }
 
 // Parses CIDR notation where IP address family is unknown.
 // Returns error if operand is not valid CIDR notation.
-// Returns [network.Block] when oprand is valid.
-func ParseUnknown(notation string) (any, error) {
-	b, err := Parse(ip.V4(), notation)
+// Returns [Block] when oprand is valid.
+func ParseUnknownCIDRNotation(notation string) (any, error) {
+	b, err := ParseCIDRNotation(ip.V4(), notation)
 	if err == nil {
 		return b, err
 	}
-	return Parse(ip.V6(), notation)
+	return ParseCIDRNotation(ip.V6(), notation)
 }
-
-// TODO: use heuristics to detect address types for efficiency

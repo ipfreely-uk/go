@@ -1,4 +1,4 @@
-package cidr_test
+package network_test
 
 import (
 	"testing"
@@ -6,7 +6,6 @@ import (
 	"github.com/dustin/go-humanize"
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ip/network"
-	"github.com/ipfreely-uk/go/ip/network/cidr"
 )
 
 func TestExampleParse(t *testing.T) {
@@ -14,7 +13,7 @@ func TestExampleParse(t *testing.T) {
 }
 
 func ExampleParse() {
-	reservedForDocumentation, _ := cidr.Parse(ip.V6(), "2001:db8::/32")
+	reservedForDocumentation, _ := network.ParseCIDRNotation(ip.V6(), "2001:db8::/32")
 	printRangeDetails(reservedForDocumentation)
 }
 
@@ -30,7 +29,7 @@ func ExampleParseUnknown() {
 		"2001:db8::/32",
 	}
 	for _, notation := range reservedForDocumentation {
-		block, err := cidr.ParseUnknown(notation)
+		block, err := network.ParseUnknownCIDRNotation(notation)
 		if err != nil {
 			panic(err)
 		}

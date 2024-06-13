@@ -1,9 +1,9 @@
-package cidr_test
+package network_test
 
 import (
 	"testing"
 
-	"github.com/ipfreely-uk/go/ip/network/cidr"
+	"github.com/ipfreely-uk/go/ip/network"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -15,7 +15,7 @@ func TestParseUnknown(t *testing.T) {
 		"::/128",
 	}
 	for _, c := range legal {
-		b, err := cidr.ParseUnknown(c)
+		b, err := network.ParseUnknownCIDRNotation(c)
 		assert.Nil(t, err)
 		assert.NotNil(t, b)
 	}
@@ -29,7 +29,7 @@ func TestParseUnknown(t *testing.T) {
 		"::/129",
 	}
 	for _, c := range illegal {
-		_, err := cidr.ParseUnknown(c)
+		_, err := network.ParseUnknownCIDRNotation(c)
 		assert.NotNil(t, err)
 	}
 }
