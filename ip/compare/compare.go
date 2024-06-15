@@ -7,12 +7,12 @@ type Comparable[C any] interface {
 }
 
 // Convenience function for testing equality
-func Eq[C Comparable[C]](a0, a1 C) bool {
+func Eq[C Comparable[C]](a0, a1 C) (areEqual bool) {
 	return a0.Compare(a1) == 0
 }
 
 // Returns greatest element
-func Max[C Comparable[C]](this, that C) C {
+func Max[C Comparable[C]](this, that C) (greatest C) {
 	if this.Compare(that) >= 0 {
 		return this
 	}
@@ -20,7 +20,7 @@ func Max[C Comparable[C]](this, that C) C {
 }
 
 // Returns least element
-func Min[C Comparable[C]](this, that C) C {
+func Min[C Comparable[C]](this, that C) (least C) {
 	if this.Compare(that) <= 0 {
 		return this
 	}

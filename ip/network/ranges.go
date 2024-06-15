@@ -5,12 +5,12 @@ import (
 	"github.com/ipfreely-uk/go/ip/compare"
 )
 
-// Test if [Range]s have common elements
+// Test if ranges have common elements
 func Intersect[A ip.Address[A]](r0, r1 AddressRange[A]) bool {
 	return r0.Contains(r1.First()) || r0.Contains(r1.Last()) || r1.Contains(r0.First()) || r1.Contains(r0.Last())
 }
 
-// Tests if [Range]s are one element from overlap
+// Tests if ranges are one element from overlap
 func Adjacent[A ip.Address[A]](r0, r1 AddressRange[A]) bool {
 	return lastNextToFirst(r0.Last(), r1.First()) || lastNextToFirst(r1.Last(), r0.First())
 }
@@ -19,7 +19,7 @@ func lastNextToFirst[A ip.Address[A]](last, first A) bool {
 	return compare.Eq(last, ip.Prev(first)) && !compare.Eq(last.Family().FromInt(0), first)
 }
 
-// Tests if [Range]s either [Intersect] or are [Adjacent]
+// Tests if ranges either [Intersect] or are [Adjacent]
 func Contiguous[A ip.Address[A]](r0, r1 AddressRange[A]) bool {
 	return Intersect(r0, r1) || Adjacent(r0, r1)
 }

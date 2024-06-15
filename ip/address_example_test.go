@@ -17,9 +17,10 @@ func ExampleAddress() {
 
 func printN[A ip.Address[A]](address A, n int) {
 	a := address
+	one := a.Family().FromInt(1)
 	for i := 0; i < n; i++ {
 		println(a.String())
-		a = ip.Next(a)
+		a = a.Add(one)
 	}
 }
 
