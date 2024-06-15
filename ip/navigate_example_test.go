@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
+	"github.com/ipfreely-uk/go/ip/compare"
 )
 
 func TestExampleNext(t *testing.T) {
@@ -22,7 +23,7 @@ func Ascend[A ip.Address[A]](lowest, highest A) {
 	current := lowest
 	for {
 		println(current.String())
-		if current.Compare(highest) == 0 {
+		if compare.Eq(current, highest) {
 			break
 		}
 		current = ip.Next(current)
@@ -45,7 +46,7 @@ func Descend[A ip.Address[A]](highest, lowest A) {
 	current := highest
 	for {
 		println(current.String())
-		if current.Compare(lowest) == 0 {
+		if compare.Eq(current, lowest) {
 			break
 		}
 		current = ip.Prev(current)
