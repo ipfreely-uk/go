@@ -5,7 +5,8 @@ import (
 	"net/netip"
 )
 
-// Immutable 32bit unsigned integer IP [Address] representation
+// Immutable 32bit unsigned integer IP [Address] representation.
+// Use [V4] to create values.
 type Addr4 struct {
 	value uint32
 }

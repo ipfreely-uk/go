@@ -13,7 +13,8 @@ var size6 = func() *big.Int {
 	return n.Add(n, big.NewInt(1))
 }()
 
-// Immutable 128bit unsigned integer IP [Address] representation
+// Immutable 128bit unsigned integer IP [Address] representation.
+// Use [V6] to create values.
 type Addr6 struct {
 	high uint64
 	low  uint64

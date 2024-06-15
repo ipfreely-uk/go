@@ -49,11 +49,11 @@ func printAllMasks[A ip.Address[A]](f ip.Family[A]) {
 	}
 }
 
-func TestExampleAddressCount(t *testing.T) {
-	ExampleAddressCount()
+func TestExampleSubnetAddressCount(t *testing.T) {
+	ExampleSubnetAddressCount()
 }
 
-func ExampleAddressCount() {
+func ExampleSubnetAddressCount() {
 	printSubnetSizesForMasks(ip.V4())
 	printSubnetSizesForMasks(ip.V6())
 }
@@ -66,12 +66,12 @@ func printSubnetSizesForMasks[A ip.Address[A]](family ip.Family[A]) {
 	}
 }
 
-func TestExampleMaskSize(t *testing.T) {
-	ExampleMaskSize()
-	ExampleMaskSize_second()
+func TestExampleSubnetMaskSize(t *testing.T) {
+	ExampleSubnetMaskSize()
+	ExampleSubnetMaskSize_second()
 }
 
-func ExampleMaskSize() {
+func ExampleSubnetMaskSize() {
 	family := ip.V4()
 	first := family.MustFromBytes(192, 0, 2, 0)
 	last := family.MustFromBytes(192, 0, 2, 255)
@@ -82,7 +82,7 @@ func ExampleMaskSize() {
 	println(fmt.Sprintf("/%d", maskBits), "==", mask.String())
 }
 
-func ExampleMaskSize_second() {
+func ExampleSubnetMaskSize_second() {
 	family := ip.V4()
 	first := family.MustFromBytes(192, 0, 2, 0)
 	last := family.MustFromBytes(192, 0, 2, 255)
@@ -93,5 +93,25 @@ func ExampleMaskSize_second() {
 		println(first.String(), "-", last.String(), " is valid subnet ", cidrNotation)
 	} else {
 		println(first.String(), "-", last.String(), " is not a valid subnet")
+	}
+}
+
+func TestExampleSubnetMaskCovers(t *testing.T) {
+	ExampleSubnetMaskCovers()
+}
+
+func ExampleSubnetMaskCovers() {
+	v4 := ip.V4()
+	netAddress := v4.MustFromBytes(192, 0, 2, 0)
+
+	for mask := 32; mask >= 20; mask-- {
+		addrStr := netAddress.String()
+		cidrNotation := fmt.Sprintf("%s/%d", addrStr, mask)
+		if ip.SubnetMaskCovers(mask, netAddress) {
+			println(cidrNotation, "is a valid expression")
+		} else {
+			maskAddr := ip.SubnetMask(v4, mask).String()
+			println(cidrNotation, "is not a valid expression;", maskAddr, "does not cover", addrStr)
+		}
 	}
 }

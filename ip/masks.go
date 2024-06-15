@@ -102,7 +102,8 @@ func makeMask[A Address[A]](family Family[A], bits int) A {
 	return mask
 }
 
-func SubnetMaskCovers[A Address[A]](maskBits int, address A) bool {
+// Tests mask bits cover network address.
+func SubnetMaskCovers[A Address[A]](maskBits int, address A) (maskBitsDoCover bool) {
 	if maskBits < 0 {
 		return false
 	}

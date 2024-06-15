@@ -23,11 +23,11 @@ func printN[A ip.Address[A]](address A, n int) {
 	}
 }
 
-func TestExampleUnknown(t *testing.T) {
-	ExampleUnknown()
+func TestExampleUntyped(t *testing.T) {
+	ExampleUntyped()
 }
 
-func ExampleUnknown() {
+func ExampleUntyped() {
 	examples := []string{
 		"2001:db8::",
 		"192.0.2.0",

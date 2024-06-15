@@ -73,3 +73,16 @@ func TestMaskSize(t *testing.T) {
 		assert.Equal(t, -1, ip.SubnetMaskSize(one, two))
 	}
 }
+
+func TestSubnetCovers(t *testing.T) {
+	fe80 := ip.MustParse(ip.V6(), "fe80::")
+	zero := ip.V6().FromInt(0)
+
+	assert.True(t, ip.SubnetMaskCovers(128, fe80))
+	assert.True(t, ip.SubnetMaskCovers(16, fe80))
+	assert.True(t, ip.SubnetMaskCovers(0, zero))
+
+	assert.False(t, ip.SubnetMaskCovers(-1, fe80))
+	assert.False(t, ip.SubnetMaskCovers(0, fe80))
+	assert.False(t, ip.SubnetMaskCovers(129, fe80))
+}
