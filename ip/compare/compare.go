@@ -6,7 +6,7 @@ type Comparable[C any] interface {
 	Compare(operand C) int
 }
 
-// Convenience function for testing equality
+// Tests equality
 func Eq[C Comparable[C]](a0, a1 C) (areEqual bool) {
 	return a0.Compare(a1) == 0
 }
