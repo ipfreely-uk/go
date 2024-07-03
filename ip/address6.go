@@ -6,13 +6,6 @@ import (
 	"net/netip"
 )
 
-var size6 = func() *big.Int {
-	zero := Addr6{}
-	max := zero.Not()
-	n := ToBigInt(max)
-	return n.Add(n, big.NewInt(1))
-}()
-
 // Immutable 128bit unsigned integer IP [Number] representation.
 // Use [V6] to create values.
 type Addr6 struct {
@@ -96,6 +89,14 @@ func isZero(a Addr6) bool {
 func isOne(a Addr6) bool {
 	return a.high == 0 && a.low == 1
 }
+
+// Size of IPv6 range as big.Int
+var size6 = func() *big.Int {
+	zero := Addr6{}
+	max := zero.Not()
+	n := ToBigInt(max)
+	return n.Add(n, big.NewInt(1))
+}()
 
 // See [Number]
 func (a Addr6) Multiply(multiplicand Addr6) Addr6 {
