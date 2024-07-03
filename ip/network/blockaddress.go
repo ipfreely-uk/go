@@ -8,7 +8,7 @@ import (
 	"github.com/ipfreely-uk/go/ip/compare"
 )
 
-type single[A ip.Address[A]] struct {
+type single[A ip.Number[A]] struct {
 	address A
 }
 

@@ -6,7 +6,7 @@ import (
 	"github.com/ipfreely-uk/go/ip"
 )
 
-type empty[A ip.Address[A]] struct{}
+type empty[A ip.Number[A]] struct{}
 
 func (e *empty[A]) Contains(A) bool {
 	return false
@@ -28,6 +28,6 @@ func (e *empty[A]) String() string {
 	return "{}"
 }
 
-func emptySet[A ip.Address[A]]() AddressSet[A] {
+func emptySet[A ip.Number[A]]() AddressSet[A] {
 	return &empty[A]{}
 }

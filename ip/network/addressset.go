@@ -8,7 +8,7 @@ import (
 	"github.com/ipfreely-uk/go/ip"
 )
 
-type addressSet[A ip.Address[A]] struct {
+type addressSet[A ip.Number[A]] struct {
 	ranges []AddressRange[A]
 }
 
@@ -55,7 +55,7 @@ func (s *addressSet[A]) String() string {
 // Creates [AddressSet] from given IP address ranges.
 // Ranges may overlap.
 // If set reduces to contiguous range returns type that conforms to [AddressRange].
-func NewSet[A ip.Address[A]](ranges ...AddressRange[A]) AddressSet[A] {
+func NewSet[A ip.Number[A]](ranges ...AddressRange[A]) AddressSet[A] {
 	if len(ranges) == 0 {
 		return emptySet[A]()
 	}
@@ -68,7 +68,7 @@ func NewSet[A ip.Address[A]](ranges ...AddressRange[A]) AddressSet[A] {
 	}
 }
 
-func rationalize[A ip.Address[A]](spans []AddressRange[A]) []AddressRange[A] {
+func rationalize[A ip.Number[A]](spans []AddressRange[A]) []AddressRange[A] {
 	set := map[AddressRange[A]]bool{}
 	for _, r := range spans {
 		set[r] = true

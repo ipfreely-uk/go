@@ -30,7 +30,7 @@ func sliceIterator[E any](slice []E) Iterator[E] {
 	}
 }
 
-func addressIterator[A ip.Address[A]](first, last A) Iterator[A] {
+func addressIterator[A ip.Number[A]](first, last A) Iterator[A] {
 	var current A = first
 	var done bool = false
 
@@ -46,7 +46,7 @@ func addressIterator[A ip.Address[A]](first, last A) Iterator[A] {
 	}
 }
 
-func ranges2AddressIterator[A ip.Address[A]](slice []AddressRange[A]) Iterator[A] {
+func ranges2AddressIterator[A ip.Number[A]](slice []AddressRange[A]) Iterator[A] {
 	ranges := sliceIterator(slice)
 	rnge, rok := ranges()
 	addresses := rnge.Addresses()

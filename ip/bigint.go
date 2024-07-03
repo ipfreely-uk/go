@@ -5,14 +5,14 @@ import (
 	"math/big"
 )
 
-// Converts any [Address] to big integer
-func ToBigInt[A Address[A]](address A) (i *big.Int) {
+// Converts any [Number] to big integer
+func ToBigInt[A Number[A]](address A) (i *big.Int) {
 	return big.NewInt(0).SetBytes(address.Bytes())
 }
 
-// Converts big integer to [Address].
+// Converts big integer to [Number].
 // Returns error if value out of range for address family.
-func FromBigInt[A Address[A]](family Family[A], i *big.Int) (address A, err error) {
+func FromBigInt[A Number[A]](family Family[A], i *big.Int) (address A, err error) {
 	b := i.Bytes()
 	maxlen := family.Width() / 8
 	if i.Sign() < 0 || len(b) > maxlen {

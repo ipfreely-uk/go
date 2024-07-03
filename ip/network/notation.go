@@ -11,7 +11,7 @@ import (
 
 // Parses CIDR notation.
 // Returns error if second argument is invalid CIDR notation.
-func ParseCIDRNotation[A ip.Address[A]](f ip.Family[A], notation string) (netAddress A, maskBits int, err error) {
+func ParseCIDRNotation[A ip.Number[A]](f ip.Family[A], notation string) (netAddress A, maskBits int, err error) {
 	var address A
 	var mask int
 
@@ -46,8 +46,8 @@ func splitCidr(notation string) (addr string, maskBits int, err error) {
 
 // Parses CIDR notation where IP address family is unknown.
 // Returns error if argument is invalid CIDR notation.
-func ParseUnknownCIDRNotation(notation string) (netAddress ip.Untyped, maskBits int, err error) {
-	var addr ip.Untyped
+func ParseUnknownCIDRNotation(notation string) (netAddress ip.Address, maskBits int, err error) {
+	var addr ip.Address
 	var mask int
 
 	addressPart, mask, err := splitCidr(notation)

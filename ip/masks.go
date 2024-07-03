@@ -13,7 +13,7 @@ var ipv6Masks []Addr6 = allMasks(V6())
 
 // Subnet mask of given bit size.
 // Panics if mask bits exceeds [Family.Width] or is less than zero.
-func SubnetMask[A Address[A]](family Family[A], maskBits int) (mask A) {
+func SubnetMask[A Number[A]](family Family[A], maskBits int) (mask A) {
 	validateBits(family, maskBits)
 
 	var r any
@@ -25,7 +25,7 @@ func SubnetMask[A Address[A]](family Family[A], maskBits int) (mask A) {
 	return reflect.ValueOf(r).Interface().(A)
 }
 
-func validateBits[A Address[A]](family Family[A], bits int) {
+func validateBits[A Number[A]](family Family[A], bits int) {
 	width := family.Width()
 	if bits < 0 || bits > width {
 		msg := fmt.Sprintf("wanted 0-%d for IPv%d; got %d", family.Width(), family.Version(), bits)
@@ -35,7 +35,7 @@ func validateBits[A Address[A]](family Family[A], bits int) {
 
 // Number of addresses in subnet with given bit mask size.
 // Panics if mask bits exceeds width of family or is less than zero.
-func SubnetAddressCount[A Address[A]](family Family[A], maskBits int) (count *big.Int) {
+func SubnetAddressCount[A Number[A]](family Family[A], maskBits int) (count *big.Int) {
 	validateBits(family, maskBits)
 	size := big.NewInt(int64(family.Width() - maskBits))
 	two := big.NewInt(2)
@@ -43,9 +43,9 @@ func SubnetAddressCount[A Address[A]](family Family[A], maskBits int) (count *bi
 }
 
 // Mask size in bits.
-// Returns between 0 and [Family] bit width inclusive if first and last form valid CIDR block.
+// Returns between 0 and [Family.Width] inclusive if first and last form valid CIDR block.
 // Returns -1 if first and last do not form valid CIDR block.
-func SubnetMaskSize[A Address[A]](first, last A) (maskBits int) {
+func SubnetMaskSize[A Number[A]](first, last A) (maskBits int) {
 	fam := first.Family()
 	xor := first.Xor(last)
 	zero := fam.FromInt(0)
@@ -60,7 +60,7 @@ func SubnetMaskSize[A Address[A]](first, last A) (maskBits int) {
 	return -1
 }
 
-func allMasks[A Address[A]](family Family[A]) []A {
+func allMasks[A Number[A]](family Family[A]) []A {
 	masks := []A{}
 	for i := 0; i <= family.Width(); i++ {
 		masks = append(masks, makeMask(family, i))
@@ -68,7 +68,7 @@ func allMasks[A Address[A]](family Family[A]) []A {
 	return masks
 }
 
-func makeMask[A Address[A]](family Family[A], bits int) A {
+func makeMask[A Number[A]](family Family[A], bits int) A {
 	validateBits(family, bits)
 
 	bytes := family.Width() / 8
@@ -103,7 +103,7 @@ func makeMask[A Address[A]](family Family[A], bits int) A {
 }
 
 // Tests mask bits cover network address.
-func SubnetMaskCovers[A Address[A]](maskBits int, address A) (maskBitsDoCover bool) {
+func SubnetMaskCovers[A Number[A]](maskBits int, address A) (maskBitsDoCover bool) {
 	if maskBits < 0 {
 		return false
 	}

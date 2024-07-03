@@ -7,7 +7,7 @@ import (
 )
 
 // IP address set.
-type AddressSet[A ip.Address[A]] interface {
+type AddressSet[A ip.Number[A]] interface {
 	// Tests if address in set
 	Contains(address A) bool
 	// Number of unique addresses
@@ -21,7 +21,7 @@ type AddressSet[A ip.Address[A]] interface {
 }
 
 // Immutable contiguous range of one or more IP addresses.
-type AddressRange[A ip.Address[A]] interface {
+type AddressRange[A ip.Number[A]] interface {
 	AddressSet[A]
 	// Least address
 	First() (address A)
@@ -31,7 +31,7 @@ type AddressRange[A ip.Address[A]] interface {
 
 // Immutable RFC-4632 CIDR block.
 // Roughly equivalent to the [netip.Prefix] type.
-type Block[A ip.Address[A]] interface {
+type Block[A ip.Number[A]] interface {
 	AddressRange[A]
 	// Mask size in bits
 	MaskSize() (bits int)

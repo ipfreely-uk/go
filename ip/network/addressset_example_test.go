@@ -28,7 +28,7 @@ func ExampleNewSet() {
 	}
 }
 
-func exampleRange[A ip.Address[A]](family ip.Family[A], first, last string) network.AddressRange[A] {
+func exampleRange[A ip.Number[A]](family ip.Family[A], first, last string) network.AddressRange[A] {
 	a0 := ip.MustParse(family, first)
 	a1 := ip.MustParse(family, last)
 	return network.NewRange(a0, a1)

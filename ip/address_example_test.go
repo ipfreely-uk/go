@@ -6,16 +6,16 @@ import (
 	"github.com/ipfreely-uk/go/ip"
 )
 
-func TestExampleAddress(t *testing.T) {
-	ExampleAddress()
+func TestExampleNumber(t *testing.T) {
+	ExampleNumber()
 }
 
-func ExampleAddress() {
+func ExampleNumber() {
 	printN(ip.V4().MustFromBytes(192, 0, 2, 0), 3)
 	printN(ip.MustParse(ip.V6(), "2001:db8::"), 3)
 }
 
-func printN[A ip.Address[A]](address A, n int) {
+func printN[A ip.Number[A]](address A, n int) {
 	a := address
 	one := a.Family().FromInt(1)
 	for i := 0; i < n; i++ {
@@ -24,11 +24,11 @@ func printN[A ip.Address[A]](address A, n int) {
 	}
 }
 
-func TestExampleUntyped(t *testing.T) {
-	ExampleUntyped()
+func TestExampleAddress(t *testing.T) {
+	ExampleAddress()
 }
 
-func ExampleUntyped() {
+func ExampleAddress() {
 	examples := []string{
 		"2001:db8::",
 		"192.0.2.0",
@@ -45,7 +45,7 @@ func ExampleUntyped() {
 	}
 }
 
-func printNthAfter[A ip.Address[A]](address A, n uint32) {
+func printNthAfter[A ip.Number[A]](address A, n uint32) {
 	operand := address.Family().FromInt(n)
 	result := address.Add(operand)
 	println(result.String())

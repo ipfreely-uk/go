@@ -8,7 +8,7 @@ import (
 	"github.com/ipfreely-uk/go/ip/compare"
 )
 
-type block[A ip.Address[A]] struct {
+type block[A ip.Number[A]] struct {
 	first A
 	last  A
 }
@@ -59,7 +59,7 @@ func (b *block[A]) CidrNotation() string {
 
 // Creates [Block].
 // Panics if mask does not cover network address or is out of range for address family.
-func NewBlock[A ip.Address[A]](network A, mask int) Block[A] {
+func NewBlock[A ip.Number[A]](network A, mask int) Block[A] {
 	fam := network.Family()
 	if fam.Width() == mask {
 		return &single[A]{network}

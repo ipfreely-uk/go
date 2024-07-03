@@ -10,16 +10,31 @@ const (
 	Version6 Version = 6
 )
 
-// Generic IP address type.
-type Address[A any] interface {
+// The parts of [Number] without generic typing.
+// [Addr4] and [Addr6] are the only types that can conform to this interface.
+type Address interface {
 	// Structs that conform to this interface must be produced by this package
 	sealed()
 	// IP address version
 	Version() Version
-	// IP address family - [V4] or [V6]
-	Family() Family[A]
 	// Address as bytes
 	Bytes() []byte
+	// Canonical string form
+	String() string
+	// Equivalent to math/bits.LeadingZeros
+	LeadingZeros() int
+	// Equivalent to math/bits.TrailingZeros
+	TrailingZeros() int
+	// Approximation to float64
+	Float64() (approximation float64)
+}
+
+// Generic IP address type.
+// [Addr4] and [Addr6] are the only types that can conform to this interface.
+type Number[A any] interface {
+	Address
+	// IP address family - [V4] or [V6]
+	Family() Family[A]
 	// Addition with overflow
 	Add(A) A
 	// Subtraction with overflow
@@ -44,24 +59,4 @@ type Address[A any] interface {
 	// Returns -1 if operand is more than this.
 	// Returns 0 if operand is equal.
 	Compare(A) int
-	// Equivalent to math/bits.LeadingZeros
-	LeadingZeros() int
-	// Equivalent to math/bits.TrailingZeros
-	TrailingZeros() int
-	// Canonical string form
-	String() string
-	// Approximation to float64
-	Float64() (approximation float64)
-}
-
-// Simplified form of [Address] without generics.
-type Untyped interface {
-	// Structs that conform to this interface must be produced by this package
-	sealed()
-	// IP address version
-	Version() Version
-	// Address as bytes
-	Bytes() []byte
-	// Canonical string form
-	String() string
 }

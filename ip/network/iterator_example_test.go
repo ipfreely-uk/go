@@ -12,9 +12,11 @@ func TestExampleIterator(t *testing.T) {
 }
 
 func ExampleIterator() {
-	first := ip.V4().MustFromBytes(192, 168, 0, 1)
-	last := ip.V4().MustFromBytes(192, 168, 0, 254)
-	assignable := network.NewRange(first, last)
+	netaddr, mask, _ := network.ParseCIDRNotation(ip.V4(), "192.0.2.128/28")
+	subnet := network.NewBlock(netaddr, mask)
+	firstAssigneable := ip.Next(subnet.First())
+	lastAssigneable := ip.Prev(subnet.Last())
+	assignable := network.NewRange(firstAssigneable, lastAssigneable)
 
 	// iterator of addresses
 	next := assignable.Addresses()

@@ -172,7 +172,7 @@ func TestBlockIteration(t *testing.T) {
 	makeAndWalkBlocks(t, ip.V6())
 }
 
-func makeAndWalkBlocks[A ip.Address[A]](t *testing.T, family ip.Family[A]) {
+func makeAndWalkBlocks[A ip.Number[A]](t *testing.T, family ip.Family[A]) {
 	src := rand.New(rand.NewSource(0))
 	buf := make([]byte, family.Width()/8)
 
@@ -188,7 +188,7 @@ func makeAndWalkBlocks[A ip.Address[A]](t *testing.T, family ip.Family[A]) {
 	}
 }
 
-func walkBlocks[A ip.Address[A]](t *testing.T, a1, a2 A) {
+func walkBlocks[A ip.Number[A]](t *testing.T, a1, a2 A) {
 	r := network.NewRange(a1, a2)
 	nextBlock := network.Blocks(r)
 

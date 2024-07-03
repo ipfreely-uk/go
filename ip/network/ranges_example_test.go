@@ -21,7 +21,7 @@ func ExampleContiguous() {
 	}
 }
 
-func makeRange[A ip.Address[A]](family ip.Family[A], first, last string) network.AddressRange[A] {
+func makeRange[A ip.Number[A]](family ip.Family[A], first, last string) network.AddressRange[A] {
 	f := ip.MustParse(family, first)
 	l := ip.MustParse(family, last)
 	return network.NewRange(f, l)

@@ -19,7 +19,7 @@ func ExampleBlocks() {
 	printCidrBlocksIn(freeAddresses)
 }
 
-func printCidrBlocksIn[A ip.Address[A]](addressRange network.AddressRange[A]) {
+func printCidrBlocksIn[A ip.Number[A]](addressRange network.AddressRange[A]) {
 	next := network.Blocks(addressRange)
 	for block, exists := next(); exists; block, exists = next() {
 		println(block.String())

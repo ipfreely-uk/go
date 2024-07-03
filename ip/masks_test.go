@@ -28,7 +28,7 @@ func TestMask(t *testing.T) {
 	assert.Panics(t, func() { ip.SubnetMask(ip.V4(), -1) })
 }
 
-func verifyMask[A ip.Address[A]](t *testing.T, expected []byte, family ip.Family[A], mask int) {
+func verifyMask[A ip.Number[A]](t *testing.T, expected []byte, family ip.Family[A], mask int) {
 	e, x := family.FromBytes(expected...)
 	assert.Nil(t, x)
 	actual := ip.SubnetMask(family, mask)

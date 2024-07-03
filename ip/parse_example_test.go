@@ -53,7 +53,7 @@ func ExampleMustFromBytes() {
 	}
 }
 
-func toNetip[A ip.Address[A]](address A) netip.Addr {
+func toNetip[A ip.Number[A]](address A) netip.Addr {
 	i, _ := netip.AddrFromSlice(address.Bytes())
 	return i
 }

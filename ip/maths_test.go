@@ -25,7 +25,7 @@ var add op = func(x, y *big.Int) *big.Int { return big.NewInt(0).Add(x, y) }
 var mul op = func(x, y *big.Int) *big.Int { return big.NewInt(0).Mul(x, y) }
 var sub op = func(x, y *big.Int) *big.Int { return big.NewInt(0).Sub(x, y) }
 
-func testMaths[A ip.Address[A]](t *testing.T, addresses []A) {
+func testMaths[A ip.Number[A]](t *testing.T, addresses []A) {
 	for _, a := range addresses {
 		expected, _ := ip.ToBigInt(a).Float64()
 		actual := a.Float64()
@@ -46,7 +46,7 @@ func testMaths[A ip.Address[A]](t *testing.T, addresses []A) {
 	}
 }
 
-func testAdd[A ip.Address[A]](t *testing.T, a, b A, bigA, bigB *big.Int) {
+func testAdd[A ip.Number[A]](t *testing.T, a, b A, bigA, bigB *big.Int) {
 	r := perform(a.Family(), add, bigA, bigB)
 
 	expected, _ := ip.FromBigInt(a.Family(), r)
@@ -55,7 +55,7 @@ func testAdd[A ip.Address[A]](t *testing.T, a, b A, bigA, bigB *big.Int) {
 	assert.Equal(t, expected, actual, msg)
 }
 
-func testMultiply[A ip.Address[A]](t *testing.T, a, b A, bigA, bigB *big.Int) {
+func testMultiply[A ip.Number[A]](t *testing.T, a, b A, bigA, bigB *big.Int) {
 	r := perform(a.Family(), mul, bigA, bigB)
 
 	expected, _ := ip.FromBigInt(a.Family(), r)
@@ -64,7 +64,7 @@ func testMultiply[A ip.Address[A]](t *testing.T, a, b A, bigA, bigB *big.Int) {
 	assert.Equal(t, expected, actual, msg)
 }
 
-func testSubtract[A ip.Address[A]](t *testing.T, a, b A, bigA, bigB *big.Int) {
+func testSubtract[A ip.Number[A]](t *testing.T, a, b A, bigA, bigB *big.Int) {
 	r := perform(a.Family(), sub, bigA, bigB)
 
 	expected, _ := ip.FromBigInt(a.Family(), r)
@@ -73,7 +73,7 @@ func testSubtract[A ip.Address[A]](t *testing.T, a, b A, bigA, bigB *big.Int) {
 	assert.Equal(t, expected, actual, msg)
 }
 
-func testDivide[A ip.Address[A]](t *testing.T, a, b A, bigA, bigB *big.Int) {
+func testDivide[A ip.Number[A]](t *testing.T, a, b A, bigA, bigB *big.Int) {
 	zero := ip.MinAddress(a.Family())
 
 	if compare.Eq(b, zero) {
@@ -98,7 +98,7 @@ func testDivide[A ip.Address[A]](t *testing.T, a, b A, bigA, bigB *big.Int) {
 	}
 }
 
-func perform[A ip.Address[A]](family ip.Family[A], f op, x, y *big.Int) *big.Int {
+func perform[A ip.Number[A]](family ip.Family[A], f op, x, y *big.Int) *big.Int {
 	z := f(x, y)
 	var size *big.Int
 	if family.Version() == ip.Version4 {

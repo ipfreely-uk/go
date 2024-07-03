@@ -8,7 +8,7 @@ import (
 	"github.com/ipfreely-uk/go/ip/compare"
 )
 
-type addressRange[A ip.Address[A]] struct {
+type addressRange[A ip.Number[A]] struct {
 	first A
 	last  A
 }
@@ -48,7 +48,7 @@ func (e *addressRange[A]) String() string {
 
 // Creates new AddressRange.
 // Return value conforms to Block if possible.
-func NewRange[A ip.Address[A]](first, last A) AddressRange[A] {
+func NewRange[A ip.Number[A]](first, last A) AddressRange[A] {
 	f := compare.Min(first, last)
 	l := compare.Max(first, last)
 	mask := ip.SubnetMaskSize(f, l)
