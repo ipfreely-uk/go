@@ -71,9 +71,12 @@ func split[A ip.Number[A]](b ipset.Block[A], newMaskSize int) ipset.Iterator[ips
 	if newMaskSize < b.MaskSize() {
 		panic("invalid split size")
 	}
-	current := ipset.NewBlock(b.First(), newMaskSize)
-	one := current.First().Family().FromInt(1)
+	start := b.First()
+	one := start.Family().FromInt(1)
+
+	current := ipset.NewBlock(start, newMaskSize)
 	increment := current.Last().Subtract(current.First()).Add(one)
+	end := b.Last()
 	exhausted := false
 
 	return func() (element ipset.Block[A], exists bool) {
@@ -81,7 +84,7 @@ func split[A ip.Number[A]](b ipset.Block[A], newMaskSize int) ipset.Iterator[ips
 			return nil, false
 		}
 		result := current
-		exhausted = compare.Eq(current.Last(), b.Last())
+		exhausted = compare.Eq(current.Last(), end)
 		if !exhausted {
 			first := current.First().Add(increment)
 			current = ipset.NewBlock(first, newMaskSize)

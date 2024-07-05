@@ -13,10 +13,10 @@ func TestExampleNext(t *testing.T) {
 
 func ExampleNext() {
 	v4 := ip.V4()
-	first := v4.MustFromBytes(192, 0, 2, 0)
-	last := first.Add(v4.FromInt(255))
+	lowest := v4.MustFromBytes(192, 0, 2, 0)
+	highest := lowest.Add(v4.FromInt(10))
 
-	Ascend(first, last)
+	Ascend(lowest, highest)
 }
 
 func Ascend[A ip.Number[A]](lowest, highest A) {
@@ -36,10 +36,10 @@ func TestExamplePrev(t *testing.T) {
 
 func ExamplePrev() {
 	v6 := ip.V6()
-	first := ip.MustParse(v6, "2001:db8::")
-	last := first.Add(v6.FromInt(255))
+	highest := ip.MustParse(v6, "2001:db8::fffe")
+	lowest := highest.Subtract(v6.FromInt(10))
 
-	Descend(last, first)
+	Descend(highest, lowest)
 }
 
 func Descend[A ip.Number[A]](highest, lowest A) {

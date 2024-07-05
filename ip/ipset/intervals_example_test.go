@@ -7,11 +7,11 @@ import (
 	"github.com/ipfreely-uk/go/ip/ipset"
 )
 
-func TestExampleContiguous(t *testing.T) {
-	ExampleContiguous()
+func TestExampleJoin(t *testing.T) {
+	ExampleJoin()
 }
 
-func ExampleContiguous() {
+func ExampleJoin() {
 	r0 := makeInterval(ip.V6(), "2001:db8::", "2001:db8::100")
 	r1 := makeInterval(ip.V6(), "2001:db8::10", "2001:db8::ffff:ffff:ffff")
 

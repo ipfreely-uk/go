@@ -23,5 +23,5 @@ func printNumberOfAddresses[A ip.Number[A]](first, last A) {
 	n := ip.ToBigInt(diff)
 	rangeSize := n.Add(n, big.NewInt(1))
 
-	println(first.String(), "-", last.String(), "=", humanize.BigComma(rangeSize))
+	println(first.String(), "to", last.String(), "=", humanize.BigComma(rangeSize), "addresses")
 }
