@@ -52,3 +52,8 @@ func TestFromInvalidBytes6(t *testing.T) {
 	_, err := ip.V4().FromBytes(0xFF, 0xFF, 0xFF)
 	assert.NotNil(t, err)
 }
+
+func TestFamilyString6(t *testing.T) {
+	s := ip.V6().String()
+	assert.Equal(t, "IPv6", s)
+}

@@ -29,7 +29,7 @@ type Address interface {
 	Float64() (approximation float64)
 }
 
-// Generic IP address type.
+// IP address as generic numeric type.
 // [Addr4] and [Addr6] are the only types that can conform to this interface.
 type Number[A any] interface {
 	Address

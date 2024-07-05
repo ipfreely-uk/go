@@ -17,4 +17,6 @@ type Family[A any] interface {
 	// Create address from unsigned integer.
 	// All values are valid.
 	FromInt(i uint32) (address A)
+	// Informational
+	String() string
 }

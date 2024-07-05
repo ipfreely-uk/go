@@ -46,6 +46,10 @@ func (f *family6) FromInt(i uint32) Addr6 {
 	}
 }
 
+func (f *family6) String() string {
+	return "IPv6"
+}
+
 // IPv6 family of addresses
 func V6() Family[Addr6] {
 	return &f6

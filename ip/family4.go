@@ -41,6 +41,10 @@ func (f *family4) FromInt(i uint32) Addr4 {
 	}
 }
 
+func (f *family4) String() string {
+	return "IPv4"
+}
+
 // IPv4 family of addresses
 func V4() Family[Addr4] {
 	return &f4
