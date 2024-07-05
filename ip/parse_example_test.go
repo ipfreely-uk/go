@@ -14,7 +14,7 @@ func TestExampleFromBytes(t *testing.T) {
 func ExampleFromBytes() {
 	address, err := ip.FromBytes(192, 0, 2, 1)
 	if err != nil {
-		println("Not address:", err)
+		println("Not address:", err.Error())
 	}
 	switch a := address.(type) {
 	case ip.Addr4:
