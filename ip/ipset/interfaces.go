@@ -24,8 +24,8 @@ type Discrete[A ip.Number[A]] interface {
 // Immutable set of IP addresses between first and last inclusive.
 //
 // A range of one or more IP addresses.
-// The name interval was chosen because range is a keyword in Go
-// and it is a term in mathematical set theory.
+// The name interval was chosen because range is a keyword in Go.
+// Interval is a term from mathematical set theory.
 type Interval[A ip.Number[A]] interface {
 	Discrete[A]
 	// Least address
