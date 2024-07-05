@@ -1,4 +1,4 @@
-package network
+package ipset
 
 import (
 	"math/big"
@@ -6,23 +6,28 @@ import (
 	"github.com/ipfreely-uk/go/ip"
 )
 
-// IP address set.
-type AddressSet[A ip.Number[A]] interface {
+// Discrete set of IP addresses
+type Discrete[A ip.Number[A]] interface {
 	// Tests if address in set
 	Contains(address A) bool
-	// Number of unique addresses
+	// Number of unique addresses.
+	// The cardinality of the set.
 	Size() *big.Int
 	// Unique addresses from least to greatest
 	Addresses() Iterator[A]
-	// Non-contiguous ranges from least to greatest
-	Ranges() Iterator[AddressRange[A]]
+	// Contents as distinct [Interval] types
+	Intervals() Iterator[Interval[A]]
 	// Informational only
 	String() string
 }
 
-// Immutable contiguous range of one or more IP addresses.
-type AddressRange[A ip.Number[A]] interface {
-	AddressSet[A]
+// Immutable set of IP addresses between first and last inclusive.
+//
+// A range of one or more IP addresses.
+// The name interval was chosen because range is a keyword in Go
+// and it is a term in mathematical set theory.
+type Interval[A ip.Number[A]] interface {
+	Discrete[A]
 	// Least address
 	First() (address A)
 	// Greatest address
@@ -32,7 +37,7 @@ type AddressRange[A ip.Number[A]] interface {
 // Immutable RFC-4632 CIDR block.
 // Roughly equivalent to the [netip.Prefix] type.
 type Block[A ip.Number[A]] interface {
-	AddressRange[A]
+	Interval[A]
 	// Mask size in bits
 	MaskSize() (bits int)
 	// Mask as IP address

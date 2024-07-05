@@ -1,11 +1,11 @@
-package network_test
+package ipset_test
 
 import (
 	"testing"
 
 	"github.com/dustin/go-humanize"
 	"github.com/ipfreely-uk/go/ip"
-	"github.com/ipfreely-uk/go/ip/network"
+	"github.com/ipfreely-uk/go/ip/ipset"
 )
 
 func TestExampleParseCIDRNotation(t *testing.T) {
@@ -13,8 +13,8 @@ func TestExampleParseCIDRNotation(t *testing.T) {
 }
 
 func ExampleParseCIDRNotation() {
-	address, mask, _ := network.ParseCIDRNotation(ip.V6(), "2001:db8::/32")
-	reservedForDocumentation := network.NewBlock(address, mask)
+	address, mask, _ := ipset.ParseCIDRNotation(ip.V6(), "2001:db8::/32")
+	reservedForDocumentation := ipset.NewBlock(address, mask)
 	printRangeDetails(reservedForDocumentation)
 }
 
@@ -30,20 +30,20 @@ func ExampleParseUnknownCIDRNotation() {
 		"2001:db8::/32",
 	}
 	for _, notation := range reservedForDocumentation {
-		address, mask, err := network.ParseUnknownCIDRNotation(notation)
+		address, mask, err := ipset.ParseUnknownCIDRNotation(notation)
 		if err != nil {
 			panic(err)
 		}
 		switch a := address.(type) {
 		case ip.Addr4:
-			printRangeDetails(network.NewBlock(a, mask))
+			printRangeDetails(ipset.NewBlock(a, mask))
 		case ip.Addr6:
-			printRangeDetails(network.NewBlock(a, mask))
+			printRangeDetails(ipset.NewBlock(a, mask))
 		}
 	}
 }
 
-func printRangeDetails[A ip.Number[A]](addresses network.AddressRange[A]) {
+func printRangeDetails[A ip.Number[A]](addresses ipset.Interval[A]) {
 	println("Start:", addresses.First().String())
 	println("End:", addresses.Last().String())
 	println("Addresses:", humanize.BigComma(addresses.Size()))

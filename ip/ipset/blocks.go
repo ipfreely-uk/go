@@ -1,4 +1,4 @@
-package network
+package ipset
 
 import (
 	"math"
@@ -10,8 +10,8 @@ import (
 // TODO: can replace with constant
 var log_2 = math.Log(2.0)
 
-// Subdivides [AddressRange] into valid CIDR blocks
-func Blocks[A ip.Number[A]](r AddressRange[A]) Iterator[Block[A]] {
+// Subdivides [Interval] into valid CIDR blocks
+func Blocks[A ip.Number[A]](r Interval[A]) Iterator[Block[A]] {
 	first := r.First()
 	last := r.Last()
 	mask := ip.SubnetMaskSize(first, last)

@@ -1,11 +1,12 @@
-package network
+package ipset
 
 import (
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ip/compare"
 )
 
-// Iterator function that returns whether element returned and element
+// Iterator function that returns element and whether element returned.
+// Mutates state until exhausted.
 type Iterator[E any] func() (element E, exists bool)
 
 func emptyIterator[E any]() Iterator[E] {
@@ -46,7 +47,7 @@ func addressIterator[A ip.Number[A]](first, last A) Iterator[A] {
 	}
 }
 
-func ranges2AddressIterator[A ip.Number[A]](slice []AddressRange[A]) Iterator[A] {
+func ranges2AddressIterator[A ip.Number[A]](slice []Interval[A]) Iterator[A] {
 	ranges := sliceIterator(slice)
 	rnge, rok := ranges()
 	addresses := rnge.Addresses()

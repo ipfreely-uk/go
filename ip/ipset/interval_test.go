@@ -1,32 +1,32 @@
-package network_test
+package ipset_test
 
 import (
 	"math/big"
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
-	"github.com/ipfreely-uk/go/ip/network"
+	"github.com/ipfreely-uk/go/ip/ipset"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNewRange(t *testing.T) {
+func TestNewInterval(t *testing.T) {
 	first := ip.V6().FromInt(1)
 	last := ip.V6().FromInt(10)
 
-	actual := network.NewRange(first, last)
+	actual := ipset.NewInterval(first, last)
 
 	assert.Equal(t, first, actual.First())
 	assert.Equal(t, last, actual.Last())
 }
 
-func TestRange_Contains(t *testing.T) {
+func TestInterval_Contains(t *testing.T) {
 	zero := ip.V6().FromInt(0)
 	one := ip.V6().FromInt(1)
 	two := ip.V6().FromInt(2)
 	three := ip.V6().FromInt(3)
 	four := ip.V6().FromInt(4)
 
-	actual := network.NewRange(one, three)
+	actual := ipset.NewInterval(one, three)
 
 	assert.True(t, actual.Contains(one))
 	assert.True(t, actual.Contains(two))
@@ -35,21 +35,21 @@ func TestRange_Contains(t *testing.T) {
 	assert.False(t, actual.Contains(four))
 }
 
-func TestRange_Size(t *testing.T) {
+func TestInterval_Size(t *testing.T) {
 	one := ip.V6().FromInt(1)
 	three := ip.V6().FromInt(3)
 
 	expected := big.NewInt(3)
-	actual := network.NewRange(one, three).Size()
+	actual := ipset.NewInterval(one, three).Size()
 
 	assert.Equal(t, expected, actual)
 }
 
-func TestRange_Addresses(t *testing.T) {
+func TestInterval_Addresses(t *testing.T) {
 	one := ip.V6().FromInt(1)
 	three := ip.V6().FromInt(3)
 
-	actual := network.NewRange(one, three).Addresses()
+	actual := ipset.NewInterval(one, three).Addresses()
 
 	var count = 0
 	var last ip.Addr6
@@ -61,15 +61,15 @@ func TestRange_Addresses(t *testing.T) {
 	assert.Equal(t, 3, count)
 }
 
-func TestRange_Ranges(t *testing.T) {
+func TestInterval_Intervals(t *testing.T) {
 	one := ip.V6().FromInt(1)
 	three := ip.V6().FromInt(3)
-	net := network.NewRange(one, three)
+	net := ipset.NewInterval(one, three)
 
-	actual := net.Ranges()
+	actual := net.Intervals()
 
 	var count = 0
-	var last network.AddressRange[ip.Addr6]
+	var last ipset.Interval[ip.Addr6]
 	for addr, exists := actual(); exists; addr, exists = actual() {
 		last = addr
 		count++

@@ -1,4 +1,4 @@
-package network_test
+package ipset_test
 
 import (
 	"crypto/rand"
@@ -7,7 +7,7 @@ import (
 	humanize "github.com/dustin/go-humanize"
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ip/compare"
-	"github.com/ipfreely-uk/go/ip/network"
+	"github.com/ipfreely-uk/go/ip/ipset"
 )
 
 func TestExampleNewBlock(t *testing.T) {
@@ -17,7 +17,7 @@ func TestExampleNewBlock(t *testing.T) {
 func ExampleNewBlock() {
 	netAddress := ip.MustParse(ip.V6(), "2001:db8::")
 
-	block := network.NewBlock(netAddress, 32)
+	block := ipset.NewBlock(netAddress, 32)
 
 	println("Block", block.String())
 	println("First", block.First().String())
@@ -31,14 +31,14 @@ func TestExampleBlock(t *testing.T) {
 
 func ExampleBlock() {
 	netAddress := ip.MustParse(ip.V6(), "2001:db8:cafe::")
-	block := network.NewBlock(netAddress, 56)
+	block := ipset.NewBlock(netAddress, 56)
 
 	randomAddr := randomAddressFrom(block)
 
 	println("Random address from", block.String(), "=", randomAddr.String())
 }
 
-func randomAddressFrom[A ip.Number[A]](netBlock network.Block[A]) (address A) {
+func randomAddressFrom[A ip.Number[A]](netBlock ipset.Block[A]) (address A) {
 	netAddr := netBlock.First()
 	family := netAddr.Family()
 	inverseMask := netBlock.Mask().Not()
@@ -58,7 +58,7 @@ func TestExampleBlock_second(t *testing.T) {
 
 func ExampleBlock_second() {
 	netAddress := ip.MustParse(ip.V6(), "2001:db8:cafe::")
-	block := network.NewBlock(netAddress, 56)
+	block := ipset.NewBlock(netAddress, 56)
 
 	next := split(block, 60)
 	for subnet, exists := next(); exists; subnet, exists = next() {
@@ -67,16 +67,16 @@ func ExampleBlock_second() {
 }
 
 // Split subnet into smaller subnets
-func split[A ip.Number[A]](b network.Block[A], newMaskSize int) network.Iterator[network.Block[A]] {
+func split[A ip.Number[A]](b ipset.Block[A], newMaskSize int) ipset.Iterator[ipset.Block[A]] {
 	if newMaskSize < b.MaskSize() {
 		panic("invalid split size")
 	}
-	current := network.NewBlock(b.First(), newMaskSize)
+	current := ipset.NewBlock(b.First(), newMaskSize)
 	one := current.First().Family().FromInt(1)
 	increment := current.Last().Subtract(current.First()).Add(one)
 	exhausted := false
 
-	return func() (element network.Block[A], exists bool) {
+	return func() (element ipset.Block[A], exists bool) {
 		if exhausted {
 			return nil, false
 		}
@@ -84,7 +84,7 @@ func split[A ip.Number[A]](b network.Block[A], newMaskSize int) network.Iterator
 		exhausted = compare.Eq(current.Last(), b.Last())
 		if !exhausted {
 			first := current.First().Add(increment)
-			current = network.NewBlock(first, newMaskSize)
+			current = ipset.NewBlock(first, newMaskSize)
 		}
 		return result, true
 	}

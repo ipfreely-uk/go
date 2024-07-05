@@ -1,11 +1,11 @@
-package network_test
+package ipset_test
 
 import (
 	"math/rand"
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
-	"github.com/ipfreely-uk/go/ip/network"
+	"github.com/ipfreely-uk/go/ip/ipset"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -18,9 +18,9 @@ func TestBlocks(t *testing.T) {
 		expectedLast0 := inverse.Or(expectedFirst0)
 		expectedFirst1 := ip.Next(expectedLast0)
 		expectedLast1 := expectedFirst1
-		input := network.NewRange(expectedFirst0, expectedLast1)
+		input := ipset.NewInterval(expectedFirst0, expectedLast1)
 
-		nextBlock := network.Blocks(input)
+		nextBlock := ipset.Blocks(input)
 
 		actual, exists := nextBlock()
 		assert.True(t, exists)
@@ -43,9 +43,9 @@ func TestBlocks(t *testing.T) {
 		expectedLast0 := inverse.Or(expectedFirst0)
 		expectedFirst1 := ip.Next(expectedLast0)
 		expectedLast1 := expectedFirst1
-		input := network.NewRange(expectedFirst0, expectedLast1)
+		input := ipset.NewInterval(expectedFirst0, expectedLast1)
 
-		nextBlock := network.Blocks(input)
+		nextBlock := ipset.Blocks(input)
 
 		actual, exists := nextBlock()
 		assert.True(t, exists)
@@ -68,9 +68,9 @@ func TestBlocks(t *testing.T) {
 		expectedLast0 := inverse.Or(expectedFirst0)
 		expectedFirst1 := ip.Next(expectedLast0)
 		expectedLast1 := expectedFirst1
-		input := network.NewRange(expectedFirst0, expectedLast1)
+		input := ipset.NewInterval(expectedFirst0, expectedLast1)
 
-		nextBlock := network.Blocks(input)
+		nextBlock := ipset.Blocks(input)
 
 		actual, exists := nextBlock()
 		assert.True(t, exists)
@@ -93,9 +93,9 @@ func TestBlocks(t *testing.T) {
 		expectedLast0 := inverse.Or(expectedFirst0)
 		expectedFirst1 := ip.Next(expectedLast0)
 		expectedLast1 := expectedFirst1
-		input := network.NewRange(expectedFirst0, expectedLast1)
+		input := ipset.NewInterval(expectedFirst0, expectedLast1)
 
-		nextBlock := network.Blocks(input)
+		nextBlock := ipset.Blocks(input)
 
 		actual, exists := nextBlock()
 		assert.True(t, exists)
@@ -118,9 +118,9 @@ func TestBlocks(t *testing.T) {
 		expectedLast0 := inverse.Or(expectedFirst0)
 		expectedFirst1 := ip.Next(expectedLast0)
 		expectedLast1 := expectedFirst1
-		input := network.NewRange(expectedFirst0, expectedLast1)
+		input := ipset.NewInterval(expectedFirst0, expectedLast1)
 
-		nextBlock := network.Blocks(input)
+		nextBlock := ipset.Blocks(input)
 
 		actual, exists := nextBlock()
 		assert.True(t, exists)
@@ -141,9 +141,9 @@ func TestBlocks(t *testing.T) {
 		mask := ip.SubnetMask(family, 32)
 		inverse := mask.Not()
 		expectedLast0 := inverse.Or(expectedFirst0)
-		input := network.NewRange(expectedFirst0, expectedLast0)
+		input := ipset.NewInterval(expectedFirst0, expectedLast0)
 
-		nextBlock := network.Blocks(input)
+		nextBlock := ipset.Blocks(input)
 
 		actual, exists := nextBlock()
 		assert.True(t, exists)
@@ -156,9 +156,9 @@ func TestBlocks(t *testing.T) {
 	{
 		first := ip.V6().FromInt(999)
 		last := ip.V6().FromInt(0).Not()
-		input := network.NewRange(first, last)
+		input := ipset.NewInterval(first, last)
 
-		next := network.Blocks(input)
+		next := ipset.Blocks(input)
 
 		for block, exists := next(); exists; block, exists = next() {
 			assert.True(t, input.Contains(block.First()))
@@ -189,14 +189,14 @@ func makeAndWalkBlocks[A ip.Number[A]](t *testing.T, family ip.Family[A]) {
 }
 
 func walkBlocks[A ip.Number[A]](t *testing.T, a1, a2 A) {
-	r := network.NewRange(a1, a2)
-	nextBlock := network.Blocks(r)
+	r := ipset.NewInterval(a1, a2)
+	nextBlock := ipset.Blocks(r)
 
 	prev, _ := nextBlock()
 
 	for block, exists := nextBlock(); exists; block, exists = nextBlock() {
-		assert.True(t, network.Adjacent(prev, block))
-		assert.False(t, network.Intersect(prev, block))
+		assert.True(t, ipset.Adjacent(prev, block))
+		assert.False(t, ipset.Intersect(prev, block))
 
 		prev = block
 	}

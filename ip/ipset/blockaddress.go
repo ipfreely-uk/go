@@ -1,4 +1,4 @@
-package network
+package ipset
 
 import (
 	"fmt"
@@ -36,8 +36,8 @@ func (b *single[A]) Addresses() Iterator[A] {
 	return addressIterator(b.address, b.address)
 }
 
-func (b *single[A]) Ranges() Iterator[AddressRange[A]] {
-	slice := []AddressRange[A]{b}
+func (b *single[A]) Intervals() Iterator[Interval[A]] {
+	slice := []Interval[A]{b}
 	return sliceIterator(slice)
 }
 

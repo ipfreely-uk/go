@@ -1,4 +1,4 @@
-package network
+package ipset
 
 import (
 	"math/big"
@@ -20,14 +20,14 @@ func (e *empty[A]) Addresses() Iterator[A] {
 	return emptyIterator[A]()
 }
 
-func (e *empty[A]) Ranges() Iterator[AddressRange[A]] {
-	return emptyIterator[AddressRange[A]]()
+func (e *empty[A]) Intervals() Iterator[Interval[A]] {
+	return emptyIterator[Interval[A]]()
 }
 
 func (e *empty[A]) String() string {
 	return "{}"
 }
 
-func emptySet[A ip.Number[A]]() AddressSet[A] {
+func emptySet[A ip.Number[A]]() Discrete[A] {
 	return &empty[A]{}
 }

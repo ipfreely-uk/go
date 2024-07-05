@@ -1,10 +1,10 @@
-package network_test
+package ipset_test
 
 import (
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
-	"github.com/ipfreely-uk/go/ip/network"
+	"github.com/ipfreely-uk/go/ip/ipset"
 )
 
 func TestExampleIterator(t *testing.T) {
@@ -12,11 +12,11 @@ func TestExampleIterator(t *testing.T) {
 }
 
 func ExampleIterator() {
-	netaddr, mask, _ := network.ParseCIDRNotation(ip.V4(), "192.0.2.128/28")
-	subnet := network.NewBlock(netaddr, mask)
+	netaddr, mask, _ := ipset.ParseCIDRNotation(ip.V4(), "192.0.2.128/28")
+	subnet := ipset.NewBlock(netaddr, mask)
 	firstAssigneable := ip.Next(subnet.First())
 	lastAssigneable := ip.Prev(subnet.Last())
-	assignable := network.NewRange(firstAssigneable, lastAssigneable)
+	assignable := ipset.NewInterval(firstAssigneable, lastAssigneable)
 
 	// iterator of addresses
 	next := assignable.Addresses()
