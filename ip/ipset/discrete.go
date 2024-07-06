@@ -9,11 +9,11 @@ import (
 )
 
 type discrete[A ip.Number[A]] struct {
-	ranges []Interval[A]
+	intervals []Interval[A]
 }
 
 func (s *discrete[A]) Contains(address A) bool {
-	for _, r := range s.ranges {
+	for _, r := range s.intervals {
 		if r.Contains(address) {
 			return true
 		}
@@ -23,7 +23,7 @@ func (s *discrete[A]) Contains(address A) bool {
 
 func (s *discrete[A]) Size() *big.Int {
 	sum := big.NewInt(0)
-	for _, r := range s.ranges {
+	for _, r := range s.intervals {
 		sum = sum.Add(sum, r.Size())
 		println(sum.String())
 	}
@@ -31,34 +31,35 @@ func (s *discrete[A]) Size() *big.Int {
 }
 
 func (s *discrete[A]) Addresses() Iterator[A] {
-	return ranges2AddressIterator(s.ranges)
+	return ranges2AddressIterator(s.intervals)
 }
 
 func (s *discrete[A]) Intervals() Iterator[Interval[A]] {
-	return sliceIterator(s.ranges)
+	return sliceIterator(s.intervals)
 }
 
 func (s *discrete[A]) String() string {
 	buf := strings.Builder{}
 	buf.WriteString("{")
 	delim := ""
-	next := s.Intervals()
-	for r, exists := next(); exists; r, exists = next() {
+	for _, i := range s.intervals {
 		buf.WriteString(delim)
 		delim = ", "
-		buf.WriteString(r.String())
+		buf.WriteString(i.String())
 	}
 	buf.WriteString("}")
 	return buf.String()
 }
 
-// Creates [Discrete] from given IP address ranges.
-// Ranges may overlap.
-// If set reduces to contiguous range returns type that conforms to [Interval].
-func NewDiscrete[A ip.Number[A]](ranges ...Interval[A]) Discrete[A] {
-	if len(ranges) == 0 {
+// Creates [Discrete] set as a union of addresses from the operand elements.
+// If set reduces to contiguous range returns [Interval] set.
+// If set reduces to CIDR range returns [Block] set.
+// A zero-length slice returns the empty set.
+func NewDiscrete[A ip.Number[A]](sets ...Discrete[A]) (set Discrete[A]) {
+	if len(sets) == 0 {
 		return emptySet[A]()
 	}
+	ranges := toIntervals(sets)
 	ranges = rationalize(ranges)
 	if len(ranges) == 1 {
 		return ranges[0]
@@ -66,6 +67,17 @@ func NewDiscrete[A ip.Number[A]](ranges ...Interval[A]) Discrete[A] {
 	return &discrete[A]{
 		ranges,
 	}
+}
+
+func toIntervals[A ip.Number[A]](sets []Discrete[A]) []Interval[A] {
+	result := []Interval[A]{}
+	for _, set := range sets {
+		next := set.Intervals()
+		for s, ok := next(); ok; s, ok = next() {
+			result = append(result, s)
+		}
+	}
+	return result
 }
 
 func rationalize[A ip.Number[A]](spans []Interval[A]) []Interval[A] {

@@ -15,27 +15,10 @@ func ExampleNewDiscrete() {
 	v4 := ip.V4()
 	r0 := exampleInterval(v4, "192.0.2.0", "192.0.2.100")
 	r1 := exampleInterval(v4, "192.0.2.101", "192.0.2.111")
+	r2 := exampleInterval(v4, "192.0.2.101", "192.0.2.111")
 
-	combined := union(r0, r1)
-	println(r0.String(), "\u222A", r1.String(), "=", combined.String())
-}
-
-// Example union function
-func union[A ip.Number[A]](sets ...ipset.Discrete[A]) ipset.Discrete[A] {
-	slice := []ipset.Interval[A]{}
-	for _, set := range sets {
-		slice = appendToSlice(set.Intervals(), slice)
-	}
-	return ipset.NewDiscrete(slice...)
-}
-
-// Example iterator to slice function
-func appendToSlice[E any](i ipset.Iterator[E], slice []E) []E {
-	result := slice
-	for e, ok := i(); ok; e, ok = i() {
-		result = append(result, e)
-	}
-	return result
+	union := ipset.NewDiscrete(r0, r1, r2)
+	println(r0.String(), "\u222A", r1.String(), "=", union.String())
 }
 
 func exampleInterval[A ip.Number[A]](family ip.Family[A], first, last string) ipset.Interval[A] {
