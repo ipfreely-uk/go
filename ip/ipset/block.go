@@ -62,7 +62,7 @@ func (b *block[A]) CidrNotation() string {
 func NewBlock[A ip.Number[A]](network A, mask int) Block[A] {
 	fam := network.Family()
 	if fam.Width() == mask {
-		return &single[A]{network}
+		return NewSingle(network)
 	}
 	m := ip.SubnetMask(fam, mask)
 	if !compare.Eq(network, m.And(network)) {

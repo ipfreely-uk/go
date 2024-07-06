@@ -6,7 +6,7 @@ import (
 	"github.com/ipfreely-uk/go/ip"
 )
 
-// Discrete set of IP addresses
+// Discrete ordered set of IP addresses
 type Discrete[A ip.Number[A]] interface {
 	// Tests if address in set
 	Contains(address A) bool
@@ -15,7 +15,9 @@ type Discrete[A ip.Number[A]] interface {
 	Size() *big.Int
 	// Unique addresses from least to greatest
 	Addresses() Iterator[A]
-	// Contents as distinct [Interval] types
+	// Contents as distinct [Interval] sets.
+	// Intervals do not [Intersect] and are not [Adjacent].
+	// Intervals are returned from least address to greatest.
 	Intervals() Iterator[Interval[A]]
 	// Informational only
 	String() string

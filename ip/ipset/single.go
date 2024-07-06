@@ -52,3 +52,8 @@ func (b *single[A]) Mask() A {
 func (b *single[A]) CidrNotation() string {
 	return b.String()
 }
+
+// Creates [Block] from single address.
+func NewSingle[A ip.Number[A]](address A) Block[A] {
+	return &single[A]{address}
+}
