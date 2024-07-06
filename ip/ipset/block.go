@@ -57,7 +57,8 @@ func (b *block[A]) CidrNotation() string {
 	return b.String()
 }
 
-// Creates [Block].
+// Creates [Block] set.
+//
 // Panics if mask does not cover network address or is out of range for address family.
 func NewBlock[A ip.Number[A]](network A, mask int) Block[A] {
 	fam := network.Family()

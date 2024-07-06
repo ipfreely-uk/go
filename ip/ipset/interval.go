@@ -46,8 +46,9 @@ func (e *interval[A]) String() string {
 	return fmt.Sprintf("%s-%s", e.first.String(), e.last.String())
 }
 
-// Creates new [Interval] instance.
-// Return value conforms to [Block] if possible.
+// Creates [Interval] set.
+//
+// If range is valid CIDR block returns [Block] set.
 func NewInterval[A ip.Number[A]](first, last A) Interval[A] {
 	f := compare.Min(first, last)
 	l := compare.Max(first, last)

@@ -52,9 +52,10 @@ func (s *discrete[A]) String() string {
 }
 
 // Creates [Discrete] set as a union of addresses from the operand elements.
-// If set reduces to contiguous range returns [Interval] set.
-// If set reduces to CIDR range returns [Block] set.
-// A zero-length slice returns the empty set.
+//
+// If set is contiguous range returns [Interval] set.
+// If set is CIDR range returns [Block] set.
+// If zero-length slice returns the empty set.
 func NewDiscrete[A ip.Number[A]](sets ...Discrete[A]) (set Discrete[A]) {
 	if len(sets) == 0 {
 		return emptySet[A]()

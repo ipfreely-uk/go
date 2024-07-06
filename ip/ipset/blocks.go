@@ -10,7 +10,7 @@ import (
 // TODO: can replace with constant
 var log_2 = math.Log(2.0)
 
-// Subdivides [Interval] into valid CIDR blocks
+// Subdivides [Interval] into CIDR [Block] sets
 func Blocks[A ip.Number[A]](r Interval[A]) Iterator[Block[A]] {
 	first := r.First()
 	last := r.Last()
