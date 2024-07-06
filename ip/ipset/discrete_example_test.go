@@ -12,19 +12,17 @@ func TestExampleNewDiscrete(t *testing.T) {
 }
 
 func ExampleNewDiscrete() {
-	v4 := ip.V4()
-	r0 := exampleInterval(v4, "192.0.2.0", "192.0.2.100")
-	r1 := exampleInterval(v4, "192.0.2.101", "192.0.2.111")
-	r2 := exampleInterval(v4, "192.0.2.200", "192.0.2.200")
+	set := func(first, last string) ipset.Interval[ip.Addr4] {
+		v4 := ip.V4()
+		p := ip.MustParse[ip.Addr4]
+		return ipset.NewInterval(p(v4, first), p(v4, last))
+	}
+	r0 := set("192.0.2.0", "192.0.2.100")
+	r1 := set("192.0.2.101", "192.0.2.111")
+	r2 := set("192.0.2.200", "192.0.2.200")
 
 	union := ipset.NewDiscrete(r0, r1, r2)
 	println(r0.String(), "\u222A", r1.String(), "\u222A", r2.String(), "=", union.String())
-}
-
-func exampleInterval[A ip.Number[A]](family ip.Family[A], first, last string) ipset.Interval[A] {
-	a0 := ip.MustParse(family, first)
-	a1 := ip.MustParse(family, last)
-	return ipset.NewInterval(a0, a1)
 }
 
 func TestExampleNewDiscrete_second(t *testing.T) {

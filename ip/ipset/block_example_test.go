@@ -15,9 +15,8 @@ func TestExampleNewBlock(t *testing.T) {
 }
 
 func ExampleNewBlock() {
-	netAddress := ip.MustParse(ip.V6(), "2001:db8::")
-
-	block := ipset.NewBlock(netAddress, 32)
+	network := ip.MustParse(ip.V6(), "2001:db8::")
+	block := ipset.NewBlock(network, 32)
 
 	println("Block", block.String())
 	println("First", block.First().String())
