@@ -1,8 +1,8 @@
 package ipset
 
 import (
-	"fmt"
 	"math/big"
+	"strings"
 
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ip/compare"
@@ -43,7 +43,15 @@ func (a *interval[A]) Intervals() Iterator[Interval[A]] {
 }
 
 func (e *interval[A]) String() string {
-	return fmt.Sprintf("%s-%s", e.first.String(), e.last.String())
+	f := e.first.String()
+	l := e.last.String()
+	len := len(f) + len(l) + 1
+	buf := strings.Builder{}
+	buf.Grow(len)
+	buf.WriteString(f)
+	buf.WriteRune('-')
+	buf.WriteString(l)
+	return buf.String()
 }
 
 // Creates [Interval] set.
