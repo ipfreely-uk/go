@@ -11,16 +11,16 @@ import (
 var log_2 = math.Log(2.0)
 
 // Subdivides [Interval] into CIDR [Block] sets
-func Blocks[A ip.Number[A]](r Interval[A]) Iterator[Block[A]] {
-	first := r.First()
-	last := r.Last()
+func Blocks[A ip.Number[A]](set Interval[A]) Iterator[Block[A]] {
+	first := set.First()
+	last := set.Last()
 	mask := ip.SubnetMaskSize(first, last)
 	if mask >= 0 {
 		block := NewBlock(first, mask)
 		slice := []Block[A]{block}
 		return sliceIterator(slice)
 	}
-	return blockIterator(r.First(), r.Last())
+	return blockIterator(set.First(), set.Last())
 }
 
 func blockIterator[A ip.Number[A]](start, end A) Iterator[Block[A]] {

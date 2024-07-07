@@ -3,12 +3,12 @@ package ipset
 import "github.com/ipfreely-uk/go/ip"
 
 // Tests if two discrete sets are equal
-func Eq[A ip.Number[A]](s0, s1 Discrete[A]) (equal bool) {
-	if s0 == s1 {
+func Eq[A ip.Number[A]](set0, set1 Discrete[A]) (equal bool) {
+	if set0 == set1 {
 		return true
 	}
-	left := s0.Intervals()
-	right := s1.Intervals()
+	left := set0.Intervals()
+	right := set1.Intervals()
 	for {
 		this, rok := left()
 		that, lok := right()
