@@ -59,8 +59,10 @@ func TestParseUnknown(t *testing.T) {
 	for _, c := range parsingTestSet() {
 		actual, err := ip.ParseUnknown(c.s)
 		if err != nil {
-			assert.False(t, c.ok)
+			assert.False(t, c.ok, c.s)
 			continue
+		} else {
+			assert.True(t, c.ok, c.s)
 		}
 
 		var expected any
@@ -153,12 +155,41 @@ func parsingTestSet() []parseTestCase {
 			s:  "fe80::1",
 			v:  ip.Version6,
 			ok: true,
+		}, {
+			b:  []byte{0x20, 0x01, 0x0D, 0xB8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			s:  "2001:db8::",
+			v:  ip.Version6,
+			ok: true,
 		},
 		{
 			b:  []byte{0xFF, 0xFF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xCA, 0xFE, 0xBA, 0xBE},
 			s:  "FFFF::Cafe:Babe",
 			v:  ip.Version6,
 			ok: true,
+		},
+		{
+			b:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			s:  "1:2:3:4:5:6:7:8:9",
+			v:  ip.Version6,
+			ok: false,
+		},
+		{
+			b:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			s:  "1:2:3:4:5::6:7:8",
+			v:  ip.Version6,
+			ok: false,
+		},
+		{
+			b:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			s:  "::1:2:3:4:5:6:7:8",
+			v:  ip.Version6,
+			ok: false,
+		},
+		{
+			b:  []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			s:  "1:2:3:4:5:6:7:8::",
+			v:  ip.Version6,
+			ok: false,
 		},
 		{
 			b:  []byte{0, 0, 0, 0},
@@ -169,6 +200,12 @@ func parsingTestSet() []parseTestCase {
 		{
 			b:  []byte{},
 			s:  ":",
+			v:  ip.Version6,
+			ok: false,
+		},
+		{
+			b:  []byte{},
+			s:  ":::",
 			v:  ip.Version6,
 			ok: false,
 		},
@@ -217,6 +254,18 @@ func parsingTestSet() []parseTestCase {
 		{
 			b:  []byte{255, 255, 255},
 			s:  "256.255.255.255",
+			v:  ip.Version4,
+			ok: false,
+		},
+		{
+			b:  []byte{255, 255, 255},
+			s:  "255..255.255",
+			v:  ip.Version4,
+			ok: false,
+		},
+		{
+			b:  []byte{255, 255, 255},
+			s:  ".255.255.255",
 			v:  ip.Version4,
 			ok: false,
 		},
