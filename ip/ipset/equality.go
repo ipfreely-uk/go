@@ -2,7 +2,8 @@ package ipset
 
 import "github.com/ipfreely-uk/go/ip"
 
-// Tests if two discrete sets are equal
+// Tests if two discrete sets are equal.
+// Iterates each [Discrete] set's [Interval] sets comparing first and last elements.
 func Eq[A ip.Number[A]](set0, set1 Discrete[A]) (equal bool) {
 	if set0 == set1 {
 		return true
