@@ -5,7 +5,6 @@ import (
 	"math/big"
 
 	"github.com/ipfreely-uk/go/ip"
-	"github.com/ipfreely-uk/go/ip/compare"
 )
 
 type single[A ip.Number[A]] struct {
@@ -17,7 +16,7 @@ func (b *single[A]) MaskSize() int {
 }
 
 func (b *single[A]) Contains(address A) bool {
-	return compare.Eq(b.address, address)
+	return ip.Eq(b.address, address)
 }
 
 func (b *single[A]) Size() *big.Int {

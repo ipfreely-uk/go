@@ -2,7 +2,6 @@ package ipset
 
 import (
 	"github.com/ipfreely-uk/go/ip"
-	"github.com/ipfreely-uk/go/ip/compare"
 )
 
 // Iterator function that returns element and whether element returned.
@@ -41,7 +40,7 @@ func addressIterator[A ip.Number[A]](first, last A) Iterator[A] {
 			return element, false
 		}
 		r := current
-		done = compare.Eq(current, last)
+		done = ip.Eq(current, last)
 		current = ip.Next(current)
 		return r, true
 	}

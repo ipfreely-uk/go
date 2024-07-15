@@ -6,7 +6,6 @@ import (
 
 	"github.com/dustin/go-humanize"
 	"github.com/ipfreely-uk/go/ip"
-	"github.com/ipfreely-uk/go/ip/compare"
 )
 
 func TestExampleSubnetMask(t *testing.T) {
@@ -25,7 +24,7 @@ func printNetworkDetails[A ip.Number[A]](network A, maskBits int) {
 	inverseMask := mask.Not()
 
 	zero := fam.FromInt(0)
-	if !compare.Eq(mask.And(inverseMask), zero) {
+	if !ip.Eq(mask.And(inverseMask), zero) {
 		panic("Mask does not cover network address")
 	}
 

@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/ipfreely-uk/go/ip"
-	"github.com/ipfreely-uk/go/ip/compare"
 )
 
 type interval[A ip.Number[A]] struct {
@@ -58,8 +57,8 @@ func (e *interval[A]) String() string {
 //
 // If range is valid CIDR block returns [Block] set.
 func NewInterval[A ip.Number[A]](first, last A) Interval[A] {
-	f := compare.Min(first, last)
-	l := compare.Max(first, last)
+	f := least(first, last)
+	l := greatest(first, last)
 	mask := ip.SubnetMaskSize(f, l)
 	if mask >= 0 {
 		b := NewBlock(f, mask)

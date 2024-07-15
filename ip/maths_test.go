@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
-	"github.com/ipfreely-uk/go/ip/compare"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -76,7 +75,7 @@ func testSubtract[A ip.Number[A]](t *testing.T, a, b A, bigA, bigB *big.Int) {
 func testDivide[A ip.Number[A]](t *testing.T, a, b A, bigA, bigB *big.Int) {
 	zero := ip.MinAddress(a.Family())
 
-	if compare.Eq(b, zero) {
+	if ip.Eq(b, zero) {
 		assert.Panics(t, func() {
 			a.Divide(b)
 		})

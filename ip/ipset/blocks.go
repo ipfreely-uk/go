@@ -4,7 +4,6 @@ import (
 	"math"
 
 	"github.com/ipfreely-uk/go/ip"
-	"github.com/ipfreely-uk/go/ip/compare"
 )
 
 // TODO: can replace with constant
@@ -41,7 +40,7 @@ func blockIterator[A ip.Number[A]](start, end A) Iterator[Block[A]] {
 		mask := max(maxSize, maxDiff)
 		block := NewBlock(current, mask)
 		last := block.Last()
-		if compare.Eq(last, end) {
+		if ip.Eq(last, end) {
 			done = true
 		} else {
 			current = ip.Next(last)

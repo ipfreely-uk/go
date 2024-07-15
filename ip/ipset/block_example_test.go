@@ -6,7 +6,6 @@ import (
 
 	humanize "github.com/dustin/go-humanize"
 	"github.com/ipfreely-uk/go/ip"
-	"github.com/ipfreely-uk/go/ip/compare"
 	"github.com/ipfreely-uk/go/ip/ipset"
 )
 
@@ -83,7 +82,7 @@ func split[A ip.Number[A]](b ipset.Block[A], newMaskSize int) ipset.Iterator[ips
 			return nil, false
 		}
 		result := current
-		exhausted = compare.Eq(current.Last(), end)
+		exhausted = ip.Eq(current.Last(), end)
 		if !exhausted {
 			first := current.First().Add(increment)
 			current = ipset.NewBlock(first, newMaskSize)

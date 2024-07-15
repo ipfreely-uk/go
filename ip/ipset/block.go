@@ -5,7 +5,6 @@ import (
 	"math/big"
 
 	"github.com/ipfreely-uk/go/ip"
-	"github.com/ipfreely-uk/go/ip/compare"
 )
 
 type block[A ip.Number[A]] struct {
@@ -66,7 +65,7 @@ func NewBlock[A ip.Number[A]](network A, mask int) Block[A] {
 		return NewSingle(network)
 	}
 	m := ip.SubnetMask(fam, mask)
-	if !compare.Eq(network, m.And(network)) {
+	if !ip.Eq(network, m.And(network)) {
 		msg := fmt.Sprintf("mask %s does not cover %s", m.String(), network.String())
 		panic(msg)
 	}

@@ -2,7 +2,6 @@ package ipset
 
 import (
 	"github.com/ipfreely-uk/go/ip"
-	"github.com/ipfreely-uk/go/ip/compare"
 )
 
 // Tests if IP address ranges have common elements
@@ -16,7 +15,7 @@ func Adjacent[A ip.Number[A]](i0, i1 Interval[A]) bool {
 }
 
 func lastNextToFirst[A ip.Number[A]](last, first A) bool {
-	return compare.Eq(last, ip.Prev(first)) && isNotZero(first)
+	return ip.Eq(last, ip.Prev(first)) && isNotZero(first)
 }
 
 func isNotZero[A ip.Number[A]](address A) bool {
@@ -32,12 +31,12 @@ func Contiguous[A ip.Number[A]](i0, i1 Interval[A]) bool {
 // Joins IP address ranges using least and greatest elements from both.
 // Intervals do not have to be [Contiguous].
 func Join[A ip.Number[A]](i0, i1 Interval[A]) Interval[A] {
-	first := compare.Min(i0.First(), i1.First())
-	last := compare.Max(i0.Last(), i1.Last())
-	if compare.Eq(i0.First(), first) && compare.Eq(i0.Last(), last) {
+	first := least(i0.First(), i1.First())
+	last := greatest(i0.Last(), i1.Last())
+	if ip.Eq(i0.First(), first) && ip.Eq(i0.Last(), last) {
 		return i0
 	}
-	if compare.Eq(i1.First(), first) && compare.Eq(i1.Last(), last) {
+	if ip.Eq(i1.First(), first) && ip.Eq(i1.Last(), last) {
 		return i1
 	}
 	return NewInterval(first, last)

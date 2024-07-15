@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"math/big"
 	"reflect"
-
-	"github.com/ipfreely-uk/go/ip/compare"
 )
 
 var ipv4Masks []Addr4 = allMasks(V4())
@@ -49,12 +47,12 @@ func SubnetMaskSize[A Number[A]](first, last A) (maskBits int) {
 	fam := first.Family()
 	xor := first.Xor(last)
 	zero := fam.FromInt(0)
-	if !compare.Eq(xor.And(first), zero) || !compare.Eq(xor.And(last), xor) {
+	if !Eq(xor.And(first), zero) || !Eq(xor.And(last), xor) {
 		return -1
 	}
 	bits := fam.Width() - xor.Not().TrailingZeros()
 	mask := SubnetMask(fam, bits)
-	if compare.Eq(xor.And(mask), zero) {
+	if Eq(xor.And(mask), zero) {
 		return bits
 	}
 	return -1
