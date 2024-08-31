@@ -90,6 +90,18 @@ func isOne(a Addr6) bool {
 	return a.high == 0 && a.low == 1
 }
 
+func isSmall(a Addr6) bool {
+	return a.high == 0 && a.low <= 16
+}
+
+func times(a Addr6, n int) Addr6 {
+	r := Addr6{}
+	for i := 0; i < n; i++ {
+		r = r.Add(a)
+	}
+	return r
+}
+
 // Size of IPv6 range as big.Int
 var size6 = func() *big.Int {
 	zero := Addr6{}
@@ -105,6 +117,12 @@ func (a Addr6) Multiply(multiplicand Addr6) Addr6 {
 	}
 	if isZero(a) || isOne(multiplicand) {
 		return a
+	}
+	if isSmall(a) {
+		return times(multiplicand, int(a.low))
+	}
+	if isSmall(multiplicand) {
+		return times(a, int(multiplicand.low))
 	}
 	this := ToBigInt(a)
 	that := ToBigInt(multiplicand)
