@@ -124,6 +124,7 @@ func (a Addr6) Multiply(multiplicand Addr6) Addr6 {
 	if isSmall(multiplicand) {
 		return times(a, int(multiplicand.low))
 	}
+	// TODO: check Hacker's Delight 2013
 	this := ToBigInt(a)
 	that := ToBigInt(multiplicand)
 	result := this.Mul(this, that).Mod(this, size6)
