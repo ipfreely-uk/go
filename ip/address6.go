@@ -110,6 +110,9 @@ func (a Addr6) Divide(denominator Addr6) Addr6 {
 	if isZero(denominator) {
 		panic("divide by zero")
 	}
+	if isOne(denominator) {
+		return a
+	}
 	compared := a.Compare(denominator)
 	if compared == 0 {
 		return Addr6{
