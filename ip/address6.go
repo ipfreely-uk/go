@@ -112,10 +112,17 @@ func (a Addr6) Divide(denominator Addr6) Addr6 {
 	}
 	compared := a.Compare(denominator)
 	if compared == 0 {
-		return a.Family().FromInt(1)
+		return Addr6{
+			low: 1,
+		}
 	}
 	if compared < 0 {
-		return a.Family().FromInt(0)
+		return Addr6{}
+	}
+	if a.high == 0 && denominator.high == 0 {
+		return Addr6{
+			low: a.low / denominator.low,
+		}
 	}
 	this := ToBigInt(a)
 	that := ToBigInt(denominator)
@@ -126,17 +133,8 @@ func (a Addr6) Divide(denominator Addr6) Addr6 {
 
 // See [Number]
 func (a Addr6) Mod(denominator Addr6) Addr6 {
-	if isZero(denominator) {
-		panic("divide by zero")
-	}
-	if isOne(denominator) || a == denominator {
-		return a.Family().FromInt(0)
-	}
-	this := ToBigInt(a)
-	that := ToBigInt(denominator)
-	result := this.Mod(this, that)
-	address, _ := FromBigInt(a.Family(), result)
-	return address
+	quotient := a.Divide(denominator)
+	return a.Subtract(quotient.Multiply(denominator))
 }
 
 // See [Number]
