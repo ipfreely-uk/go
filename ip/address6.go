@@ -1,7 +1,6 @@
 package ip
 
 import (
-	"math/big"
 	"math/bits"
 	"net/netip"
 )
@@ -90,26 +89,6 @@ func isOne(a Addr6) bool {
 	return a.high == 0 && a.low == 1
 }
 
-func isSmall(a Addr6) bool {
-	return a.high == 0 && a.low <= 16
-}
-
-func times(a Addr6, n int) Addr6 {
-	r := Addr6{}
-	for i := 0; i < n; i++ {
-		r = r.Add(a)
-	}
-	return r
-}
-
-// Size of IPv6 range as big.Int
-var size6 = func() *big.Int {
-	zero := Addr6{}
-	max := zero.Not()
-	n := ToBigInt(max)
-	return n.Add(n, big.NewInt(1))
-}()
-
 // See [Number]
 func (a Addr6) Multiply(multiplicand Addr6) Addr6 {
 	if isZero(multiplicand) || isOne(a) {
@@ -118,18 +97,12 @@ func (a Addr6) Multiply(multiplicand Addr6) Addr6 {
 	if isZero(a) || isOne(multiplicand) {
 		return a
 	}
-	if isSmall(a) {
-		return times(multiplicand, int(a.low))
+	hi, lo := bits.Mul64(a.low, multiplicand.low)
+	hi += (a.high * multiplicand.low) + (a.low * multiplicand.high)
+	return Addr6{
+		high: hi,
+		low:  lo,
 	}
-	if isSmall(multiplicand) {
-		return times(a, int(multiplicand.low))
-	}
-	// TODO: check Hacker's Delight 2013
-	this := ToBigInt(a)
-	that := ToBigInt(multiplicand)
-	result := this.Mul(this, that).Mod(this, size6)
-	address, _ := FromBigInt(a.Family(), result)
-	return address
 }
 
 // See [Number]
