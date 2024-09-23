@@ -12,6 +12,9 @@ type Addr6 struct {
 	low  uint64
 }
 
+var v6ZERO = Addr6{}
+var v6ONE = Addr6{0, 1}
+
 func (a Addr6) sealed() {}
 
 // Returns [Version4]
@@ -81,22 +84,8 @@ func (a Addr6) Subtract(subtrahend Addr6) Addr6 {
 	}
 }
 
-func isZero(a Addr6) bool {
-	return a.high == 0 && a.low == 0
-}
-
-func isOne(a Addr6) bool {
-	return a.high == 0 && a.low == 1
-}
-
 // See [Number]
 func (a Addr6) Multiply(multiplicand Addr6) Addr6 {
-	if isZero(multiplicand) || isOne(a) {
-		return multiplicand
-	}
-	if isZero(a) || isOne(multiplicand) {
-		return a
-	}
 	hi, lo := bits.Mul64(a.low, multiplicand.low)
 	hi += (a.high * multiplicand.low) + (a.low * multiplicand.high)
 	return Addr6{
@@ -107,20 +96,18 @@ func (a Addr6) Multiply(multiplicand Addr6) Addr6 {
 
 // See [Number]
 func (a Addr6) Divide(denominator Addr6) Addr6 {
-	if isZero(denominator) {
+	if denominator == v6ZERO {
 		panic("divide by zero")
 	}
-	if isOne(denominator) {
+	if denominator == v6ONE {
 		return a
 	}
 	compared := a.Compare(denominator)
 	if compared == 0 {
-		return Addr6{
-			low: 1,
-		}
+		return v6ONE
 	}
 	if compared < 0 {
-		return Addr6{}
+		return v6ZERO
 	}
 	if a.high == 0 && denominator.high == 0 {
 		return Addr6{
@@ -136,8 +123,17 @@ func (a Addr6) Divide(denominator Addr6) Addr6 {
 
 // See [Number]
 func (a Addr6) Mod(denominator Addr6) Addr6 {
-	if isOne(denominator) {
-		return Addr6{}
+	if denominator == v6ONE {
+		return v6ZERO
+	}
+	if denominator != v6ZERO {
+		comp := a.Compare(denominator)
+		if comp == 0 {
+			return v6ZERO
+		}
+		if comp < 0 {
+			return a
+		}
 	}
 	quotient := a.Divide(denominator)
 	return a.Subtract(quotient.Multiply(denominator))
