@@ -136,6 +136,9 @@ func (a Addr6) Divide(denominator Addr6) Addr6 {
 
 // See [Number]
 func (a Addr6) Mod(denominator Addr6) Addr6 {
+	if isOne(denominator) {
+		return Addr6{}
+	}
 	quotient := a.Divide(denominator)
 	return a.Subtract(quotient.Multiply(denominator))
 }
