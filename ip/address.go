@@ -15,16 +15,16 @@ const (
 type Address interface {
 	// Structs that conform to this interface must be produced by this package
 	sealed()
-	// IP address version
+	// IP address version - [Version4] or [Version6]
 	Version() Version
 	// Address as bytes
-	Bytes() []byte
+	Bytes() (slice []byte)
 	// Canonical string form
-	String() string
+	String() (address string)
 	// Equivalent to math/bits.LeadingZeros
-	LeadingZeros() int
+	LeadingZeros() (count int)
 	// Equivalent to math/bits.TrailingZeros
-	TrailingZeros() int
+	TrailingZeros() (count int)
 	// Approximation to float64
 	Float64() (approximation float64)
 }
@@ -36,27 +36,27 @@ type Number[A any] interface {
 	// IP address family - [V4] or [V6]
 	Family() Family[A]
 	// Addition with overflow
-	Add(A) A
+	Add(addend A) (sum A)
 	// Subtraction with overflow
-	Subtract(A) A
+	Subtract(subtrahend A) (difference A)
 	// Multiplication with overflow
-	Multiply(A) A
+	Multiply(factor A) (product A)
 	// Division
-	Divide(A) A
+	Divide(denominator A) (quotient A)
 	// Modulus
-	Mod(A) A
+	Mod(denominator A) (remainder A)
 	// Bitwise NOT
-	Not() A
+	Not() (complement A)
 	// Bitwise AND
-	And(A) A
+	And(operand A) (address A)
 	// Bitwise OR
-	Or(A) A
+	Or(operand A) (address A)
 	// Bitwise XOR
-	Xor(A) A
+	Xor(operand A) (address A)
 	// Bit shift. Use negative int for left shift; use positive int for right shift.
-	Shift(int) A
+	Shift(bits int) (address A)
 	// Returns 1 if operand is less than this.
 	// Returns -1 if operand is more than this.
 	// Returns 0 if operand is equal.
-	Compare(A) int
+	Compare(address A) int
 }

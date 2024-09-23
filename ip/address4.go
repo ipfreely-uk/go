@@ -49,9 +49,9 @@ func (a Addr4) Add(addend Addr4) Addr4 {
 }
 
 // See [Number]
-func (a Addr4) Subtract(addend Addr4) Addr4 {
+func (a Addr4) Subtract(subtrahend Addr4) Addr4 {
 	return Addr4{
-		a.value - addend.value,
+		a.value - subtrahend.value,
 	}
 }
 
