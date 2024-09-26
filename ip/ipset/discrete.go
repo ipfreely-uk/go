@@ -14,7 +14,11 @@ type discrete[A ip.Number[A]] struct {
 
 func (s *discrete[A]) Contains(address A) bool {
 	for _, r := range s.intervals {
-		if r.Contains(address) {
+		compare := address.Compare(r.First())
+		if compare < 0 {
+			break
+		}
+		if compare == 0 || address.Compare(r.Last()) <= 0 {
 			return true
 		}
 	}
@@ -53,20 +57,20 @@ func (s *discrete[A]) String() string {
 
 // Creates [Discrete] set as a union of addresses from the operand elements.
 //
-// If set is contiguous range returns [Interval] set.
-// If set is CIDR range returns [Block] set.
+// If set is contiguous range returns result of [NewInterval] function.
+// If set is CIDR range returns result of [NewBlock] function.
 // If zero-length slice returns the empty set.
 func NewDiscrete[A ip.Number[A]](sets ...Discrete[A]) (set Discrete[A]) {
-	if len(sets) == 0 {
+	intervals := toIntervals(sets)
+	intervals = rationalize(intervals)
+	if len(intervals) == 1 {
+		return intervals[0]
+	}
+	if len(intervals) == 0 {
 		return emptySet[A]()
 	}
-	ranges := toIntervals(sets)
-	ranges = rationalize(ranges)
-	if len(ranges) == 1 {
-		return ranges[0]
-	}
 	return &discrete[A]{
-		ranges,
+		intervals,
 	}
 }
 

@@ -6,8 +6,8 @@ import (
 	"github.com/ipfreely-uk/go/ip"
 )
 
-// TODO: can replace with constant
-var log_2 = math.Log(2.0)
+// math.Log(2.0)
+var log_2 = 0.6931471805599453
 
 // Subdivides [Interval] into CIDR [Block] sets
 func Blocks[A ip.Number[A]](set Interval[A]) Iterator[Block[A]] {

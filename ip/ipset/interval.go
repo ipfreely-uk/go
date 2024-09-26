@@ -55,7 +55,7 @@ func (e *interval[A]) String() string {
 
 // Creates [Interval] set.
 //
-// If range is valid CIDR block returns [Block] set.
+// If range is valid CIDR block returns value from [NewBlock] instead.
 func NewInterval[A ip.Number[A]](first, last A) Interval[A] {
 	f := least(first, last)
 	l := greatest(first, last)

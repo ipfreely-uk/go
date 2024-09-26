@@ -9,7 +9,13 @@ import (
 	"github.com/ipfreely-uk/go/ip"
 )
 
-// Parses CIDR notation.
+// Parses RFC 4632 CIDR notation.
+// See also the [NewBlock] function.
+//
+// For the IPv4 family and expression "192.168.0.0/128",
+// returns 192.168.0.0 as the network address part and
+// 128 as the mask bits.
+//
 // Returns error if second argument is invalid CIDR notation.
 func ParseCIDRNotation[A ip.Number[A]](f ip.Family[A], notation string) (netAddress A, maskBits int, err error) {
 	var address A

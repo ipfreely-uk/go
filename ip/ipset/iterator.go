@@ -5,7 +5,9 @@ import (
 )
 
 // Iterator function that returns element and whether element returned.
-// Mutates state until exhausted.
+//
+// Mutates internal state until exhausted.
+// When exists is false the iterator is exhausted and element should not be used.
 type Iterator[E any] func() (element E, exists bool)
 
 func emptyIterator[E any]() Iterator[E] {

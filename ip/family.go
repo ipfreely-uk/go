@@ -16,6 +16,8 @@ type Family[A any] interface {
 	MustFromBytes(...byte) (address A)
 	// Create address from unsigned integer.
 	// All values are valid.
+	// For V4 operand 1 returns "0.0.0.1"
+	// For V6 operand 1 return "::1"
 	FromInt(i uint32) (address A)
 	// Informational
 	String() string
