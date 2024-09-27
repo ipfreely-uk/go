@@ -40,7 +40,7 @@ func ExampleSubnets() {
 	netAddr, bits, _ := ipset.ParseCIDRNotation(ip.V4(), "203.0.113.0/24")
 	block := ipset.NewBlock(netAddr, bits)
 
-	println(fmt.Sprintf("Dividing %s", block.CidrNotation()))
+	println(fmt.Sprintf("Dividing %s into blocks of at least %s addresses", block.CidrNotation(), oneHundredAddresses.String()))
 	nextSub := ipset.Subnets(block, mask)
 	for sub, exists := nextSub(); exists; sub, exists = nextSub() {
 		println(sub.String())
