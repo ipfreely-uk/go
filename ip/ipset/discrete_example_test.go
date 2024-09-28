@@ -1,6 +1,7 @@
 package ipset_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
@@ -37,4 +38,37 @@ func ExampleNewDiscrete_second() {
 func printEmptySetFor[A ip.Number[A]](f ip.Family[A]) {
 	empty := ipset.NewDiscrete[A]()
 	println(f.String(), empty.String())
+}
+
+func TestExampleNewDiscrete_third(t *testing.T) {
+	ExampleNewDiscrete_third()
+}
+
+func ExampleNewDiscrete_third() {
+	s0 := parseV4("192.0.2.0/32")
+	s1 := parseV4("192.0.2.11/32")
+	s2 := parseV4("192.0.2.12/32")
+	printSetType(s0)
+	printSetType(s1, s2)
+	printSetType(s0, s1, s2)
+}
+
+func parseV4(notation string) ipset.Block[ip.Addr4] {
+	a, m, err := ipset.ParseCIDRNotation(ip.V4(), notation)
+	if err != nil {
+		panic(err)
+	}
+	return ipset.NewBlock(a, m)
+}
+
+func printSetType[A ip.Number[A]](sets ...ipset.Discrete[A]) {
+	union := ipset.NewDiscrete(sets...)
+	switch s := union.(type) {
+	case ipset.Block[A]:
+		println(fmt.Sprintf("%s is a block set", s.String()))
+	case ipset.Interval[A]:
+		println(fmt.Sprintf("%s is an interval set", s.String()))
+	case ipset.Discrete[A]:
+		println(fmt.Sprintf("%s is a discrete set", s.String()))
+	}
 }
