@@ -24,3 +24,19 @@ func ExampleIterator() {
 		println(address.String())
 	}
 }
+
+func TestExampleSeq(t *testing.T) {
+	ExampleSeq()
+}
+
+func ExampleSeq() {
+	netaddr, mask, _ := ipset.ParseCIDRNotation(ip.V4(), "192.0.2.128/28")
+	subnet := ipset.NewBlock(netaddr, mask)
+	firstAssigneable := ip.Next(subnet.First())
+	lastAssigneable := ip.Prev(subnet.Last())
+	assignable := ipset.NewInterval(firstAssigneable, lastAssigneable)
+
+	for address := range ipset.Seq(assignable.Addresses()) {
+		println(address.String())
+	}
+}

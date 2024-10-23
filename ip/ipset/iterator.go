@@ -1,6 +1,8 @@
 package ipset
 
 import (
+	"iter"
+
 	"github.com/ipfreely-uk/go/ip"
 )
 
@@ -67,5 +69,20 @@ func ranges2AddressIterator[A ip.Number[A]](slice []Interval[A]) Iterator[A] {
 			addresses = rnge.Addresses()
 		}
 		return result, false
+	}
+}
+
+// Adapts [Iterator] for use in range loops
+func Seq[A any](i Iterator[A]) iter.Seq[A] {
+	return func(yield func(A) bool) {
+		for {
+			a, ok := i()
+			if !ok {
+				return
+			}
+			if !yield(a) {
+				return
+			}
+		}
 	}
 }
