@@ -1,6 +1,7 @@
 package ipset_test
 
 import (
+	"iter"
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
@@ -12,7 +13,8 @@ func TestSubnets(t *testing.T) {
 	netAddr := ip.MustParse(ip.V4(), "192.168.0.0")
 	{
 		b := ipset.NewBlock(netAddr, 31)
-		next := ipset.Subnets(b, 32)
+		next, stop := iter.Pull(ipset.Subnets(b, 32))
+		defer stop()
 
 		b, exists := next()
 		assert.True(t, exists)

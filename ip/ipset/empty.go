@@ -1,6 +1,7 @@
 package ipset
 
 import (
+	"iter"
 	"math/big"
 
 	"github.com/ipfreely-uk/go/ip"
@@ -16,12 +17,12 @@ func (e *empty[A]) Size() *big.Int {
 	return big.NewInt(0)
 }
 
-func (e *empty[A]) Addresses() Iterator[A] {
-	return emptyIterator[A]()
+func (e *empty[A]) Addresses() iter.Seq[A] {
+	return emptySeq[A]()
 }
 
-func (e *empty[A]) Intervals() Iterator[Interval[A]] {
-	return emptyIterator[Interval[A]]()
+func (e *empty[A]) Intervals() iter.Seq[Interval[A]] {
+	return emptySeq[Interval[A]]()
 }
 
 func (e *empty[A]) String() string {

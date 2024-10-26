@@ -1,6 +1,7 @@
 package ipset
 
 import (
+	"iter"
 	"math/big"
 
 	"github.com/ipfreely-uk/go/ip"
@@ -13,11 +14,11 @@ type Discrete[A ip.Number[A]] interface {
 	// Number of unique addresses.
 	Size() (cardinality *big.Int)
 	// Unique addresses from least to greatest
-	Addresses() Iterator[A]
+	Addresses() iter.Seq[A]
 	// Contents as distinct [Interval] sets.
 	// Intervals do not [Intersect] and are not [Adjacent].
 	// Intervals are returned from least address to greatest.
-	Intervals() Iterator[Interval[A]]
+	Intervals() iter.Seq[Interval[A]]
 	// Informational only
 	String() string
 }

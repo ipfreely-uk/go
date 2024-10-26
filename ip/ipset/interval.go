@@ -1,6 +1,7 @@
 package ipset
 
 import (
+	"iter"
 	"math/big"
 	"strings"
 
@@ -32,13 +33,13 @@ func (a *interval[A]) Last() A {
 	return a.last
 }
 
-func (a *interval[A]) Addresses() Iterator[A] {
-	return addressIterator(a.first, a.last)
+func (a *interval[A]) Addresses() iter.Seq[A] {
+	return addressSeq(a.first, a.last)
 }
 
-func (a *interval[A]) Intervals() Iterator[Interval[A]] {
+func (a *interval[A]) Intervals() iter.Seq[Interval[A]] {
 	slice := []Interval[A]{a}
-	return sliceIterator(slice)
+	return sliceSeq(slice)
 }
 
 func (e *interval[A]) String() string {

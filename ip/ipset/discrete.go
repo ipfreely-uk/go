@@ -1,6 +1,7 @@
 package ipset
 
 import (
+	"iter"
 	"math/big"
 	"sort"
 	"strings"
@@ -34,12 +35,12 @@ func (s *discrete[A]) Size() *big.Int {
 	return sum
 }
 
-func (s *discrete[A]) Addresses() Iterator[A] {
-	return ranges2AddressIterator(s.intervals)
+func (s *discrete[A]) Addresses() iter.Seq[A] {
+	return ranges2AddressSeq(s.intervals)
 }
 
-func (s *discrete[A]) Intervals() Iterator[Interval[A]] {
-	return sliceIterator(s.intervals)
+func (s *discrete[A]) Intervals() iter.Seq[Interval[A]] {
+	return sliceSeq(s.intervals)
 }
 
 func (s *discrete[A]) String() string {
@@ -77,9 +78,8 @@ func NewDiscrete[A ip.Number[A]](sets ...Discrete[A]) (set Discrete[A]) {
 func toIntervals[A ip.Number[A]](sets []Discrete[A]) []Interval[A] {
 	result := []Interval[A]{}
 	for _, set := range sets {
-		next := set.Intervals()
-		for s, ok := next(); ok; s, ok = next() {
-			result = append(result, s)
+		for i := range set.Intervals() {
+			result = append(result, i)
 		}
 	}
 	return result

@@ -41,8 +41,7 @@ func ExampleSubnets() {
 	block := ipset.NewBlock(netAddr, bits)
 
 	println(fmt.Sprintf("Dividing %s into blocks of at least %s addresses", block.CidrNotation(), oneHundredAddresses.String()))
-	nextSub := ipset.Subnets(block, mask)
-	for sub, exists := nextSub(); exists; sub, exists = nextSub() {
+	for sub := range ipset.Subnets(block, mask) {
 		println(sub.String())
 	}
 }

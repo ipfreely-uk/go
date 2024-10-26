@@ -2,13 +2,14 @@ package ipset
 
 import (
 	"fmt"
+	"iter"
 
 	"github.com/ipfreely-uk/go/ip"
 )
 
 // Splits [Block] into subnets of a given size.
 // Panics on illegal mask bits.
-func Subnets[A ip.Number[A]](b Block[A], maskBits int) Iterator[Block[A]] {
+func Subnets[A ip.Number[A]](b Block[A], maskBits int) iter.Seq[Block[A]] {
 	first := b.First()
 	f := first.Family()
 
@@ -17,18 +18,16 @@ func Subnets[A ip.Number[A]](b Block[A], maskBits int) Iterator[Block[A]] {
 		panic(msg)
 	}
 
-	one := f.FromInt(1)
-	current := first
-	done := false
-
-	return func() (element Block[A], exists bool) {
-		var sub Block[A]
-		if !done {
-			sub = NewBlock(current, maskBits)
-			done = ip.Eq(sub.Last(), b.Last())
+	return func(yield func(Block[A]) bool) {
+		one := f.FromInt(1)
+		current := first
+		for {
+			sub := NewBlock(current, maskBits)
+			more := yield(sub)
+			if !more || ip.Eq(sub.Last(), b.Last()) {
+				return
+			}
 			current = sub.Last().Add(one)
-			return sub, true
 		}
-		return sub, false
 	}
 }

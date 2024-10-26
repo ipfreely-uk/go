@@ -63,16 +63,26 @@ func TestAddressSet_Addresses(t *testing.T) {
 	r1 := ipset.NewInterval(hundred, hundredAndOne)
 	set := ipset.NewDiscrete(r0, r1, r0, r1)
 
-	addresses := []ip.Addr6{}
-	iter := set.Addresses()
-	for a, exists := iter(); exists; a, exists = iter() {
-		addresses = append(addresses, a)
-	}
+	{
+		addresses := []ip.Addr6{}
+		for a := range set.Addresses() {
+			addresses = append(addresses, a)
+		}
 
-	assert.Equal(t, 3, len(addresses))
-	assert.Equal(t, zero, addresses[0])
-	assert.Equal(t, hundred, addresses[1])
-	assert.Equal(t, hundredAndOne, addresses[2])
+		assert.Equal(t, 3, len(addresses))
+		assert.Equal(t, zero, addresses[0])
+		assert.Equal(t, hundred, addresses[1])
+		assert.Equal(t, hundredAndOne, addresses[2])
+	}
+	{
+		addresses := []ip.Addr6{}
+		for a := range set.Addresses() {
+			addresses = append(addresses, a)
+			break
+		}
+
+		assert.Equal(t, 1, len(addresses))
+	}
 }
 
 func TestAddressSet_String(t *testing.T) {

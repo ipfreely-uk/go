@@ -1,6 +1,7 @@
 package ipset
 
 import (
+	"iter"
 	"math"
 
 	"github.com/ipfreely-uk/go/ip"
@@ -10,28 +11,29 @@ import (
 var log_2 = 0.6931471805599453
 
 // Subdivides [Interval] into CIDR [Block] sets
-func Blocks[A ip.Number[A]](set Interval[A]) Iterator[Block[A]] {
+func Blocks[A ip.Number[A]](set Interval[A]) iter.Seq[Block[A]] {
 	first := set.First()
 	last := set.Last()
 	mask := ip.SubnetMaskSize(first, last)
 	if mask >= 0 {
 		block := NewBlock(first, mask)
 		slice := []Block[A]{block}
-		return sliceIterator(slice)
+		return sliceSeq(slice)
 	}
 	return blockIterator(set.First(), set.Last())
 }
 
-func blockIterator[A ip.Number[A]](start, end A) Iterator[Block[A]] {
+func blockIterator[A ip.Number[A]](start, end A) iter.Seq[Block[A]] {
 	// implementation breaks on entire internet but guarded above
-	current := start
-	done := false
-	width := start.Family().Width()
+	return func(yield func(Block[A]) bool) {
+		walkBlocks(start, end, yield)
+	}
+}
 
-	return func() (Block[A], bool) {
-		if done {
-			return nil, false
-		}
+func walkBlocks[A ip.Number[A]](start, end A, yield func(Block[A]) bool) {
+	current := start
+	width := start.Family().Width()
+	for {
 		maxSize := width - current.TrailingZeros()
 		size := ip.Next(end.Subtract(current))
 		l := math.Log(size.Float64())
@@ -39,13 +41,11 @@ func blockIterator[A ip.Number[A]](start, end A) Iterator[Block[A]] {
 		maxDiff := int(width - int(math.Floor(x)))
 		mask := max(maxSize, maxDiff)
 		block := NewBlock(current, mask)
-		last := block.Last()
-		if ip.Eq(last, end) {
-			done = true
-		} else {
-			current = ip.Next(last)
+		more := yield(block)
+		if !more || ip.Eq(block.Last(), end) {
+			return
 		}
-		return block, true
+		current = ip.Next(block.Last())
 	}
 }
 

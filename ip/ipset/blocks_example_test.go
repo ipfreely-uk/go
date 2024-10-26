@@ -20,8 +20,7 @@ func ExampleBlocks() {
 }
 
 func printCidrBlocksIn[A ip.Number[A]](addressRange ipset.Interval[A]) {
-	next := ipset.Blocks(addressRange)
-	for block, exists := next(); exists; block, exists = next() {
+	for block := range ipset.Blocks(addressRange) {
 		println(block.String())
 	}
 }

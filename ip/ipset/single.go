@@ -2,6 +2,7 @@ package ipset
 
 import (
 	"fmt"
+	"iter"
 	"math/big"
 
 	"github.com/ipfreely-uk/go/ip"
@@ -31,13 +32,13 @@ func (b *single[A]) Last() A {
 	return b.address
 }
 
-func (b *single[A]) Addresses() Iterator[A] {
-	return addressIterator(b.address, b.address)
+func (b *single[A]) Addresses() iter.Seq[A] {
+	return addressSeq(b.address, b.address)
 }
 
-func (b *single[A]) Intervals() Iterator[Interval[A]] {
+func (b *single[A]) Intervals() iter.Seq[Interval[A]] {
 	slice := []Interval[A]{b}
-	return sliceIterator(slice)
+	return sliceSeq(slice)
 }
 
 func (b *single[A]) String() string {

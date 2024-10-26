@@ -76,8 +76,7 @@ func TestBlock_Addresses(t *testing.T) {
 
 		count := big.NewInt(0)
 		one := big.NewInt(1)
-		next := actual.Addresses()
-		for _, exists := next(); exists; _, exists = next() {
+		for _ = range actual.Addresses() {
 			count = count.Add(count, one)
 		}
 		assert.Equal(t, actual.Size(), count)
@@ -88,23 +87,33 @@ func TestBlock_Addresses(t *testing.T) {
 
 		count := big.NewInt(0)
 		one := big.NewInt(1)
-		next := actual.Addresses()
-		for _, exists := next(); exists; _, exists = next() {
+		for _ = range actual.Addresses() {
 			count = count.Add(count, one)
 		}
 		assert.Equal(t, actual.Size(), count)
 	}
+	{
+		address := ip.MustParse(ip.V6(), "::")
+		actual := ipset.NewBlock(address, 0)
+
+		count := big.NewInt(0)
+		one := big.NewInt(1)
+		for _ = range actual.Addresses() {
+			count = count.Add(count, one)
+			break
+		}
+		assert.Equal(t, one, count)
+	}
 }
 
-func TestBlock_Ranges(t *testing.T) {
+func TestBlock_Intervals(t *testing.T) {
 	{
 		address, _ := ip.V4().FromBytes(192, 168, 0, 0)
 		actual := ipset.NewBlock(address, 24)
 
 		count := big.NewInt(0)
 		one := big.NewInt(1)
-		next := actual.Intervals()
-		for _, exists := next(); exists; _, exists = next() {
+		for _ = range actual.Intervals() {
 			count = count.Add(count, one)
 		}
 		assert.Equal(t, one, count)
@@ -115,8 +124,7 @@ func TestBlock_Ranges(t *testing.T) {
 
 		count := big.NewInt(0)
 		one := big.NewInt(1)
-		next := actual.Intervals()
-		for _, exists := next(); exists; _, exists = next() {
+		for _ = range actual.Intervals() {
 			count = count.Add(count, one)
 		}
 		assert.Equal(t, one, count)

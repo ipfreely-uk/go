@@ -49,11 +49,11 @@ func TestInterval_Addresses(t *testing.T) {
 	one := ip.V6().FromInt(1)
 	three := ip.V6().FromInt(3)
 
-	actual := ipset.NewInterval(one, three).Addresses()
+	actual := ipset.NewInterval(one, three)
 
 	var count = 0
 	var last ip.Addr6
-	for addr, exists := actual(); exists; addr, exists = actual() {
+	for addr := range actual.Addresses() {
 		last = addr
 		count++
 	}
@@ -66,11 +66,9 @@ func TestInterval_Intervals(t *testing.T) {
 	three := ip.V6().FromInt(3)
 	net := ipset.NewInterval(one, three)
 
-	actual := net.Intervals()
-
 	var count = 0
 	var last ipset.Interval[ip.Addr6]
-	for addr, exists := actual(); exists; addr, exists = actual() {
+	for addr := range net.Intervals() {
 		last = addr
 		count++
 	}
