@@ -17,8 +17,7 @@ func Blocks[A ip.Number[A]](set Interval[A]) iter.Seq[Block[A]] {
 	mask := ip.SubnetMaskSize(first, last)
 	if mask >= 0 {
 		block := NewBlock(first, mask)
-		slice := []Block[A]{block}
-		return sliceSeq(slice)
+		return singleSeq(block)
 	}
 	return blockIterator(set.First(), set.Last())
 }
