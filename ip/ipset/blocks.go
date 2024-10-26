@@ -37,14 +37,15 @@ func walkBlocks[A ip.Number[A]](start, end A, yield func(Block[A]) bool) {
 		size := ip.Next(end.Subtract(current))
 		l := math.Log(size.Float64())
 		x := l / log_2
-		maxDiff := int(width - int(math.Floor(x)))
+		maxDiff := width - int(math.Floor(x))
 		mask := max(maxSize, maxDiff)
 		block := NewBlock(current, mask)
 		more := yield(block)
-		if !more || ip.Eq(block.Last(), end) {
+		last := block.Last()
+		if !more || ip.Eq(last, end) {
 			return
 		}
-		current = ip.Next(block.Last())
+		current = ip.Next(last)
 	}
 }
 
