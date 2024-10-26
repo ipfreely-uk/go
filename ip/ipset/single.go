@@ -33,12 +33,12 @@ func (b *single[A]) Last() A {
 }
 
 func (b *single[A]) Addresses() iter.Seq[A] {
-	return addressSeq(b.address, b.address)
+	return singleSeq(b.address)
 }
 
 func (b *single[A]) Intervals() iter.Seq[Interval[A]] {
-	slice := []Interval[A]{b}
-	return sliceSeq(slice)
+	var i Interval[A] = b
+	return singleSeq(i)
 }
 
 func (b *single[A]) String() string {

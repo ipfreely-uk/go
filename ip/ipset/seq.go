@@ -10,7 +10,11 @@ func emptySeq[E any]() iter.Seq[E] {
 	return func(yield func(E) bool) {}
 }
 
-// TODO: single Seq
+func singleSeq[E any](element E) iter.Seq[E] {
+	return func(yield func(E) bool) {
+		_ = yield(element)
+	}
+}
 
 func sliceSeq[E any](slice []E) iter.Seq[E] {
 	return func(yield func(E) bool) {

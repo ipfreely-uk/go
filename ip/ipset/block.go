@@ -41,8 +41,8 @@ func (b *block[A]) Addresses() iter.Seq[A] {
 }
 
 func (b *block[A]) Intervals() iter.Seq[Interval[A]] {
-	slice := []Interval[A]{b}
-	return sliceSeq(slice)
+	var i Interval[A] = b
+	return singleSeq(i)
 }
 
 func (b *block[A]) String() string {

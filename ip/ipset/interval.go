@@ -38,8 +38,8 @@ func (a *interval[A]) Addresses() iter.Seq[A] {
 }
 
 func (a *interval[A]) Intervals() iter.Seq[Interval[A]] {
-	slice := []Interval[A]{a}
-	return sliceSeq(slice)
+	var i Interval[A] = a
+	return singleSeq(i)
 }
 
 func (e *interval[A]) String() string {

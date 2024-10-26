@@ -7,7 +7,8 @@ import (
 	"github.com/ipfreely-uk/go/ip"
 )
 
-// Discrete ordered set of IP addresses
+// Immutable discrete ordered set of IP addresses.
+// Seq types provided by implementations are reusable.
 type Discrete[A ip.Number[A]] interface {
 	// Tests if address in set
 	Contains(address A) bool
