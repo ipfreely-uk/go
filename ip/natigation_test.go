@@ -32,3 +32,69 @@ func TestPrev(t *testing.T) {
 	actual := ip.Prev(one)
 	assert.Equal(t, expected, actual)
 }
+
+func TestInclusive(t *testing.T) {
+	smallest := ip.V6().FromInt(0)
+	middle := ip.Next(smallest)
+	largest := ip.Next(middle)
+	{
+		count := 0
+		for _ = range ip.Inclusive(smallest, largest) {
+			count++
+		}
+		assert.Equal(t, 3, count)
+	}
+	{
+		count := 0
+		for _ = range ip.Inclusive(largest, smallest) {
+			count++
+		}
+		assert.Equal(t, 3, count)
+	}
+	{
+		count := 0
+		for _ = range ip.Inclusive(smallest, smallest) {
+			count++
+		}
+		assert.Equal(t, 1, count)
+	}
+	{
+		yield := func(a ip.Addr6) bool {
+			return false
+		}
+		ip.Inclusive(largest, smallest)(yield)
+	}
+}
+
+func TestExclusive(t *testing.T) {
+	smallest := ip.V6().FromInt(0)
+	middle := ip.Next(smallest)
+	largest := ip.Next(middle)
+	{
+		count := 0
+		for _ = range ip.Exclusive(smallest, largest) {
+			count++
+		}
+		assert.Equal(t, 2, count)
+	}
+	{
+		count := 0
+		for _ = range ip.Exclusive(largest, smallest) {
+			count++
+		}
+		assert.Equal(t, 2, count)
+	}
+	{
+		count := 0
+		for _ = range ip.Exclusive(smallest, smallest) {
+			count++
+		}
+		assert.Equal(t, 0, count)
+	}
+	{
+		yield := func(a ip.Addr6) bool {
+			return false
+		}
+		ip.Exclusive(largest, smallest)(yield)
+	}
+}
