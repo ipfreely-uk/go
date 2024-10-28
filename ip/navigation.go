@@ -27,7 +27,7 @@ func Prev[A Number[A]](address A) (decremented A) {
 // Address iteration for range loops.
 // Iteration uses [Next] or [Prev] depending on relative values of first and last.
 // The returned sequence is reusable.
-func Inclusive[A Number[A]](first, last A) iter.Seq[A] {
+func Inclusive[A Number[A]](first, last A) (inclusiveRange iter.Seq[A]) {
 	var step func(n A) A
 	if first.Compare(last) < 0 {
 		step = Next
@@ -51,7 +51,7 @@ func Inclusive[A Number[A]](first, last A) iter.Seq[A] {
 
 // The exclusive version of [Inclusive].
 // If first and last are equal there are no results.
-func Exclusive[A Number[A]](start, excludedEnd A) iter.Seq[A] {
+func Exclusive[A Number[A]](start, excludedEnd A) (exclusiveRange iter.Seq[A]) {
 	comp := start.Compare(excludedEnd)
 	if comp == 0 {
 		return func(yield func(A) bool) {}
