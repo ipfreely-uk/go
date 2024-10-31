@@ -9,10 +9,10 @@ unsigned integers capable of arithmetic and bitwise operations.
 
 Add an import statement to [go.mod](https://go.dev/doc/modules/gomod-ref) to utilise.
 
-| Package                                     | Purpose                     |
-|---------------------------------------------|-----------------------------|
-| `import github.com/ipfreely-uk/go/ip`       | Core IP address types       |
-| `import github.com/ipfreely-uk/go/ip/ipset` | IP address collection types |
+| Package                                  | Purpose                     |
+|------------------------------------------|-----------------------------|
+| `import github.com/ipfreely-uk/go/ip`    | Core IP address types       |
+| `import github.com/ipfreely-uk/go/ipset` | IP address collection types |
 
 ## Versus Standard Library
 

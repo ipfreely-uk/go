@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
-	"github.com/ipfreely-uk/go/ip/ipset"
+	"github.com/ipfreely-uk/go/ipset"
 )
 
 func TestExampleNewDiscrete(t *testing.T) {

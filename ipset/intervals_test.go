@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
-	"github.com/ipfreely-uk/go/ip/ipset"
+	"github.com/ipfreely-uk/go/ipset"
 	"github.com/stretchr/testify/assert"
 )
 

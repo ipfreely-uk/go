@@ -6,7 +6,7 @@ import (
 
 	humanize "github.com/dustin/go-humanize"
 	"github.com/ipfreely-uk/go/ip"
-	"github.com/ipfreely-uk/go/ip/ipset"
+	"github.com/ipfreely-uk/go/ipset"
 )
 
 func TestExampleNewBlock(t *testing.T) {
