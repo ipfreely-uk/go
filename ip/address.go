@@ -19,7 +19,7 @@ type Address interface {
 	Version() Version
 	// Address as bytes
 	Bytes() (slice []byte)
-	// Canonical string form
+	// Normalized string form
 	String() (address string)
 	// Equivalent to math/bits.LeadingZeros
 	LeadingZeros() (count int)
@@ -29,7 +29,7 @@ type Address interface {
 	Float64() (approximation float64)
 }
 
-// IP address as generic numeric type.
+// IP address as generic unsigned integer type.
 // [Addr4] and [Addr6] are the only types that can conform to this interface.
 type Int[A any] interface {
 	Address
