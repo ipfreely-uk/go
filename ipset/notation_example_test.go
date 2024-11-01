@@ -43,7 +43,7 @@ func ExampleParseUnknownCIDRNotation() {
 	}
 }
 
-func printRangeDetails[A ip.Number[A]](addresses ipset.Interval[A]) {
+func printRangeDetails[A ip.Int[A]](addresses ipset.Interval[A]) {
 	println("Start:", addresses.First().String())
 	println("End:", addresses.Last().String())
 	println("Addresses:", humanize.BigComma(addresses.Size()))

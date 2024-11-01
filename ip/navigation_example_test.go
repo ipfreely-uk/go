@@ -18,7 +18,7 @@ func ExampleNext() {
 	Ascend(lowest, highest)
 }
 
-func Ascend[A ip.Number[A]](lowest, highest A) {
+func Ascend[A ip.Int[A]](lowest, highest A) {
 	current := lowest
 	for {
 		println(current.String())
@@ -41,7 +41,7 @@ func ExamplePrev() {
 	Descend(highest, lowest)
 }
 
-func Descend[A ip.Number[A]](highest, lowest A) {
+func Descend[A ip.Int[A]](highest, lowest A) {
 	current := highest
 	for {
 		println(current.String())

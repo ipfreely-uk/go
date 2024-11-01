@@ -13,7 +13,7 @@ func TestExampleSubnets(t *testing.T) {
 	ExampleSubnets()
 }
 
-func maskRequiredFor[A ip.Number[A]](f ip.Family[A], allocateableAddresses *big.Int) (bits int) {
+func maskRequiredFor[A ip.Int[A]](f ip.Family[A], allocateableAddresses *big.Int) (bits int) {
 	var min *big.Int
 	if f.Version() == ip.V4().Version() {
 		// IPv4 subnets reserve two addresses for the network

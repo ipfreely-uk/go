@@ -19,7 +19,7 @@ func ExampleBlocks() {
 	printCidrBlocksIn(freeAddresses)
 }
 
-func printCidrBlocksIn[A ip.Number[A]](addressRange ipset.Interval[A]) {
+func printCidrBlocksIn[A ip.Int[A]](addressRange ipset.Interval[A]) {
 	for block := range ipset.Blocks(addressRange) {
 		println(block.String())
 	}

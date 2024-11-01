@@ -17,7 +17,7 @@ func ExampleToBigInt() {
 	printNumberOfAddresses(ip.MinAddress(ip.V6()), ip.MaxAddress(ip.V6()))
 }
 
-func printNumberOfAddresses[A ip.Number[A]](first, last A) {
+func printNumberOfAddresses[A ip.Int[A]](first, last A) {
 	diff := last.Subtract(first)
 
 	n := ip.ToBigInt(diff)

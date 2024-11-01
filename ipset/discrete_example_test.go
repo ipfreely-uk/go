@@ -35,7 +35,7 @@ func ExampleNewDiscrete_second() {
 	printEmptySetFor(ip.V6())
 }
 
-func printEmptySetFor[A ip.Number[A]](f ip.Family[A]) {
+func printEmptySetFor[A ip.Int[A]](f ip.Family[A]) {
 	empty := ipset.NewDiscrete[A]()
 	println(f.String(), empty.String())
 }
@@ -61,7 +61,7 @@ func parseV4(notation string) ipset.Block[ip.Addr4] {
 	return ipset.NewBlock(a, m)
 }
 
-func printSetType[A ip.Number[A]](sets ...ipset.Discrete[A]) {
+func printSetType[A ip.Int[A]](sets ...ipset.Discrete[A]) {
 	union := ipset.NewDiscrete(sets...)
 	switch s := union.(type) {
 	case ipset.Block[A]:

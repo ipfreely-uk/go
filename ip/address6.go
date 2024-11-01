@@ -5,7 +5,7 @@ import (
 	"net/netip"
 )
 
-// Immutable 128bit unsigned integer IP [Number] representation.
+// Immutable 128bit unsigned integer IP [Int] representation.
 // Use [V6] to create values.
 type Addr6 struct {
 	high uint64
@@ -50,7 +50,7 @@ func (a Addr6) Bytes() []byte {
 	}
 }
 
-// See [Number]
+// See [Int]
 func (a Addr6) Not() Addr6 {
 	return Addr6{
 		^a.high,
@@ -58,7 +58,7 @@ func (a Addr6) Not() Addr6 {
 	}
 }
 
-// See [Number]
+// See [Int]
 func (a Addr6) Add(addend Addr6) Addr6 {
 	var low = a.low + addend.low
 	var high = a.high + addend.high
@@ -71,7 +71,7 @@ func (a Addr6) Add(addend Addr6) Addr6 {
 	}
 }
 
-// See [Number]
+// See [Int]
 func (a Addr6) Subtract(subtrahend Addr6) Addr6 {
 	var low = a.low - subtrahend.low
 	var high = a.high - subtrahend.high
@@ -84,7 +84,7 @@ func (a Addr6) Subtract(subtrahend Addr6) Addr6 {
 	}
 }
 
-// See [Number]
+// See [Int]
 func (a Addr6) Multiply(multiplicand Addr6) Addr6 {
 	hi, lo := bits.Mul64(a.low, multiplicand.low)
 	hi += (a.high * multiplicand.low) + (a.low * multiplicand.high)
@@ -94,7 +94,7 @@ func (a Addr6) Multiply(multiplicand Addr6) Addr6 {
 	}
 }
 
-// See [Number]
+// See [Int]
 func (a Addr6) Divide(denominator Addr6) Addr6 {
 	if denominator == v6ZERO {
 		panic("divide by zero")
@@ -121,7 +121,7 @@ func (a Addr6) Divide(denominator Addr6) Addr6 {
 	return address
 }
 
-// See [Number]
+// See [Int]
 func (a Addr6) Mod(denominator Addr6) Addr6 {
 	if denominator == v6ONE {
 		return v6ZERO
@@ -139,7 +139,7 @@ func (a Addr6) Mod(denominator Addr6) Addr6 {
 	return a.Subtract(quotient.Multiply(denominator))
 }
 
-// See [Number]
+// See [Int]
 func (a Addr6) And(operand Addr6) Addr6 {
 	return Addr6{
 		a.high & operand.high,
@@ -147,7 +147,7 @@ func (a Addr6) And(operand Addr6) Addr6 {
 	}
 }
 
-// See [Number]
+// See [Int]
 func (a Addr6) Or(operand Addr6) Addr6 {
 	return Addr6{
 		a.high | operand.high,
@@ -155,7 +155,7 @@ func (a Addr6) Or(operand Addr6) Addr6 {
 	}
 }
 
-// See [Number]
+// See [Int]
 func (a Addr6) Xor(operand Addr6) Addr6 {
 	return Addr6{
 		a.high ^ operand.high,
@@ -163,7 +163,7 @@ func (a Addr6) Xor(operand Addr6) Addr6 {
 	}
 }
 
-// See [Number]
+// See [Int]
 func (a Addr6) Shift(bits int) Addr6 {
 	var high uint64
 	var low uint64
@@ -184,7 +184,7 @@ func (a Addr6) Shift(bits int) Addr6 {
 	}
 }
 
-// See [Number]
+// See [Int]
 func (a Addr6) Compare(other Addr6) int {
 	if a.high < other.high {
 		return -1
@@ -201,7 +201,7 @@ func (a Addr6) Compare(other Addr6) int {
 	return 0
 }
 
-// See [Number]
+// See [Int]
 func (a Addr6) LeadingZeros() int {
 	high0 := bits.LeadingZeros64(a.high)
 	if high0 == 64 {
@@ -210,7 +210,7 @@ func (a Addr6) LeadingZeros() int {
 	return high0
 }
 
-// See [Number]
+// See [Int]
 func (a Addr6) TrailingZeros() int {
 	low0 := bits.TrailingZeros64(a.low)
 	if low0 == 64 {
@@ -219,14 +219,14 @@ func (a Addr6) TrailingZeros() int {
 	return low0
 }
 
-// See [Number]
+// See [Int]
 func (a Addr6) String() string {
 	b := a.Bytes()
 	addr, _ := netip.AddrFromSlice(b)
 	return addr.String()
 }
 
-// See [Number]
+// See [Int]
 func (a Addr6) Float64() float64 {
 	if a.high == 0 {
 		return float64(a.low)

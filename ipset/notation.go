@@ -17,7 +17,7 @@ import (
 // 128 as the mask bits.
 //
 // Returns error if second argument is invalid CIDR notation.
-func ParseCIDRNotation[A ip.Number[A]](f ip.Family[A], notation string) (netAddress A, maskBits int, err error) {
+func ParseCIDRNotation[A ip.Int[A]](f ip.Family[A], notation string) (netAddress A, maskBits int, err error) {
 	var address A
 	var mask int
 

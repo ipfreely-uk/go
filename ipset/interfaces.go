@@ -9,7 +9,7 @@ import (
 
 // Immutable discrete ordered set of IP addresses.
 // Seq types provided by implementations are reusable.
-type Discrete[A ip.Number[A]] interface {
+type Discrete[A ip.Int[A]] interface {
 	// Tests if address in set
 	Contains(address A) bool
 	// Number of unique addresses.
@@ -29,7 +29,7 @@ type Discrete[A ip.Number[A]] interface {
 // A range of one or more IP addresses.
 // The name interval was chosen because range is a keyword in Go.
 // Interval is a term from mathematical set theory.
-type Interval[A ip.Number[A]] interface {
+type Interval[A ip.Int[A]] interface {
 	Discrete[A]
 	// Least address
 	First() (address A)
@@ -39,7 +39,7 @@ type Interval[A ip.Number[A]] interface {
 
 // Immutable RFC-4632 CIDR block.
 // Roughly equivalent to the [netip.Prefix] type.
-type Block[A ip.Number[A]] interface {
+type Block[A ip.Int[A]] interface {
 	Interval[A]
 	// Mask size in bits
 	MaskSize() (bits int)

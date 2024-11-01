@@ -18,7 +18,7 @@ func ExampleSubnetMask() {
 	printNetworkDetails(network, 26)
 }
 
-func printNetworkDetails[A ip.Number[A]](network A, maskBits int) {
+func printNetworkDetails[A ip.Int[A]](network A, maskBits int) {
 	fam := network.Family()
 	mask := ip.SubnetMask(fam, maskBits)
 	inverseMask := mask.Not()
@@ -39,7 +39,7 @@ func ExampleSubnetMask_second() {
 	printAllMasks(ip.V6())
 }
 
-func printAllMasks[A ip.Number[A]](f ip.Family[A]) {
+func printAllMasks[A ip.Int[A]](f ip.Family[A]) {
 	println(f.String())
 	for bits := 0; bits <= f.Width(); bits++ {
 		mask := ip.SubnetMask(f, bits)
@@ -57,7 +57,7 @@ func ExampleSubnetAddressCount() {
 	printSubnetSizesForMasks(ip.V6())
 }
 
-func printSubnetSizesForMasks[A ip.Number[A]](f ip.Family[A]) {
+func printSubnetSizesForMasks[A ip.Int[A]](f ip.Family[A]) {
 	for mask := 0; mask <= f.Width(); mask++ {
 		count := ip.SubnetAddressCount(f, mask)
 		msg := fmt.Sprintf("IPv%d /%d == %s", f.Version(), mask, humanize.BigComma(count))

@@ -10,7 +10,7 @@ const (
 	Version6 Version = 6
 )
 
-// The parts of [Number] without generic typing.
+// The parts of [Int] without generic typing.
 // [Addr4] and [Addr6] are the only types that can conform to this interface.
 type Address interface {
 	// Structs that conform to this interface must be produced by this package
@@ -31,7 +31,7 @@ type Address interface {
 
 // IP address as generic numeric type.
 // [Addr4] and [Addr6] are the only types that can conform to this interface.
-type Number[A any] interface {
+type Int[A any] interface {
 	Address
 	// IP address family - [V4] or [V6]
 	Family() Family[A]

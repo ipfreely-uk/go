@@ -9,7 +9,7 @@ import (
 	"github.com/ipfreely-uk/go/ip"
 )
 
-type discrete[A ip.Number[A]] struct {
+type discrete[A ip.Int[A]] struct {
 	intervals []Interval[A]
 }
 
@@ -61,7 +61,7 @@ func (s *discrete[A]) String() string {
 // If set is contiguous range returns result of [NewInterval] function.
 // If set is CIDR range returns result of [NewBlock] function.
 // If zero-length slice returns the empty set.
-func NewDiscrete[A ip.Number[A]](sets ...Discrete[A]) (set Discrete[A]) {
+func NewDiscrete[A ip.Int[A]](sets ...Discrete[A]) (set Discrete[A]) {
 	intervals := toIntervals(sets)
 	intervals = rationalize(intervals)
 	if len(intervals) == 1 {
@@ -75,7 +75,7 @@ func NewDiscrete[A ip.Number[A]](sets ...Discrete[A]) (set Discrete[A]) {
 	}
 }
 
-func toIntervals[A ip.Number[A]](sets []Discrete[A]) []Interval[A] {
+func toIntervals[A ip.Int[A]](sets []Discrete[A]) []Interval[A] {
 	result := []Interval[A]{}
 	for _, set := range sets {
 		for i := range set.Intervals() {
@@ -85,7 +85,7 @@ func toIntervals[A ip.Number[A]](sets []Discrete[A]) []Interval[A] {
 	return result
 }
 
-func rationalize[A ip.Number[A]](spans []Interval[A]) []Interval[A] {
+func rationalize[A ip.Int[A]](spans []Interval[A]) []Interval[A] {
 	set := map[Interval[A]]bool{}
 	for _, r := range spans {
 		set[r] = true

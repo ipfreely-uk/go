@@ -8,7 +8,7 @@ import (
 	"github.com/ipfreely-uk/go/ip"
 )
 
-type single[A ip.Number[A]] struct {
+type single[A ip.Int[A]] struct {
 	address A
 }
 
@@ -54,6 +54,6 @@ func (b *single[A]) CidrNotation() string {
 }
 
 // Creates [Block] set from a single address
-func NewSingle[A ip.Number[A]](address A) Block[A] {
+func NewSingle[A ip.Int[A]](address A) Block[A] {
 	return &single[A]{address}
 }

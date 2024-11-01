@@ -9,7 +9,7 @@ import (
 
 // Splits [Block] into subnets of a given size.
 // Panics on illegal mask bits.
-func Subnets[A ip.Number[A]](b Block[A], maskBits int) iter.Seq[Block[A]] {
+func Subnets[A ip.Int[A]](b Block[A], maskBits int) iter.Seq[Block[A]] {
 	first := b.First()
 	f := first.Family()
 

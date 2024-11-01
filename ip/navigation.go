@@ -3,23 +3,23 @@ package ip
 import "iter"
 
 // Zero address for family.
-func MinAddress[A Number[A]](fam Family[A]) (firstInFamily A) {
+func MinAddress[A Int[A]](fam Family[A]) (firstInFamily A) {
 	return fam.FromInt(0)
 }
 
 // Maximum address for family
-func MaxAddress[A Number[A]](fam Family[A]) (lastInFamily A) {
+func MaxAddress[A Int[A]](fam Family[A]) (lastInFamily A) {
 	return MinAddress(fam).Not()
 }
 
 // Increments argument by one with overflow
-func Next[A Number[A]](address A) (incremented A) {
+func Next[A Int[A]](address A) (incremented A) {
 	one := address.Family().FromInt(1)
 	return address.Add(one)
 }
 
 // Decrements argument by one with underflow
-func Prev[A Number[A]](address A) (decremented A) {
+func Prev[A Int[A]](address A) (decremented A) {
 	one := address.Family().FromInt(1)
 	return address.Subtract(one)
 }
@@ -27,7 +27,7 @@ func Prev[A Number[A]](address A) (decremented A) {
 // Address iteration for range loops.
 // Iteration uses [Next] or [Prev] depending on relative values of first and last.
 // The returned sequence is reusable.
-func Inclusive[A Number[A]](first, last A) (inclusiveRange iter.Seq[A]) {
+func Inclusive[A Int[A]](first, last A) (inclusiveRange iter.Seq[A]) {
 	var step func(n A) A
 	if first.Compare(last) < 0 {
 		step = Next
@@ -51,7 +51,7 @@ func Inclusive[A Number[A]](first, last A) (inclusiveRange iter.Seq[A]) {
 
 // The exclusive version of [Inclusive].
 // If first and last are equal there are no results.
-func Exclusive[A Number[A]](start, excludedEnd A) (exclusiveRange iter.Seq[A]) {
+func Exclusive[A Int[A]](start, excludedEnd A) (exclusiveRange iter.Seq[A]) {
 	comp := start.Compare(excludedEnd)
 	if comp == 0 {
 		return func(yield func(A) bool) {}

@@ -36,7 +36,7 @@ func ExampleBlock() {
 	println("Random address from", block.String(), "=", randomAddr.String())
 }
 
-func randomAddressFrom[A ip.Number[A]](netBlock ipset.Block[A]) (address A) {
+func randomAddressFrom[A ip.Int[A]](netBlock ipset.Block[A]) (address A) {
 	netAddr := netBlock.First()
 	family := netAddr.Family()
 	inverseMask := netBlock.Mask().Not()
@@ -44,7 +44,7 @@ func randomAddressFrom[A ip.Number[A]](netBlock ipset.Block[A]) (address A) {
 	return random(family).And(inverseMask).Or(netAddr)
 }
 
-func random[A ip.Number[A]](f ip.Family[A]) (address A) {
+func random[A ip.Int[A]](f ip.Family[A]) (address A) {
 	slice := make([]byte, f.Width()/8)
 	_, _ = rand.Read(slice)
 	return f.MustFromBytes(slice...)

@@ -7,7 +7,7 @@ import (
 )
 
 // Parses address string
-func Parse[A Number[A]](family Family[A], candidate string) (address A, err error) {
+func Parse[A Int[A]](family Family[A], candidate string) (address A, err error) {
 	var a A
 	if family.Version() == Version4 {
 		v, err := parse4(candidate)
@@ -25,7 +25,7 @@ func Parse[A Number[A]](family Family[A], candidate string) (address A, err erro
 }
 
 // As [Parse] but panics on error
-func MustParse[A Number[A]](family Family[A], candidate string) (address A) {
+func MustParse[A Int[A]](family Family[A], candidate string) (address A) {
 	a, err := Parse(family, candidate)
 	if err != nil {
 		panic(err)

@@ -8,7 +8,7 @@ import (
 
 // Tests if two discrete sets are equal.
 // Iterates each [Discrete] set's [Interval] sets comparing first and last elements.
-func Eq[A ip.Number[A]](set0, set1 Discrete[A]) (equal bool) {
+func Eq[A ip.Int[A]](set0, set1 Discrete[A]) (equal bool) {
 	if set0 == set1 {
 		return true
 	}

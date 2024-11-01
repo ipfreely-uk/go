@@ -5,32 +5,32 @@ import (
 )
 
 // Tests if IP address ranges have common elements
-func Intersect[A ip.Number[A]](i0, i1 Interval[A]) bool {
+func Intersect[A ip.Int[A]](i0, i1 Interval[A]) bool {
 	return i0.Contains(i1.First()) || i0.Contains(i1.Last()) || i1.Contains(i0.First()) || i1.Contains(i0.Last())
 }
 
 // Tests if IP address ranges are one element from overlap
-func Adjacent[A ip.Number[A]](i0, i1 Interval[A]) bool {
+func Adjacent[A ip.Int[A]](i0, i1 Interval[A]) bool {
 	return lastNextToFirst(i0.Last(), i1.First()) || lastNextToFirst(i1.Last(), i0.First())
 }
 
-func lastNextToFirst[A ip.Number[A]](last, first A) bool {
+func lastNextToFirst[A ip.Int[A]](last, first A) bool {
 	return ip.Eq(last, ip.Prev(first)) && isNotZero(first)
 }
 
-func isNotZero[A ip.Number[A]](address A) bool {
+func isNotZero[A ip.Int[A]](address A) bool {
 	zero := address.Family().FromInt(0)
 	return zero.Compare(address) != 0
 }
 
 // Tests if IP address ranges either [Intersect] or are [Adjacent]
-func Contiguous[A ip.Number[A]](i0, i1 Interval[A]) bool {
+func Contiguous[A ip.Int[A]](i0, i1 Interval[A]) bool {
 	return Intersect(i0, i1) || Adjacent(i0, i1)
 }
 
 // Joins IP address ranges using least and greatest elements from both.
 // Intervals do not have to be [Contiguous].
-func Join[A ip.Number[A]](i0, i1 Interval[A]) Interval[A] {
+func Join[A ip.Int[A]](i0, i1 Interval[A]) Interval[A] {
 	first := least(i0.First(), i1.First())
 	last := greatest(i0.Last(), i1.Last())
 	if ip.Eq(i0.First(), first) && ip.Eq(i0.Last(), last) {

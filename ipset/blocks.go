@@ -11,7 +11,7 @@ import (
 var log_2 = 0.6931471805599453
 
 // Subdivides [Interval] into CIDR [Block] sets
-func Blocks[A ip.Number[A]](set Interval[A]) iter.Seq[Block[A]] {
+func Blocks[A ip.Int[A]](set Interval[A]) iter.Seq[Block[A]] {
 	first := set.First()
 	last := set.Last()
 	mask := ip.SubnetMaskSize(first, last)
@@ -22,14 +22,14 @@ func Blocks[A ip.Number[A]](set Interval[A]) iter.Seq[Block[A]] {
 	return blockIterator(set.First(), set.Last())
 }
 
-func blockIterator[A ip.Number[A]](start, end A) iter.Seq[Block[A]] {
+func blockIterator[A ip.Int[A]](start, end A) iter.Seq[Block[A]] {
 	// implementation breaks on entire internet but guarded above
 	return func(yield func(Block[A]) bool) {
 		walkBlocks(start, end, yield)
 	}
 }
 
-func walkBlocks[A ip.Number[A]](start, end A, yield func(Block[A]) bool) {
+func walkBlocks[A ip.Int[A]](start, end A, yield func(Block[A]) bool) {
 	current := start
 	width := start.Family().Width()
 	for {

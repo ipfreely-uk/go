@@ -7,15 +7,15 @@ import (
 )
 
 func TestExampleNumber(t *testing.T) {
-	ExampleNumber()
+	ExampleInt()
 }
 
-func ExampleNumber() {
+func ExampleInt() {
 	printN(ip.V4().MustFromBytes(192, 0, 2, 0), 3)
 	printN(ip.MustParse(ip.V6(), "2001:db8::"), 3)
 }
 
-func printN[A ip.Number[A]](address A, n int) {
+func printN[A ip.Int[A]](address A, n int) {
 	a := address
 	one := a.Family().FromInt(1)
 	for i := 0; i < n; i++ {
@@ -45,7 +45,7 @@ func ExampleAddress() {
 	}
 }
 
-func printNthAfter[A ip.Number[A]](address A, n uint32) {
+func printNthAfter[A ip.Int[A]](address A, n uint32) {
 	operand := address.Family().FromInt(n)
 	result := address.Add(operand)
 	println(result.String())
