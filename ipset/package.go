@@ -1,5 +1,5 @@
 /*
-Network ranges and arbitrary IP address sets.
+Discrete sets and ranges of IP addresses.
 
 # Set Types
 

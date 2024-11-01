@@ -8,7 +8,9 @@ import (
 )
 
 // Splits [Block] into subnets of a given size.
+//
 // Panics on illegal mask bits.
+// maskBits must be greater or equal to [Block].MaskSize and less than or equal to the bit width of the address family.
 func Subnets[A ip.Int[A]](b Block[A], maskBits int) iter.Seq[Block[A]] {
 	first := b.First()
 	f := first.Family()

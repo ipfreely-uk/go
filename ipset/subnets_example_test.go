@@ -5,6 +5,7 @@ import (
 	"math/big"
 	"testing"
 
+	"github.com/dustin/go-humanize"
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ipset"
 )
@@ -29,7 +30,8 @@ func maskRequiredFor[A ip.Int[A]](f ip.Family[A], allocateableAddresses *big.Int
 			return m
 		}
 	}
-	msg := fmt.Sprintf("%s is larger than family %s", allocateableAddresses.String(), f.String())
+	formatted := humanize.BigComma(allocateableAddresses)
+	msg := fmt.Sprintf("%s is larger than family %s", formatted, f.String())
 	panic(msg)
 }
 
