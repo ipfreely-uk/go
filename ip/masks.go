@@ -10,7 +10,7 @@ var ipv4Masks []Addr4 = allMasks(V4())
 var ipv6Masks []Addr6 = allMasks(V6())
 
 // Subnet mask of given bit size.
-// Panics if mask bits exceeds [Family.Width] or is less than zero.
+// Panics if mask bits exceeds [Family].Width or is less than zero.
 func SubnetMask[A Int[A]](family Family[A], maskBits int) (mask A) {
 	validateBits(family, maskBits)
 
