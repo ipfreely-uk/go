@@ -1,6 +1,7 @@
 package ip_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
@@ -59,21 +60,22 @@ func TestExampleInclusive(t *testing.T) {
 func ExampleInclusive() {
 	v4 := ip.V4()
 	lowest := v4.MustFromBytes(192, 0, 2, 0)
-	highest := lowest.Add(v4.FromInt(10))
+	highest := lowest.Add(v4.FromInt(5))
 
+	printOrder("Ascending", lowest, highest)
+	for addr := range ip.Inclusive(lowest, highest) {
+		println(addr.String())
+	}
+
+	printOrder("Descending", highest, lowest)
 	for addr := range ip.Inclusive(highest, lowest) {
 		println(addr.String())
 	}
 }
 
-func ExampleInclusive_second() {
-	v4 := ip.V4()
-	lowest := v4.MustFromBytes(192, 0, 2, 0)
-	highest := lowest.Add(v4.FromInt(10))
-
-	for addr := range ip.Inclusive(lowest, highest) {
-		println(addr.String())
-	}
+func printOrder(order string, start, end fmt.Stringer) {
+	msg := fmt.Sprintf("%s: %s to %s", order, start.String(), end.String())
+	println(msg)
 }
 
 func TestExampleExclusive(t *testing.T) {
@@ -81,11 +83,18 @@ func TestExampleExclusive(t *testing.T) {
 }
 
 func ExampleExclusive() {
-	v4 := ip.V4()
-	lowest := v4.MustFromBytes(192, 0, 2, 0)
-	highest := lowest.Add(v4.FromInt(10))
+	v6 := ip.V6()
+	docs := ip.MustParse(v6, "2001:DB8::")
+	lowest := docs.Add(v6.FromInt(0xD))
+	highest := lowest.Add(v6.FromInt(5))
 
+	printOrder("Ascending", lowest, highest)
 	for addr := range ip.Exclusive(lowest, highest) {
+		println(addr.String())
+	}
+
+	printOrder("Descending", highest, lowest)
+	for addr := range ip.Exclusive(highest, lowest) {
 		println(addr.String())
 	}
 }
