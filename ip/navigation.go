@@ -50,7 +50,7 @@ func Inclusive[A Int[A]](first, last A) (inclusiveRange iter.Seq[A]) {
 }
 
 // The exclusive version of [Inclusive].
-// If first and last are equal there are no results.
+// If start and end are equal the sequence is empty.
 func Exclusive[A Int[A]](start, excludedEnd A) (exclusiveRange iter.Seq[A]) {
 	comp := start.Compare(excludedEnd)
 	if comp == 0 {
