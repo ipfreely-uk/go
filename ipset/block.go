@@ -10,19 +10,19 @@ import (
 
 type block[A ip.Int[A]] struct {
 	first A
-	last  A
+	mask  byte
 }
 
 func (b *block[A]) MaskSize() int {
-	return ip.SubnetMaskSize(b.first, b.last)
+	return ip.SubnetMaskSize(b.first, b.Last())
 }
 
 func (b *block[A]) Contains(address A) bool {
-	return b.first.Compare(address) <= 0 && b.last.Compare(address) >= 0
+	return b.first.Compare(address) <= 0 && b.Last().Compare(address) >= 0
 }
 
 func (b *block[A]) Size() *big.Int {
-	diff := b.last.Subtract(b.first)
+	diff := b.Last().Subtract(b.first)
 	bi := ip.ToBigInt(diff)
 	one := big.NewInt(1)
 	return bi.Add(bi, one)
@@ -33,11 +33,13 @@ func (b *block[A]) First() A {
 }
 
 func (b *block[A]) Last() A {
-	return b.last
+	f := b.first.Family()
+	maskComplement := ip.SubnetMask(f, int(b.mask)).Not()
+	return b.first.Or(maskComplement)
 }
 
 func (b *block[A]) Addresses() iter.Seq[A] {
-	return addressSeq(b.first, b.last)
+	return addressSeq(b.first, b.Last())
 }
 
 func (b *block[A]) Intervals() iter.Seq[Interval[A]] {
@@ -70,6 +72,5 @@ func NewBlock[A ip.Int[A]](network A, mask int) Block[A] {
 		msg := fmt.Sprintf("mask %s does not cover %s", m.String(), network.String())
 		panic(msg)
 	}
-	last := network.Or(m.Not())
-	return &block[A]{network, last}
+	return &block[A]{network, byte(mask)}
 }

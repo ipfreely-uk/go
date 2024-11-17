@@ -11,11 +11,11 @@ var ipv6Masks []Addr6 = allMasks(V6())
 
 // Subnet mask of given bit size.
 // Panics if mask bits exceeds [Family].Width or is less than zero.
-func SubnetMask[A Int[A]](family Family[A], maskBits int) (mask A) {
-	validateBits(family, maskBits)
+func SubnetMask[A Int[A]](f Family[A], maskBits int) (mask A) {
+	validateBits(f, maskBits)
 
 	var r any
-	if family.Version() == Version4 {
+	if f.Version() == Version4 {
 		r = ipv4Masks[maskBits]
 	} else {
 		r = ipv6Masks[maskBits]
@@ -26,7 +26,7 @@ func SubnetMask[A Int[A]](family Family[A], maskBits int) (mask A) {
 func validateBits[A Int[A]](family Family[A], bits int) {
 	width := family.Width()
 	if bits < 0 || bits > width {
-		msg := fmt.Sprintf("wanted 0-%d for IPv%d; got %d", family.Width(), family.Version(), bits)
+		msg := fmt.Sprintf("wanted 0-%d for IPv%d width; got %d", family.Width(), family.Version(), bits)
 		panic(msg)
 	}
 }
