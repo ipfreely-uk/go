@@ -31,7 +31,7 @@ type Address interface {
 
 // IP address as generic unsigned integer type.
 // [Addr4] and [Addr6] are the only types that can conform to this interface.
-type Int[A any] interface {
+type Int[A Address] interface {
 	Address
 	// IP address family - [V4] or [V6]
 	Family() Family[A]

@@ -2,7 +2,7 @@ package ip
 
 // IP address family.
 // Obtain via [V4] or [V6] functions.
-type Family[A any] interface {
+type Family[A Address] interface {
 	// Structs that conform to this interface must be produced by this package
 	sealed()
 	// IP address version
