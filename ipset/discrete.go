@@ -60,7 +60,7 @@ func (s *discrete[A]) String() string {
 //
 // If set is contiguous range returns result of [NewInterval] function.
 // If set is CIDR range returns result of [NewBlock] function.
-// If zero-length slice returns the empty set.
+// Zero-length slice returns the empty set.
 func NewDiscrete[A ip.Int[A]](sets ...Discrete[A]) (set Discrete[A]) {
 	intervals := toIntervals(sets)
 	intervals = rationalize(intervals)
