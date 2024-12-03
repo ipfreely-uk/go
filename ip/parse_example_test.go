@@ -53,12 +53,14 @@ func ExampleMustFromBytes() {
 	}
 }
 
-func toNetip[A ip.Int[A]](address A) netip.Addr {
+func toNetip(address ip.Address) netip.Addr {
+	// convert to standard library type
 	i, _ := netip.AddrFromSlice(address.Bytes())
 	return i
 }
 
-func fromNetip(a netip.Addr) any {
+func fromNetip(a netip.Addr) ip.Address {
+	// convert from standard library type
 	return ip.MustFromBytes(a.AsSlice()...)
 }
 

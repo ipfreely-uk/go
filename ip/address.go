@@ -17,7 +17,7 @@ type Address interface {
 	sealed()
 	// IP address version - [Version4] or [Version6]
 	Version() Version
-	// Address as bytes
+	// Address as byte slice
 	Bytes() (slice []byte)
 	// Normalized string form
 	String() (address string)
