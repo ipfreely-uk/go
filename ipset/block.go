@@ -14,7 +14,7 @@ type block[A ip.Int[A]] struct {
 }
 
 func (b *block[A]) MaskSize() int {
-	return ip.SubnetMaskSize(b.first, b.Last())
+	return int(b.mask)
 }
 
 func (b *block[A]) Contains(address A) bool {
