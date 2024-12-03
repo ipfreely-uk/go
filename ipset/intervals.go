@@ -31,12 +31,17 @@ func Contiguous[A ip.Int[A]](i0, i1 Interval[A]) bool {
 // Joins IP address ranges using least and greatest elements from both.
 // Intervals do not have to be [Contiguous].
 func Join[A ip.Int[A]](i0, i1 Interval[A]) Interval[A] {
-	first, _ := order(i0.First(), i1.First())
-	_, last := order(i0.Last(), i1.Last())
-	if ip.Eq(i0.First(), first) && ip.Eq(i0.Last(), last) {
+	a := i0.First()
+	b := i0.Last()
+	x := i1.First()
+	y := i1.Last()
+
+	first, _ := order(a, x)
+	_, last := order(b, y)
+	if ip.Eq(a, first) && ip.Eq(b, last) {
 		return i0
 	}
-	if ip.Eq(i1.First(), first) && ip.Eq(i1.Last(), last) {
+	if ip.Eq(x, first) && ip.Eq(y, last) {
 		return i1
 	}
 	return NewInterval(first, last)
