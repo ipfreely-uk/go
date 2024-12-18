@@ -114,3 +114,24 @@ func ExampleSubnetMaskCovers() {
 		}
 	}
 }
+
+func TestExampleIsSubnetMask(t *testing.T) {
+	ExampleIsSubnetMask()
+}
+
+func ExampleIsSubnetMask() {
+	mask := ip.MustParse(ip.V4(), "255.255.255.0")
+	bits := calculateSubnetBits(mask)
+	msg := fmt.Sprintf("%s is a /%d network", mask.String(), bits)
+	println(msg)
+}
+
+// Calculate the /n expression for a given mask
+func calculateSubnetBits[A ip.Int[A]](mask A) (bits int) {
+	if !ip.IsSubnetMask(mask) {
+		msg := fmt.Sprintf("%s is not a subnet mask", mask.String())
+		panic(msg)
+	}
+	f := mask.Family()
+	return f.Width() - mask.TrailingZeros()
+}

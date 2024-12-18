@@ -14,7 +14,7 @@ func (f *family6) Version() Version {
 }
 
 func (f *family6) Width() int {
-	return 128
+	return Width6
 }
 
 func (f *family6) FromBytes(b ...byte) (Addr6, error) {

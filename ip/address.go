@@ -10,6 +10,13 @@ const (
 	Version6 Version = 6
 )
 
+const (
+	// Number of bits in IPv4 address (32)
+	Width4 int = 32
+	// Number of bits in IPv6 address (128)
+	Width6 int = 128
+)
+
 // The parts of [Int] without generic typing.
 // [Addr4] and [Addr6] are the only types that can conform to this interface.
 type Address interface {

@@ -113,3 +113,11 @@ func SubnetMaskCovers[A Int[A]](maskBits int, address A) (maskBitsDoCover bool) 
 	iMask := SubnetMask(fam, maskBits).Not()
 	return iMask.And(address).Compare(zero) == 0
 }
+
+// Tests if the address is a valid subnet mask.
+func IsSubnetMask[A Int[A]](address A) (isMask bool) {
+	f := address.Family()
+	bits := f.Width() - address.TrailingZeros()
+	mask := SubnetMask(f, bits)
+	return eq(mask, address)
+}
