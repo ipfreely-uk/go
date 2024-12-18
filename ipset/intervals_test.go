@@ -93,7 +93,7 @@ func TestContiguous(t *testing.T) {
 	assert.False(t, ipset.Contiguous(hundredOne_hundredOne, two_two))
 }
 
-func TestJoin(t *testing.T) {
+func TestExtremes(t *testing.T) {
 	f := ip.V6()
 	min := ip.MinAddress(f)
 	one := f.FromInt(1)
@@ -104,21 +104,21 @@ func TestJoin(t *testing.T) {
 	internet := ipset.NewBlock(min, 0)
 
 	{
-		actual := ipset.Join(one_one, hundredOne_hundredOne)
+		actual := ipset.Extremes(one_one, hundredOne_hundredOne)
 		assert.Equal(t, one, actual.First())
 		assert.Equal(t, hundredOne, actual.Last())
 	}
 	{
-		actual := ipset.Join(hundredOne_hundredOne, one_one)
+		actual := ipset.Extremes(hundredOne_hundredOne, one_one)
 		assert.Equal(t, one, actual.First())
 		assert.Equal(t, hundredOne, actual.Last())
 	}
 	{
-		actual := ipset.Join(internet, one_one)
+		actual := ipset.Extremes(internet, one_one)
 		assert.Same(t, internet, actual)
 	}
 	{
-		actual := ipset.Join(one_one, internet)
+		actual := ipset.Extremes(one_one, internet)
 		assert.Same(t, internet, actual)
 	}
 }

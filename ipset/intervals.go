@@ -28,9 +28,8 @@ func Contiguous[A ip.Int[A]](i0, i1 Interval[A]) bool {
 	return Intersect(i0, i1) || Adjacent(i0, i1)
 }
 
-// Joins IP address ranges using least and greatest elements from both.
-// Intervals do not have to be [Contiguous].
-func Join[A ip.Int[A]](i0, i1 Interval[A]) Interval[A] {
+// Creates [Interval] using least and greatest values from each
+func Extremes[A ip.Int[A]](i0, i1 Interval[A]) Interval[A] {
 	a := i0.First()
 	b := i0.Last()
 	x := i1.First()

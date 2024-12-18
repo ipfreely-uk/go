@@ -7,16 +7,16 @@ import (
 	"github.com/ipfreely-uk/go/ipset"
 )
 
-func TestExampleJoin(t *testing.T) {
-	ExampleJoin()
+func TestExampleExtremes(t *testing.T) {
+	ExampleExtremes()
 }
 
-func ExampleJoin() {
+func ExampleExtremes() {
 	r0 := parseV6Interval("2001:db8::", "2001:db8::100")
 	r1 := parseV6Interval("2001:db8::10", "2001:db8::ffff:ffff:ffff")
 
 	if ipset.Contiguous(r0, r1) {
-		r2 := ipset.Join(r0, r1)
+		r2 := ipset.Extremes(r0, r1)
 		println(r2.String())
 	}
 }

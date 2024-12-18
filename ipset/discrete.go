@@ -94,7 +94,7 @@ func rationalize[A ip.Int[A]](spans []Interval[A]) []Interval[A] {
 		a := spans[i]
 		for b := range set {
 			if Contiguous(a, b) {
-				a = Join(a, b)
+				a = Extremes(a, b)
 				delete(set, b)
 			}
 		}
