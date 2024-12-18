@@ -14,7 +14,7 @@ var ipv6Masks []Addr6 = allMasks(V6())
 func SubnetMask[A Int[A]](f Family[A], maskBits int) (mask A) {
 	validateBits(f, maskBits)
 
-	var r any
+	var r Address
 	if f.Version() == Version4 {
 		r = ipv4Masks[maskBits]
 	} else {
