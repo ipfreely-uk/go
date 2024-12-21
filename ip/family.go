@@ -5,9 +5,11 @@ type Spec interface {
 	// Structs that conform to this interface must be produced by this package
 	sealed()
 	// IP address version
-	Version() Version
+	Version() (constant Version)
 	// Address width in bits - 32 or 128
-	Width() int
+	Width() (bits int)
+	// Implementation-defined
+	String() string
 }
 
 // IP address family.
@@ -24,6 +26,4 @@ type Family[A Address] interface {
 	// For V4 operand 1 returns "0.0.0.1".
 	// For V6 operand 1 return "::1".
 	FromInt(i uint32) (address A)
-	// Informational
-	String() string
 }
