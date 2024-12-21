@@ -20,10 +20,7 @@ const (
 // The parts of [Int] without generic typing.
 // [Addr4] and [Addr6] are the only types that can conform to this interface.
 type Address interface {
-	// Structs that conform to this interface must be produced by this package
-	sealed()
-	// IP address version - [Version4] or [Version6]
-	Version() Version
+	Spec
 	// Address as byte slice
 	Bytes() (slice []byte)
 	// Normalized string form

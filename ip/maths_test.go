@@ -31,6 +31,7 @@ func testMaths[A ip.Int[A]](t *testing.T, addresses []A) {
 		assert.Equal(t, expected, actual, a.String())
 
 		assert.Equal(t, a.Version(), a.Family().Version())
+		assert.Equal(t, a.Width(), a.Family().Width())
 	}
 
 	for _, a := range addresses {

@@ -6,6 +6,8 @@ import (
 	"strings"
 )
 
+var errInvalid = errors.New("invalid address")
+
 // Parses address string
 func Parse[A Int[A]](family Family[A], candidate string) (address A, err error) {
 	var a A
@@ -71,7 +73,7 @@ func parse4(candidate string) (uint32, error) {
 		invalid = true
 	}
 	if invalid {
-		return value, errors.New("invalid address")
+		return value, errInvalid
 	}
 	return value, nil
 }
@@ -109,7 +111,7 @@ func parse6(candidate string) ([]byte, error) {
 	}
 
 	if invalid {
-		return bytes, errors.New("invalid address")
+		return bytes, errInvalid
 	}
 	return bytes, nil
 }
@@ -119,14 +121,14 @@ func headTail6(candidate string) ([]string, []string, error) {
 	if shortener < 0 {
 		c := split6(candidate)
 		if len(c) != 8 {
-			return nil, nil, errors.New("invalid address")
+			return nil, nil, errInvalid
 		}
 		return c, []string{}, nil
 	}
 	head, tail := candidate[:shortener], candidate[shortener+2:]
 	h, t := split6(head), split6(tail)
 	if len(h)+len(t) > 7 {
-		return nil, nil, errors.New("invalid address")
+		return nil, nil, errInvalid
 	}
 	return h, t, nil
 }
@@ -160,7 +162,8 @@ func MustParseUnknown(candidate string) Address {
 	return a
 }
 
-// Parse IP address bytes from unknown family
+// Parse IP address bytes from unknown family.
+// Slice length must be 4 (IPv4) or 16 (IPv6).
 func FromBytes(address ...byte) (Address, error) {
 	length := len(address)
 	if length == 4 {
@@ -169,7 +172,7 @@ func FromBytes(address ...byte) (Address, error) {
 	if length == 16 {
 		return V6().FromBytes(address...)
 	}
-	return nil, errors.New("slice must be 4 or 16 bytes")
+	return nil, errInvalid
 }
 
 // As [FromBytes] but panics on error

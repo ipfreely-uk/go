@@ -17,10 +17,14 @@ var v6ONE = Addr6{0, 1}
 
 func (a Addr6) sealed() {}
 
-// Returns [Version4]
+// Returns [Version6]
 func (a Addr6) Version() Version {
-	a.sealed()
 	return Version6
+}
+
+// Returns [Width6]
+func (a Addr6) Width() int {
+	return Width6
 }
 
 // Returns [V6]

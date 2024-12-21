@@ -1,14 +1,19 @@
 package ip
 
-// IP address family.
-// Obtain via [V4] or [V6] functions.
-type Family[A Address] interface {
+// Basic specification information.
+type Spec interface {
 	// Structs that conform to this interface must be produced by this package
 	sealed()
 	// IP address version
 	Version() Version
 	// Address width in bits - 32 or 128
 	Width() int
+}
+
+// IP address family.
+// Obtain via [V4] or [V6] functions.
+type Family[A Address] interface {
+	Spec
 	// Create address from bytes.
 	// Returns error if slice is not [Width]/8 bytes.
 	FromBytes(...byte) (address A, err error)

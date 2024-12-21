@@ -15,8 +15,12 @@ func (a Addr4) sealed() {}
 
 // Returns [Version4]
 func (a Addr4) Version() Version {
-	a.sealed()
 	return Version4
+}
+
+// Returns [Width4]
+func (a Addr4) Width() int {
+	return Width4
 }
 
 // Returns [V4]

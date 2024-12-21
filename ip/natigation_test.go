@@ -39,21 +39,21 @@ func TestInclusive(t *testing.T) {
 	largest := ip.Next(middle)
 	{
 		count := 0
-		for _ = range ip.Inclusive(smallest, largest) {
+		for range ip.Inclusive(smallest, largest) {
 			count++
 		}
 		assert.Equal(t, 3, count)
 	}
 	{
 		count := 0
-		for _ = range ip.Inclusive(largest, smallest) {
+		for range ip.Inclusive(largest, smallest) {
 			count++
 		}
 		assert.Equal(t, 3, count)
 	}
 	{
 		count := 0
-		for _ = range ip.Inclusive(smallest, smallest) {
+		for range ip.Inclusive(smallest, smallest) {
 			count++
 		}
 		assert.Equal(t, 1, count)
@@ -72,21 +72,21 @@ func TestExclusive(t *testing.T) {
 	largest := ip.Next(middle)
 	{
 		count := 0
-		for _ = range ip.Exclusive(smallest, largest) {
+		for range ip.Exclusive(smallest, largest) {
 			count++
 		}
 		assert.Equal(t, 2, count)
 	}
 	{
 		count := 0
-		for _ = range ip.Exclusive(largest, smallest) {
+		for range ip.Exclusive(largest, smallest) {
 			count++
 		}
 		assert.Equal(t, 2, count)
 	}
 	{
 		count := 0
-		for _ = range ip.Exclusive(smallest, smallest) {
+		for range ip.Exclusive(smallest, smallest) {
 			count++
 		}
 		assert.Equal(t, 0, count)
