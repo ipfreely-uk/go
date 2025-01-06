@@ -2,6 +2,7 @@ package ip_test
 
 import (
 	"fmt"
+	"math/big"
 	"testing"
 
 	"github.com/dustin/go-humanize"
@@ -50,6 +51,7 @@ func printAllMasks[A ip.Int[A]](f ip.Family[A]) {
 
 func TestExampleSubnetAddressCount(t *testing.T) {
 	ExampleSubnetAddressCount()
+	ExampleSubnetAddressCount_second()
 }
 
 func ExampleSubnetAddressCount() {
@@ -63,6 +65,34 @@ func printSubnetSizesForMasks[A ip.Int[A]](f ip.Family[A]) {
 		msg := fmt.Sprintf("IPv%d /%d == %s", f.Version(), mask, humanize.BigComma(count))
 		println(msg)
 	}
+}
+
+func ExampleSubnetAddressCount_second() {
+	family := ip.V4()
+	min := big.NewInt(50)
+	bits := minimumMaskThatSatisfies(family, min)
+	mask := ip.SubnetMask(family, bits).String()
+	count := humanize.BigComma(min)
+	msg := fmt.Sprintf("/%d network (%s) is the minimum size that can allocate %s addresses", bits, mask, count)
+	println(msg)
+}
+
+func minimumMaskThatSatisfies[A ip.Int[A]](f ip.Family[A], allocatable *big.Int) int {
+	var min *big.Int
+	// IPv4 reserves 1st & last
+	if f.Version() == ip.Version4 {
+		two := big.NewInt(2)
+		min = two.Add(two, allocatable)
+	} else {
+		min = allocatable
+	}
+	for i := f.Width(); i >= 0; i++ {
+		s := ip.SubnetAddressCount(f, i)
+		if min.Cmp(s) >= 0 {
+			return i
+		}
+	}
+	panic("illegal argument")
 }
 
 func TestExampleSubnetMaskSize(t *testing.T) {
