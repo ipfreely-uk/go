@@ -4,6 +4,7 @@ IP address manipulation library written in Go.
 This library treats IP addresses as
 [generic](https://go.dev/doc/tutorial/generics)
 unsigned integers capable of arithmetic and bitwise operations.
+This library does not perform network I/O.
 
 ## Packages
 
