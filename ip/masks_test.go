@@ -87,26 +87,26 @@ func TestSubnetCovers(t *testing.T) {
 	assert.False(t, ip.SubnetMaskCovers(129, fe80))
 }
 
-func TestIsSubnetMask(t *testing.T) {
+func TestSubnetMaskBits(t *testing.T) {
 	{
 		invalid := ip.MustParse(ip.V6(), "f0ff::")
-		actual := ip.IsSubnetMask(invalid)
-		assert.False(t, actual, invalid.String())
+		actual := ip.SubnetMaskBits(invalid)
+		assert.Equal(t, -1, actual, invalid.String())
 	}
 	{
 		v4 := ip.V4()
 		for i := 0; i < ip.Width4; i++ {
 			m := ip.SubnetMask(v4, i)
-			actual := ip.IsSubnetMask(m)
-			assert.True(t, actual, m.String())
+			actual := ip.SubnetMaskBits(m)
+			assert.Equal(t, i, actual, m.String())
 		}
 	}
 	{
 		v6 := ip.V6()
 		for i := 0; i < ip.Width6; i++ {
 			m := ip.SubnetMask(v6, i)
-			actual := ip.IsSubnetMask(m)
-			assert.True(t, actual, m.String())
+			actual := ip.SubnetMaskBits(m)
+			assert.Equal(t, i, actual, m.String())
 		}
 	}
 }

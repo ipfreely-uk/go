@@ -145,23 +145,30 @@ func ExampleSubnetMaskCovers() {
 	}
 }
 
-func TestExampleIsSubnetMask(t *testing.T) {
-	ExampleIsSubnetMask()
+func TestExampleSubnetMaskBits(t *testing.T) {
+	ExampleSubnetMaskBits()
 }
 
-func ExampleIsSubnetMask() {
-	mask := ip.MustParse(ip.V4(), "255.255.255.0")
-	bits := calculateSubnetBits(mask)
-	msg := fmt.Sprintf("Subnets with mask %s are /%d networks", mask.String(), bits)
-	println(msg)
+func ExampleSubnetMaskBits() {
+	v4 := ip.V4()
+	v6 := ip.V6()
+	validateMask(v4.MustFromBytes(0, 0, 0, 0))
+	validateMask(v4.MustFromBytes(192, 168, 0, 0))
+	validateMask(v4.MustFromBytes(255, 255, 255, 0))
+	validateMask(v4.MustFromBytes(255, 255, 0xF0, 0))
+	validateMask(v4.MustFromBytes(255, 255, 0x80, 0))
+	validateMask(v4.MustFromBytes(255, 255, 0xF, 0))
+	validateMask(ip.SubnetMask(v6, 56))
 }
 
-// Calculate the /n CIDR expression for a given mask
-func calculateSubnetBits[A ip.Int[A]](mask A) (bits int) {
-	if !ip.IsSubnetMask(mask) {
-		msg := fmt.Sprintf("%s is not a subnet mask", mask.String())
-		panic(msg)
+func validateMask[A ip.Int[A]](address A) {
+	bits := ip.SubnetMaskBits(address)
+	ver := address.Version()
+	if bits >= 0 {
+		msg := fmt.Sprintf("%s is valid IPv%d mask /%d", address.String(), ver, bits)
+		println(msg)
+	} else {
+		msg := fmt.Sprintf("%s is not a valid mask", address.String())
+		println(msg)
 	}
-	f := mask.Family()
-	return f.Width() - mask.TrailingZeros()
 }
