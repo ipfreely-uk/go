@@ -11,6 +11,7 @@ import (
 
 func TestExampleNewBlock(t *testing.T) {
 	ExampleNewBlock()
+	ExampleNewBlock_second()
 }
 
 func ExampleNewBlock() {
@@ -21,6 +22,18 @@ func ExampleNewBlock() {
 	println("First", block.First().String())
 	println("Last", block.Last().String())
 	println("Size", humanize.BigComma(block.Size()))
+}
+
+func ExampleNewBlock_second() {
+	network := ip.MustParse(ip.V4(), "192.168.0.0")
+	mask := ip.MustParse(ip.V4(), "255.255.255.0")
+	subnet := block(network, mask)
+	println(subnet.String())
+}
+
+func block[A ip.Int[A]](network, mask A) ipset.Block[A] {
+	bits := ip.SubnetMaskBits(mask)
+	return ipset.NewBlock(network, bits)
 }
 
 func TestExampleBlock(t *testing.T) {
