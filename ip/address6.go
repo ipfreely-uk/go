@@ -2,7 +2,8 @@ package ip
 
 import (
 	"math/bits"
-	"net/netip"
+	"strconv"
+	"strings"
 )
 
 // Immutable 128bit unsigned integer IP [Int] representation.
@@ -224,13 +225,6 @@ func (a Addr6) TrailingZeros() int {
 }
 
 // See [Int]
-func (a Addr6) String() string {
-	b := a.Bytes()
-	addr, _ := netip.AddrFromSlice(b)
-	return addr.String()
-}
-
-// See [Int]
 func (a Addr6) Float64() float64 {
 	if a.high == 0 {
 		return float64(a.low)
@@ -239,4 +233,78 @@ func (a Addr6) Float64() float64 {
 	bi := ToBigInt(a)
 	f, _ := bi.Float64()
 	return f
+}
+
+const (
+	ip6Segments = 8
+	shortWidth  = 16
+)
+
+// See [Int]
+func (a Addr6) String() string {
+	z0 := -1
+	zn := -1
+	for i := 0; i < ip6Segments; i++ {
+		if shortAtSegment(a.high, a.low, i) == 0 {
+			count := countContiguousZeroShortsFrom(a.high, a.low, i)
+			if count > 1 && count > zn-z0 {
+				z0 = i
+				zn = i + count
+			}
+		}
+	}
+
+	MAX := (ip6Segments * 4) + ip6Segments - 1
+
+	var buf strings.Builder
+	// TODO: reduce where z0 >= 0
+	buf.Grow(MAX)
+	if z0 < 0 {
+		appendHex(a.high, a.low, 0, ip6Segments, &buf)
+	} else {
+		appendHex(a.high, a.low, 0, z0, &buf)
+		buf.WriteString("::")
+		appendHex(a.high, a.low, zn, ip6Segments, &buf)
+	}
+	return buf.String()
+}
+
+func appendHex(high, low uint64, offset, max int, buf *strings.Builder) {
+	for i := offset; i < max; i++ {
+		if i != offset {
+			buf.WriteRune(':')
+		}
+		shortSegment := shortAtSegment(high, low, i)
+		s := strconv.FormatUint(uint64(shortSegment), 16)
+		buf.WriteString(s)
+	}
+}
+
+func countContiguousZeroShortsFrom(high, low uint64, offset int) int {
+	count := 1
+	for i := offset + 1; i < ip6Segments; i++ {
+		if !isZeroShort(high, low, i) {
+			break
+		}
+		count++
+	}
+	return count
+}
+
+func isZeroShort(high, low uint64, index int) bool {
+	return shortAtSegment(high, low, index) == 0
+}
+
+func shortAtSegment(high uint64, low uint64, index int) int {
+	SHORT_WIDTH := 16
+	if index < ip6Segments/2 {
+		shift := (3 - index) * SHORT_WIDTH
+		return toShortInt(high >> shift)
+	}
+	shift := (7 - index) * SHORT_WIDTH
+	return toShortInt(low >> shift)
+}
+
+func toShortInt(l uint64) int {
+	return int(l & 0xFFFF)
 }

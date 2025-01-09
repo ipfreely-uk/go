@@ -2,6 +2,7 @@ package ip_test
 
 import (
 	"math/rand"
+	"net/netip"
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
@@ -225,6 +226,12 @@ func TestString6(t *testing.T) {
 	}, {
 		[]byte{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf},
 		"1:203:405:607:809:a0b:c0d:e0f",
+	}, {
+		[]byte{0xff, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0xca, 0xfe},
+		"ff00:0:0:101::cafe",
+	}, {
+		[]byte{0, 0, 0, 0, 0, 0, 0xca, 0xfe, 0xca, 0xfe, 0, 0, 0, 0, 0, 0},
+		"::cafe:cafe:0:0:0",
 	}}
 
 	for _, candidate := range tests {
@@ -232,6 +239,10 @@ func TestString6(t *testing.T) {
 		assert.Nil(t, err)
 		actual := a.String()
 		assert.Equal(t, candidate.expected, actual)
+
+		standard, _ := netip.AddrFromSlice(candidate.input)
+		expected := standard.String()
+		assert.Equal(t, expected, actual)
 	}
 }
 

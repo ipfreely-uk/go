@@ -2,7 +2,7 @@ package ip
 
 import (
 	"math/bits"
-	"net/netip"
+	"strconv"
 )
 
 // Immutable 32bit unsigned integer IP [Int] representation.
@@ -138,9 +138,19 @@ func (a Addr4) TrailingZeros() int {
 
 // See [Int]
 func (a Addr4) String() string {
-	b := a.Bytes()
-	addr, _ := netip.AddrFromSlice(b)
-	return addr.String()
+	first := byteShift(a.value, 24)
+	second := byteShift(a.value, 16)
+	third := byteShift(a.value, 8)
+	fourth := byteShift(a.value, 0)
+	return b10(first) + "." + b10(second) + "." + b10(third) + "." + b10(fourth)
+}
+
+func b10(n uint32) string {
+	return strconv.FormatUint(uint64(n), 10)
+}
+
+func byteShift(a, shift uint32) uint32 {
+	return (a >> shift) & 0xFF
 }
 
 // See [Int]
