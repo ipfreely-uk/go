@@ -8,7 +8,7 @@ type Spec interface {
 	Version() (constant Version)
 	// Address width in bits - 32 or 128
 	Width() (bits int)
-	// Implementation-defined
+	// Informational
 	String() string
 }
 
