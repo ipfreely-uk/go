@@ -257,11 +257,12 @@ func (a Addr6) String() string {
 	MAX := (ip6Segments * 4) + ip6Segments - 1
 
 	var buf strings.Builder
-	// TODO: reduce where z0 >= 0
-	buf.Grow(MAX)
 	if z0 < 0 {
+		buf.Grow(MAX)
 		appendHex(a.high, a.low, 0, ip6Segments, &buf)
 	} else {
+		compacted := (zn - z0) * 4
+		buf.Grow(MAX - compacted)
 		appendHex(a.high, a.low, 0, z0, &buf)
 		buf.WriteString("::")
 		appendHex(a.high, a.low, zn, ip6Segments, &buf)
