@@ -50,10 +50,10 @@ func Blocks[A ip.Int[A]](set Interval[A]) iter.Seq[Block[A]] {
 		block := NewBlock(first, mask)
 		return singleSeq(block)
 	}
-	return blockIterator(set.First(), set.Last())
+	return blockSequence(set.First(), set.Last())
 }
 
-func blockIterator[A ip.Int[A]](start, end A) iter.Seq[Block[A]] {
+func blockSequence[A ip.Int[A]](start, end A) iter.Seq[Block[A]] {
 	// implementation breaks on entire internet but guarded above
 	return func(yield func(Block[A]) bool) {
 		walkBlocks(start, end, yield)
@@ -72,8 +72,11 @@ func walkBlocks[A ip.Int[A]](start, end A, yield func(Block[A]) bool) {
 		mask := max(maxSize, maxDiff)
 		block := NewBlock(current, mask)
 		more := yield(block)
+		if !more {
+			return
+		}
 		last := block.Last()
-		if !more || ip.Eq(last, end) {
+		if ip.Eq(last, end) {
 			return
 		}
 		current = ip.Next(last)

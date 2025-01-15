@@ -201,6 +201,24 @@ func TestBlocks(t *testing.T) {
 			assert.True(t, input.Contains(block.Last()))
 		}
 	}
+	{
+		family := ip.V6()
+		expectedFirst0, _ := ip.Parse(family, "fe80::")
+		mask := ip.SubnetMask(family, 64)
+		inverse := mask.Not()
+		expectedLast0 := inverse.Or(expectedFirst0)
+		expectedFirst1 := ip.Next(expectedLast0)
+		expectedLast1 := expectedFirst1
+		input := ipset.NewInterval(expectedFirst0, expectedLast1)
+		// check algo stops early
+		count := 0
+		ipset.Blocks[ip.Addr6](input)(func(b ipset.Block[ip.Addr6]) bool {
+			count++
+			return false
+		})
+
+		assert.Equal(t, 1, count)
+	}
 }
 
 func TestBlockIteration(t *testing.T) {
