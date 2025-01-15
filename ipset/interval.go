@@ -72,3 +72,10 @@ func NewInterval[A ip.Int[A]](first, last A) Interval[A] {
 		greatest,
 	}
 }
+
+func order[C ip.Int[C]](this, that C) (least, greatest C) {
+	if this.Compare(that) <= 0 {
+		return this, that
+	}
+	return that, this
+}
