@@ -30,19 +30,6 @@ func sliceSeq[E any](slice []E) iter.Seq[E] {
 	}
 }
 
-func addressSeq[A ip.Int[A]](first, last A) iter.Seq[A] {
-	return func(yield func(A) bool) {
-		current := first
-		for {
-			more := yield(current)
-			if !more || ip.Eq(current, last) {
-				return
-			}
-			current = ip.Next(current)
-		}
-	}
-}
-
 func ranges2AddressSeq[A ip.Int[A]](slice []Interval[A]) iter.Seq[A] {
 	return func(yield func(A) bool) {
 		for _, i := range slice {

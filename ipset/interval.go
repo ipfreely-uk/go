@@ -37,7 +37,7 @@ func (a *interval[A]) Last() A {
 }
 
 func (a *interval[A]) Addresses() iter.Seq[A] {
-	return addressSeq(a.first, a.last)
+	return ip.Inclusive(a.first, a.last)
 }
 
 func (a *interval[A]) Intervals() iter.Seq[Interval[A]] {

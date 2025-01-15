@@ -42,7 +42,7 @@ func (b *block[A]) Last() A {
 }
 
 func (b *block[A]) Addresses() iter.Seq[A] {
-	return addressSeq(b.first, b.Last())
+	return ip.Inclusive(b.first, b.Last())
 }
 
 func (b *block[A]) Intervals() iter.Seq[Interval[A]] {
