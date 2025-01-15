@@ -1,6 +1,3 @@
-// Copyright 2024-2025 https://github.com/ipfreely-uk/go/blob/main/LICENSE
-// SPDX-License-Identifier: Apache-2.0
-
 /*
 IP addresses as generic, immutable positive integers.
 Use for arithmetic and bitwise operations.
@@ -15,3 +12,6 @@ Use [Family].FromBytes or [FromBytes] to obtain [Int] from byte slice.
 Use [Parse] or [ParseUnknown] to obtain [Int] from string.
 */
 package ip
+
+// Copyright 2024-2025 https://github.com/ipfreely-uk/go/blob/main/LICENSE
+// SPDX-License-Identifier: Apache-2.0
