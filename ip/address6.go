@@ -299,7 +299,7 @@ func isZeroShort(high, low uint64, index int) bool {
 	return shortAtSegment(high, low, index) == 0
 }
 
-func shortAtSegment(high uint64, low uint64, index int) int {
+func shortAtSegment(high uint64, low uint64, index int) uint {
 	SHORT_WIDTH := 16
 	if index < ip6Segments/2 {
 		shift := (3 - index) * SHORT_WIDTH
@@ -309,6 +309,6 @@ func shortAtSegment(high uint64, low uint64, index int) int {
 	return toShortInt(low >> shift)
 }
 
-func toShortInt(l uint64) int {
-	return int(l & 0xFFFF)
+func toShortInt(l uint64) uint {
+	return uint(l & 0xFFFF)
 }
