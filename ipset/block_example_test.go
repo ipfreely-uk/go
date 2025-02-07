@@ -46,9 +46,10 @@ func ExampleBlock() {
 	netAddress := ip.MustParse(ip.V6(), "2001:db8:cafe::")
 	block := ipset.NewBlock(netAddress, 56)
 
-	randomAddr := randomAddressFrom(block)
-
-	println("Random address from", block.String(), "=", randomAddr.String())
+	for i := 0; i < 3; i++ {
+		randomAddr := randomAddressFrom(block)
+		println("Random address from", block.String(), "=", randomAddr.String())
+	}
 }
 
 // Pick random address from block
