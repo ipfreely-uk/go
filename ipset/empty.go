@@ -20,6 +20,10 @@ func (e *empty[A]) Size() *big.Int {
 	return big.NewInt(0)
 }
 
+func (e *empty[A]) Empty() bool {
+	return true
+}
+
 func (e *empty[A]) Addresses() iter.Seq[A] {
 	return emptySeq[A]()
 }

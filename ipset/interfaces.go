@@ -17,6 +17,8 @@ type Discrete[A ip.Int[A]] interface {
 	Contains(address A) bool
 	// Number of unique addresses.
 	Size() (cardinality *big.Int)
+	// Tests for empty set
+	Empty() bool
 	// Unique addresses from least to greatest
 	Addresses() iter.Seq[A]
 	// Contents as distinct [Interval] sets.

@@ -44,15 +44,19 @@ func TestBlock_MaskSize(t *testing.T) {
 func TestBlock_Size(t *testing.T) {
 	{
 		address, _ := ip.V4().FromBytes(192, 168, 0, 0)
-		actual := ipset.NewBlock(address, 24).Size()
+		block := ipset.NewBlock(address, 24)
+		actual := block.Size()
 		expected := ip.SubnetAddressCount(ip.V4(), 24)
 		assert.Equal(t, expected, actual)
+		assert.False(t, block.Empty())
 	}
 	{
 		address := ip.MustParse(ip.V6(), "fe80::")
-		actual := ipset.NewBlock(address, 128).Size()
+		block := ipset.NewBlock(address, 128)
+		actual := block.Size()
 		expected := ip.SubnetAddressCount(ip.V6(), 128)
 		assert.Equal(t, expected, actual)
+		assert.False(t, block.Empty())
 	}
 }
 

@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNewAddressSet(t *testing.T) {
+func TestNewDiscrete(t *testing.T) {
 	zero := ip.V6().FromInt(0)
 	hundred := ip.V6().FromInt(100)
 	thousand := ip.V6().FromInt(1000)
@@ -26,7 +26,7 @@ func TestNewAddressSet(t *testing.T) {
 	assert.Equal(t, int64(0), empty.Size().Int64())
 }
 
-func TestAddressSet_Size(t *testing.T) {
+func TestDiscrete_Size(t *testing.T) {
 	zero := ip.V6().FromInt(0)
 	hundred := ip.V6().FromInt(100)
 	thousand := ip.V6().FromInt(1000)
@@ -40,7 +40,26 @@ func TestAddressSet_Size(t *testing.T) {
 	assert.Equal(t, expected, actual)
 }
 
-func TestAddressSet_Contains(t *testing.T) {
+func TestDiscrete_Empty(t *testing.T) {
+	{
+		zero := ip.V6().FromInt(0)
+		hundred := ip.V6().FromInt(100)
+		thousand := ip.V6().FromInt(1000)
+		r0 := ipset.NewInterval(zero, zero)
+		r1 := ipset.NewInterval(hundred, thousand)
+		set := ipset.NewDiscrete(r0, r1, r0)
+
+		assert.False(t, set.Empty())
+	}
+	{
+		empty := ipset.NewDiscrete[ip.Addr6]()
+		d := ipset.NewDiscrete(empty, empty, empty)
+
+		assert.True(t, d.Empty())
+	}
+}
+
+func TestDiscrete_Contains(t *testing.T) {
 	zero := ip.V6().FromInt(0)
 	ninteynine := ip.V6().FromInt(99)
 	hundred := ip.V6().FromInt(100)
@@ -57,7 +76,7 @@ func TestAddressSet_Contains(t *testing.T) {
 	assert.False(t, set.Contains(tenthousand))
 }
 
-func TestAddressSet_Addresses(t *testing.T) {
+func TestDiscrete_Addresses(t *testing.T) {
 	zero := ip.V6().FromInt(0)
 	hundred := ip.V6().FromInt(100)
 	hundredAndOne := ip.V6().FromInt(101)
@@ -87,7 +106,7 @@ func TestAddressSet_Addresses(t *testing.T) {
 	}
 }
 
-func TestAddressSet_String(t *testing.T) {
+func TestDiscrete_String(t *testing.T) {
 	zero := ip.V6().FromInt(0)
 	hundred := ip.V6().FromInt(100)
 	thousand := ip.V6().FromInt(1000)

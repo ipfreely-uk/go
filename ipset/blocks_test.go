@@ -212,7 +212,7 @@ func TestBlocks(t *testing.T) {
 		input := ipset.NewInterval(expectedFirst0, expectedLast1)
 		// check algo stops early
 		count := 0
-		ipset.Blocks[ip.Addr6](input)(func(b ipset.Block[ip.Addr6]) bool {
+		ipset.Blocks(input)(func(b ipset.Block[ip.Addr6]) bool {
 			count++
 			return false
 		})

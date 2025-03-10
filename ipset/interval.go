@@ -28,6 +28,10 @@ func (a *interval[A]) Size() *big.Int {
 	return sub.Add(sub, one)
 }
 
+func (a *interval[A]) Empty() bool {
+	return false
+}
+
 func (a *interval[A]) First() A {
 	return a.first
 }

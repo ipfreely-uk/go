@@ -38,6 +38,10 @@ func (s *discrete[A]) Size() *big.Int {
 	return sum
 }
 
+func (s *discrete[A]) Empty() bool {
+	return false
+}
+
 func (s *discrete[A]) Addresses() iter.Seq[A] {
 	return ranges2AddressSeq(s.intervals)
 }

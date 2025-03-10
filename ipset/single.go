@@ -27,6 +27,10 @@ func (b *single[A]) Size() *big.Int {
 	return big.NewInt(1)
 }
 
+func (b *single[A]) Empty() bool {
+	return false
+}
+
 func (b *single[A]) First() A {
 	return b.address
 }

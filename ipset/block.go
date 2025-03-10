@@ -24,11 +24,16 @@ func (b *block[A]) Contains(address A) bool {
 	return b.first.Compare(address) <= 0 && b.Last().Compare(address) >= 0
 }
 
+var one = big.NewInt(1)
+
 func (b *block[A]) Size() *big.Int {
 	diff := b.Last().Subtract(b.first)
 	bi := ip.ToBigInt(diff)
-	one := big.NewInt(1)
 	return bi.Add(bi, one)
+}
+
+func (b *block[A]) Empty() bool {
+	return false
 }
 
 func (b *block[A]) First() A {

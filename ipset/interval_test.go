@@ -42,9 +42,11 @@ func TestInterval_Size(t *testing.T) {
 	three := ip.V6().FromInt(3)
 
 	expected := big.NewInt(3)
-	actual := ipset.NewInterval(one, three).Size()
+	interval := ipset.NewInterval(one, three)
+	actual := interval.Size()
 
 	assert.Equal(t, expected, actual)
+	assert.False(t, interval.Empty())
 }
 
 func TestInterval_Addresses(t *testing.T) {
