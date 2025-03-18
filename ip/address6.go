@@ -248,7 +248,8 @@ const (
 func (a Addr6) String() string {
 	if isV4Mapped(a.high, a.low) {
 		prefix := "::ffff:"
-		v4 := V4().FromInt(uint32(a.low)).String()
+		addr := a.low & 0xFFFFFFFF
+		v4 := V4().FromInt(uint32(addr)).String()
 		return fmt.Sprintf("%s%s", prefix, v4)
 	}
 
