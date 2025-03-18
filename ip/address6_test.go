@@ -234,6 +234,15 @@ func TestString6(t *testing.T) {
 	}, {
 		[]byte{0, 0, 0, 0, 0, 0, 0xca, 0xfe, 0xca, 0xfe, 0, 0, 0, 0, 0, 0},
 		"::cafe:cafe:0:0:0",
+	}, {
+		[]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF, 0xFF, 0xC0, 0, 2, 1},
+		"::ffff:192.0.2.1",
+	}, {
+		[]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF},
+		"::ffff:255.255.255.255",
+	}, {
+		[]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF, 0xFF, 0, 0, 0, 0},
+		"::ffff:0.0.0.0",
 	}}
 
 	for _, candidate := range tests {

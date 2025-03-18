@@ -4,6 +4,7 @@ package ip
 // SPDX-License-Identifier: Apache-2.0
 
 import (
+	"fmt"
 	"math/bits"
 	"strconv"
 	"strings"
@@ -245,6 +246,12 @@ const (
 
 // See [Int]
 func (a Addr6) String() string {
+	if isV4Mapped(a.high, a.low) {
+		prefix := "::ffff:"
+		v4 := V4().FromInt(uint32(a.low)).String()
+		return fmt.Sprintf("%s%s", prefix, v4)
+	}
+
 	z0 := -1
 	zn := -1
 	for i := 0; i < ip6Segments; i++ {
@@ -271,6 +278,10 @@ func (a Addr6) String() string {
 		appendHex(a.high, a.low, zn, ip6Segments, &buf)
 	}
 	return buf.String()
+}
+
+func isV4Mapped(high, low uint64) bool {
+	return high == 0 && low >= 0xffff00000000 && low <= 0xffffffffffff
 }
 
 func appendHex(high, low uint64, offset, max int, buf *strings.Builder) {
