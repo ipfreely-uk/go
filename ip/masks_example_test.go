@@ -24,17 +24,17 @@ func ExampleSubnetMask() {
 func printNetworkDetails[A ip.Int[A]](network A, maskBits int) {
 	fam := network.Family()
 	mask := ip.SubnetMask(fam, maskBits)
-	inverseMask := mask.Not()
+	maskComplement := mask.Not()
 
 	zero := fam.FromInt(0)
-	if !ip.Eq(mask.And(inverseMask), zero) {
+	if !ip.Eq(mask.And(maskComplement), zero) {
 		panic("Mask does not cover network address")
 	}
 
 	println("First Address:", network.String())
-	println("Last Address:", network.Or(inverseMask).String())
+	println("Last Address:", network.Or(maskComplement).String())
 	println("Mask:", mask.String())
-	println(fmt.Sprintf("CIDR Notation: %s/%d", network.String(), maskBits))
+	fmt.Printf("CIDR Notation: %s/%d\n", network.String(), maskBits)
 }
 
 func ExampleSubnetMask_second() {
