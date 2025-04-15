@@ -10,9 +10,22 @@ This library does not perform network I/O.
 ## Example
 
 ```go
-func ExampleSubnetMask() {
-	network := ip.V4().MustFromBytes(192, 0, 2, 128)
-	printNetworkDetails(network, 26)
+package main
+
+import(
+    "fmt"
+
+    "github.com/ipfreely-up/go/ip"
+)
+
+func main() {
+	network4 := ip.V4().MustFromBytes(192, 0, 2, 128)
+	printNetworkDetails(network4, 26)
+
+	println()
+
+	network6 := ip.MustParse(ip.V6(), "2001:DB80::")
+	printNetworkDetails(network6, 65)
 }
 
 func printNetworkDetails[A ip.Int[A]](network A, maskBits int) {
@@ -39,6 +52,11 @@ First Address: 192.0.2.128
 Last Address: 192.0.2.191
 Mask: 255.255.255.192
 CIDR Notation: 192.0.2.128/26
+
+First Address: 2001:db80::
+Last Address: 2001:db80::7fff:ffff:ffff:ffff
+Mask: ffff:ffff:ffff:ffff:8000::
+CIDR Notation: 2001:db80::/65
 ```
 
 ## Packages

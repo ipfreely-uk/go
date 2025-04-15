@@ -17,8 +17,13 @@ func TestExampleSubnetMask(t *testing.T) {
 }
 
 func ExampleSubnetMask() {
-	network := ip.V4().MustFromBytes(192, 0, 2, 128)
-	printNetworkDetails(network, 26)
+	network4 := ip.V4().MustFromBytes(192, 0, 2, 128)
+	printNetworkDetails(network4, 26)
+
+	println()
+
+	network6 := ip.MustParse(ip.V6(), "2001:DB80::")
+	printNetworkDetails(network6, 65)
 }
 
 func printNetworkDetails[A ip.Int[A]](network A, maskBits int) {
