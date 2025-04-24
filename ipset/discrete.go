@@ -43,7 +43,7 @@ func (s *discrete[A]) Empty() bool {
 }
 
 func (s *discrete[A]) Addresses() iter.Seq[A] {
-	return ranges2AddressSeq(s.intervals)
+	return intervalToAddressSeq(s.intervals)
 }
 
 func (s *discrete[A]) Intervals() iter.Seq[Interval[A]] {
