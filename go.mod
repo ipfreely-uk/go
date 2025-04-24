@@ -5,7 +5,7 @@ go 1.23.1
 require (
 	// Test/example dependencies
 	github.com/dustin/go-humanize v1.0.1
-	github.com/stretchr/testify v1.9.0
+	github.com/stretchr/testify v1.10.0
 )
 
 require (
