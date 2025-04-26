@@ -230,12 +230,6 @@ func parsingTestSet() []parseTestCase {
 			ok: true,
 		},
 		{
-			b:  []byte{1, 0, 0, 0},
-			s:  "01.0.0.0", // decimal or octal ambiguity
-			v:  ip.Version4,
-			ok: false,
-		},
-		{
 			b:  []byte{0, 0, 0, 1},
 			s:  "0.0.0.1",
 			v:  ip.Version4,
@@ -276,6 +270,30 @@ func parsingTestSet() []parseTestCase {
 			s:  ".255.255.255",
 			v:  ip.Version4,
 			ok: false,
+		},
+		{
+			b:  []byte{1, 0, 0, 0},
+			s:  "01.0.0.0", // decimal or octal ambiguity
+			v:  ip.Version4,
+			ok: false,
+		},
+		{
+			b:  []byte{1, 0, 0, 0},
+			s:  "0.0.0.008", // decimal or octal ambiguity
+			v:  ip.Version4,
+			ok: false,
+		},
+		{
+			b:  []byte{1, 0, 0, 0},
+			s:  "0.0.0.0255", // decimal or octal ambiguity
+			v:  ip.Version4,
+			ok: false,
+		},
+		{
+			b:  []byte{0, 0, 0, 0},
+			s:  "000.0.0.0",
+			v:  ip.Version4,
+			ok: true,
 		},
 	}
 }

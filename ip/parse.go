@@ -10,7 +10,7 @@ import (
 )
 
 var errInvalid = errors.New("invalid address")
-var errAmbiquous = errors.New("ambiguous address may be decimal or octal")
+var errAmbiquous = errors.New("ambiguous number may be decimal or octal")
 
 // Parses address string
 func Parse[A Int[A]](family Family[A], candidate string) (address A, err error) {
@@ -58,7 +58,7 @@ func parse4(candidate string) (uint32, error) {
 			value |= quad
 			quad = 0
 			digits = 0
-		} else if digits == 1 && quad == 0 {
+		} else if digits > 0 && quad == 0 && c != '0' {
 			return value, errAmbiquous
 		} else if c >= '0' && c <= '9' {
 			digits++
