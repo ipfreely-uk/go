@@ -10,7 +10,7 @@ import (
 )
 
 var errInvalid = errors.New("invalid address")
-var errAmbiquous = errors.New("ambiguous number may be decimal or octal")
+var errAmbiquous = errors.New("leading zeroes not supported")
 
 // Parses address string
 func Parse[A Int[A]](family Family[A], candidate string) (address A, err error) {
