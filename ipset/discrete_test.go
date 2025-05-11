@@ -29,8 +29,30 @@ func TestNewDiscrete(t *testing.T) {
 	}
 	{
 		zero := ip.V6().FromInt(0)
-		thousand := ip.V6().FromInt(1024 * 1024)
-		expected := ipset.NewInterval(zero, thousand)
+		two := ip.V6().FromInt(2)
+		kay := ip.V6().FromInt(1024)
+		expected := ipset.NewInterval(zero, kay)
+		odds := []ipset.Discrete[ip.Addr6]{}
+		for a := range expected.Addresses() {
+			if !ip.Eq(a.Mod(two), zero) {
+				odds = append(odds, ipset.NewSingle(a))
+			}
+		}
+		evens := []ipset.Discrete[ip.Addr6]{}
+		for a := range expected.Addresses() {
+			if ip.Eq(a.Mod(two), zero) {
+				evens = append(evens, ipset.NewSingle(a))
+			}
+		}
+		odd := ipset.NewDiscrete(odds...)
+		even := ipset.NewDiscrete(evens...)
+		actual := ipset.NewDiscrete(odd, even)
+		assert.True(t, ipset.Eq(expected, actual))
+	}
+	{
+		zero := ip.V6().FromInt(0)
+		meg := ip.V6().FromInt(1024 * 1024)
+		expected := ipset.NewInterval(zero, meg)
 		contents := []ipset.Discrete[ip.Addr6]{}
 		for a := range expected.Addresses() {
 			contents = append(contents, ipset.NewSingle(a))

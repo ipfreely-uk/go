@@ -101,12 +101,12 @@ func rationalize[A ip.Int[A]](sets []Discrete[A]) []Interval[A] {
 }
 
 func merge[A ip.Int[A]](intervals map[Interval[A]]bool, i Interval[A]) {
-	a := i
+	candidate := i
 	for k := range intervals {
-		if Contiguous(k, i) {
-			a = Extremes(k, i)
+		if Contiguous(k, candidate) {
+			candidate = Extremes(k, candidate)
 			delete(intervals, k)
 		}
 	}
-	intervals[a] = true
+	intervals[candidate] = true
 }
