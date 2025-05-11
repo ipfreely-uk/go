@@ -7,6 +7,7 @@ import (
 	"iter"
 	"math/big"
 	"sort"
+	"strconv"
 	"strings"
 
 	"github.com/ipfreely-uk/go/ip"
@@ -51,13 +52,20 @@ func (s *discrete[A]) Intervals() iter.Seq[Interval[A]] {
 }
 
 func (s *discrete[A]) String() string {
+	LIMIT := 5
 	buf := strings.Builder{}
 	buf.WriteString("{")
 	delim := ""
-	for _, i := range s.intervals {
+	for i, set := range s.intervals {
 		buf.WriteString(delim)
+		if i > LIMIT {
+			l := strconv.Itoa(len(s.intervals) - LIMIT)
+			buf.WriteString(l)
+			buf.WriteString(" more...")
+			break
+		}
 		delim = ", "
-		buf.WriteString(i.String())
+		buf.WriteString(set.String())
 	}
 	buf.WriteString("}")
 	return buf.String()
