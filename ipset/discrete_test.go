@@ -4,6 +4,7 @@ package ipset_test
 
 import (
 	"math/big"
+	"slices"
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
@@ -44,9 +45,18 @@ func TestNewDiscrete(t *testing.T) {
 				evens = append(evens, ipset.NewSingle(a))
 			}
 		}
+		// reverse evens
+		slices.SortFunc(evens, func(a, b ipset.Discrete[ip.Addr6]) int {
+			left := a.(ipset.Block[ip.Addr6])
+			right := b.(ipset.Block[ip.Addr6])
+			return right.First().Compare(left.First())
+		})
+		rogueIdx := 20
+		rogue := evens[rogueIdx]
+		evens = slices.Delete(evens, rogueIdx, rogueIdx)
 		odd := ipset.NewDiscrete(odds...)
 		even := ipset.NewDiscrete(evens...)
-		actual := ipset.NewDiscrete(odd, even)
+		actual := ipset.NewDiscrete(odd, even, rogue)
 		assert.True(t, ipset.Eq(expected, actual))
 	}
 	{
