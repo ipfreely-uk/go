@@ -60,8 +60,9 @@ func (s *discrete[A]) String() string {
 		buf.WriteString(delim)
 		if i > LIMIT {
 			l := strconv.Itoa(len(s.intervals) - LIMIT)
+			buf.WriteRune('[')
 			buf.WriteString(l)
-			buf.WriteString(" more...")
+			buf.WriteString("...]")
 			break
 		}
 		delim = ", "
