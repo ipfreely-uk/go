@@ -12,18 +12,32 @@ import (
 )
 
 func TestNewDiscrete(t *testing.T) {
-	zero := ip.V6().FromInt(0)
-	hundred := ip.V6().FromInt(100)
-	thousand := ip.V6().FromInt(1000)
-	r0 := ipset.NewInterval(zero, zero)
-	r1 := ipset.NewInterval(hundred, thousand)
-	r3 := ipset.NewInterval(zero, thousand)
-	set := ipset.NewDiscrete(r0, r1, r3, r0)
-	assert.NotNil(t, set)
-
-	empty := ipset.NewDiscrete[ip.Addr4]()
-	empty = ipset.NewDiscrete(empty, empty, empty)
-	assert.Equal(t, int64(0), empty.Size().Int64())
+	{
+		zero := ip.V6().FromInt(0)
+		hundred := ip.V6().FromInt(100)
+		thousand := ip.V6().FromInt(1000)
+		r0 := ipset.NewInterval(zero, zero)
+		r1 := ipset.NewInterval(hundred, thousand)
+		r3 := ipset.NewInterval(zero, thousand)
+		set := ipset.NewDiscrete(r0, r1, r3, r0)
+		assert.NotNil(t, set)
+	}
+	{
+		empty := ipset.NewDiscrete[ip.Addr4]()
+		empty = ipset.NewDiscrete(empty, empty, empty)
+		assert.Equal(t, int64(0), empty.Size().Int64())
+	}
+	{
+		zero := ip.V6().FromInt(0)
+		thousand := ip.V6().FromInt(1024 * 1024)
+		expected := ipset.NewInterval(zero, thousand)
+		contents := []ipset.Discrete[ip.Addr6]{}
+		for a := range expected.Addresses() {
+			contents = append(contents, ipset.NewSingle(a))
+		}
+		actual := ipset.NewDiscrete(contents...)
+		assert.True(t, ipset.Eq(expected, actual))
+	}
 }
 
 func TestDiscrete_Size(t *testing.T) {

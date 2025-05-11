@@ -69,8 +69,7 @@ func (s *discrete[A]) String() string {
 // If set is CIDR range returns result of [NewBlock] function.
 // Zero-length slice returns the empty set.
 func NewDiscrete[A ip.Int[A]](sets ...Discrete[A]) (set Discrete[A]) {
-	intervals := toIntervals(sets)
-	intervals = rationalize(intervals)
+	intervals := rationalize(sets)
 	if len(intervals) == 1 {
 		return intervals[0]
 	}
@@ -82,30 +81,12 @@ func NewDiscrete[A ip.Int[A]](sets ...Discrete[A]) (set Discrete[A]) {
 	}
 }
 
-func toIntervals[A ip.Int[A]](sets []Discrete[A]) []Interval[A] {
-	result := []Interval[A]{}
-	for _, set := range sets {
-		for i := range set.Intervals() {
-			result = append(result, i)
-		}
-	}
-	return result
-}
-
-func rationalize[A ip.Int[A]](spans []Interval[A]) []Interval[A] {
+func rationalize[A ip.Int[A]](sets []Discrete[A]) []Interval[A] {
 	set := map[Interval[A]]bool{}
-	for _, r := range spans {
-		set[r] = true
-	}
-	for i := range spans {
-		a := spans[i]
-		for b := range set {
-			if Contiguous(a, b) {
-				a = Extremes(a, b)
-				delete(set, b)
-			}
+	for _, s := range sets {
+		for i := range s.Intervals() {
+			merge(set, i)
 		}
-		set[a] = true
 	}
 	result := []Interval[A]{}
 	for r := range set {
@@ -117,4 +98,15 @@ func rationalize[A ip.Int[A]](spans []Interval[A]) []Interval[A] {
 		return fi.Compare(fj) < 0
 	})
 	return result
+}
+
+func merge[A ip.Int[A]](intervals map[Interval[A]]bool, i Interval[A]) {
+	a := i
+	for k, _ := range intervals {
+		if Contiguous(k, i) {
+			a = Extremes(k, i)
+			delete(intervals, k)
+		}
+	}
+	intervals[a] = true
 }
