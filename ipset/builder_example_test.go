@@ -25,7 +25,7 @@ func ExampleBuilder() {
 }
 
 var thirteen = ip.V4().FromInt(13)
-var maskComplement = ipmask.SubnetMask(ip.V4(), 24).Not()
+var maskComplement = ipmask.For(ip.V4(), 24).Not()
 
 func removeUnlucky(addresses ipset.Discrete[ip.Addr4]) (lucky ipset.Discrete[ip.Addr4]) {
 	bldr := ipset.Builder[ip.Addr4]{}

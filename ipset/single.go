@@ -54,7 +54,7 @@ func (b *single[A]) String() string {
 }
 
 func (b *single[A]) Mask() A {
-	return ipmask.SubnetMask(b.address.Family(), b.MaskSize())
+	return ipmask.For(b.address.Family(), b.MaskSize())
 }
 
 func (b *single[A]) CidrNotation() string {

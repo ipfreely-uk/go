@@ -28,7 +28,7 @@ func maskRequiredFor[A ip.Int[A]](f ip.Family[A], allocateableAddresses *big.Int
 	}
 	width := f.Width()
 	for m := width; m >= 0; m-- {
-		sizeForMask := ipmask.SubnetAddressCount(f, m)
+		sizeForMask := ipmask.Size(f, m)
 		if sizeForMask.Cmp(min) >= 0 {
 			return m
 		}

@@ -46,7 +46,7 @@ var log_2 = 0.6931471805599453
 func Blocks[A ip.Int[A]](set Interval[A]) iter.Seq[Block[A]] {
 	first := set.First()
 	last := set.Last()
-	mask := ipmask.SubnetMaskSize(first, last)
+	mask := ipmask.Test(first, last)
 	if mask >= 0 {
 		block := NewBlock(first, mask)
 		return singleSeq(block)

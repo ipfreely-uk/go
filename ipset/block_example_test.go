@@ -35,7 +35,7 @@ func ExampleNewBlock_second() {
 }
 
 func block[A ip.Int[A]](network, mask A) ipset.Block[A] {
-	bits := ipmask.SubnetMaskBits(mask)
+	bits := ipmask.Bits(mask)
 	return ipset.NewBlock(network, bits)
 }
 

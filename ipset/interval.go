@@ -67,7 +67,7 @@ func (e *interval[A]) String() string {
 // If range is valid CIDR block returns value from [NewBlock] instead.
 func NewInterval[A ip.Int[A]](first, last A) Interval[A] {
 	least, greatest := order(first, last)
-	mask := ipmask.SubnetMaskSize(least, greatest)
+	mask := ipmask.Test(least, greatest)
 	if mask >= 0 {
 		b := NewBlock(least, mask)
 		return b

@@ -43,7 +43,7 @@ func (b *block[A]) First() A {
 
 func (b *block[A]) Last() A {
 	f := b.first.Family()
-	maskComplement := ipmask.SubnetMask(f, int(b.mask)).Not()
+	maskComplement := ipmask.For(f, int(b.mask)).Not()
 	return b.first.Or(maskComplement)
 }
 
@@ -61,7 +61,7 @@ func (b *block[A]) String() string {
 }
 
 func (b *block[A]) Mask() A {
-	return ipmask.SubnetMask(b.first.Family(), b.MaskSize())
+	return ipmask.For(b.first.Family(), b.MaskSize())
 }
 
 func (b *block[A]) CidrNotation() string {
@@ -76,7 +76,7 @@ func NewBlock[A ip.Int[A]](network A, mask int) Block[A] {
 	if fam.Width() == mask {
 		return NewSingle(network)
 	}
-	m := ipmask.SubnetMask(fam, mask)
+	m := ipmask.For(fam, mask)
 	if !ip.Eq(network, m.And(network)) {
 		msg := fmt.Sprintf("mask %s does not cover %s", m.String(), network.String())
 		panic(msg)

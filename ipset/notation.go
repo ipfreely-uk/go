@@ -33,7 +33,7 @@ func ParseCIDRNotation[A ip.Int[A]](f ip.Family[A], notation string) (netAddress
 	if err != nil {
 		return address, mask, err
 	}
-	if !ipmask.SubnetMaskCovers(mask, address) {
+	if !ipmask.Covers(mask, address) {
 		msg := fmt.Sprintf("%s has invalid mask", notation)
 		return address, mask, errors.New(msg)
 	}
@@ -71,9 +71,9 @@ func ParseUnknownCIDRNotation(notation string) (netAddress ip.Address, maskBits 
 	cover := false
 	switch a := address.(type) {
 	case ip.Addr4:
-		cover = ipmask.SubnetMaskCovers(mask, a)
+		cover = ipmask.Covers(mask, a)
 	case ip.Addr6:
-		cover = ipmask.SubnetMaskCovers(mask, a)
+		cover = ipmask.Covers(mask, a)
 	}
 	if !cover {
 		msg := fmt.Sprintf("%s has invalid mask", notation)

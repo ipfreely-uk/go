@@ -46,7 +46,7 @@ func TestBlocks(t *testing.T) {
 	{
 		family := ip.V6()
 		expectedFirst0, _ := ip.Parse(family, "fe80::")
-		mask := ipmask.SubnetMask(family, 64)
+		mask := ipmask.For(family, 64)
 		inverse := mask.Not()
 		expectedLast0 := inverse.Or(expectedFirst0)
 		expectedFirst1 := ip.Next(expectedLast0)
@@ -72,7 +72,7 @@ func TestBlocks(t *testing.T) {
 	{
 		family := ip.V6()
 		expectedFirst0, _ := ip.Parse(family, "f000::")
-		mask := ipmask.SubnetMask(family, 8)
+		mask := ipmask.For(family, 8)
 		inverse := mask.Not()
 		expectedLast0 := inverse.Or(expectedFirst0)
 		expectedFirst1 := ip.Next(expectedLast0)
@@ -98,7 +98,7 @@ func TestBlocks(t *testing.T) {
 	{
 		family := ip.V6()
 		expectedFirst0, _ := ip.Parse(family, "::1")
-		mask := ipmask.SubnetMask(family, 128)
+		mask := ipmask.For(family, 128)
 		inverse := mask.Not()
 		expectedLast0 := inverse.Or(expectedFirst0)
 		expectedFirst1 := ip.Next(expectedLast0)
@@ -124,7 +124,7 @@ func TestBlocks(t *testing.T) {
 	{
 		family := ip.V4()
 		expectedFirst0, _ := ip.Parse(family, "10.0.0.0")
-		mask := ipmask.SubnetMask(family, 8)
+		mask := ipmask.For(family, 8)
 		inverse := mask.Not()
 		expectedLast0 := inverse.Or(expectedFirst0)
 		expectedFirst1 := ip.Next(expectedLast0)
@@ -150,7 +150,7 @@ func TestBlocks(t *testing.T) {
 	{
 		family := ip.V4()
 		expectedFirst0, _ := ip.Parse(family, "127.0.0.1")
-		mask := ipmask.SubnetMask(family, 32)
+		mask := ipmask.For(family, 32)
 		inverse := mask.Not()
 		expectedLast0 := inverse.Or(expectedFirst0)
 		expectedFirst1 := ip.Next(expectedLast0)
@@ -176,7 +176,7 @@ func TestBlocks(t *testing.T) {
 	{
 		family := ip.V4()
 		expectedFirst0, _ := ip.Parse(family, "127.0.0.1")
-		mask := ipmask.SubnetMask(family, 32)
+		mask := ipmask.For(family, 32)
 		inverse := mask.Not()
 		expectedLast0 := inverse.Or(expectedFirst0)
 		input := ipset.NewInterval(expectedFirst0, expectedLast0)
@@ -205,7 +205,7 @@ func TestBlocks(t *testing.T) {
 	{
 		family := ip.V6()
 		expectedFirst0, _ := ip.Parse(family, "fe80::")
-		mask := ipmask.SubnetMask(family, 64)
+		mask := ipmask.For(family, 64)
 		inverse := mask.Not()
 		expectedLast0 := inverse.Or(expectedFirst0)
 		expectedFirst1 := ip.Next(expectedLast0)

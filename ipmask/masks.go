@@ -19,7 +19,7 @@ var ipv6Masks []ip.Addr6 = allMasks(ip.V6())
 // For IPv4 `0` returns `0.0.0.0` and `32` returns `255.255.255.255`.
 // For IPv6 `0` returns `::` and `128` returns `ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff`.
 // Panics if mask bits exceeds [Family].Width or is less than zero.
-func SubnetMask[A ip.Int[A]](f ip.Family[A], maskBits int) (mask A) {
+func For[A ip.Int[A]](f ip.Family[A], maskBits int) (mask A) {
 	validateBits(f, maskBits)
 
 	var r ip.Address
@@ -41,7 +41,7 @@ func validateBits[A ip.Int[A]](family ip.Family[A], bits int) {
 
 // Number of addresses in subnet with given bit mask size.
 // Panics if mask bits exceeds width of family or is less than zero.
-func SubnetAddressCount[A ip.Int[A]](family ip.Family[A], maskBits int) (count *big.Int) {
+func Size[A ip.Int[A]](family ip.Family[A], maskBits int) (count *big.Int) {
 	validateBits(family, maskBits)
 	size := big.NewInt(int64(family.Width() - maskBits))
 	two := big.NewInt(2)
@@ -52,7 +52,7 @@ func SubnetAddressCount[A ip.Int[A]](family ip.Family[A], maskBits int) (count *
 //
 // Returns between 0 and [Family.Width] inclusive if first and last form valid CIDR block.
 // Returns -1 if first and last do not form valid CIDR block.
-func SubnetMaskSize[A ip.Int[A]](first, last A) (maskBits int) {
+func Test[A ip.Int[A]](first, last A) (maskBits int) {
 	fam := first.Family()
 	xor := first.Xor(last)
 	zero := fam.FromInt(0)
@@ -60,7 +60,7 @@ func SubnetMaskSize[A ip.Int[A]](first, last A) (maskBits int) {
 		return -1
 	}
 	bits := fam.Width() - xor.Not().TrailingZeros()
-	mask := SubnetMask(fam, bits)
+	mask := For(fam, bits)
 	if ip.Eq(xor.And(mask), zero) {
 		return bits
 	}
@@ -110,7 +110,7 @@ func makeMask[A ip.Int[A]](family ip.Family[A], bits int) A {
 }
 
 // Tests mask bits cover network address.
-func SubnetMaskCovers[A ip.Int[A]](maskBits int, address A) (maskBitsDoCover bool) {
+func Covers[A ip.Int[A]](maskBits int, address A) (maskBitsDoCover bool) {
 	if maskBits < 0 {
 		return false
 	}
@@ -119,7 +119,7 @@ func SubnetMaskCovers[A ip.Int[A]](maskBits int, address A) (maskBitsDoCover boo
 		return false
 	}
 	zero := fam.FromInt(0)
-	iMask := SubnetMask(fam, maskBits).Not()
+	iMask := For(fam, maskBits).Not()
 	return iMask.And(address).Compare(zero) == 0
 }
 
@@ -128,10 +128,10 @@ func SubnetMaskCovers[A ip.Int[A]](maskBits int, address A) (maskBitsDoCover boo
 // Returns count of most significant bits set to true.
 // For example, IPv4 mask `255.255.255.0` returns 24.
 // If `address` is not a mask returns -1.
-func SubnetMaskBits[A ip.Int[A]](address A) (maskBits int) {
+func Bits[A ip.Int[A]](address A) (maskBits int) {
 	f := address.Family()
 	bits := f.Width() - address.TrailingZeros()
-	mask := SubnetMask(f, bits)
+	mask := For(f, bits)
 	match := ip.Eq(mask, address)
 	if match {
 		return bits
