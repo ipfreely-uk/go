@@ -63,10 +63,12 @@ CIDR Notation: 2001:db80::/65
 
 Add an import statement to [go.mod](https://go.dev/doc/modules/gomod-ref) to utilise.
 
-| Package                                  | Purpose                  |
-|------------------------------------------|--------------------------|
-| `import github.com/ipfreely-uk/go/ip`    | IP addresses as integers |
-| `import github.com/ipfreely-uk/go/ipset` | IP address discrete sets |
+| Package                                   | Purpose                  |
+|-------------------------------------------|--------------------------|
+| `import github.com/ipfreely-uk/go/ip`     | IP addresses as integers |
+| `import github.com/ipfreely-uk/go/ipmask` | IP subnet mask funcs     |
+| `import github.com/ipfreely-uk/go/ipset`  | IP address discrete sets |
+| `import github.com/ipfreely-uk/go/ipstd`  | Convert to/from stdlib   |
 
 ## Versus Standard Library
 

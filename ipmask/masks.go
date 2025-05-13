@@ -50,7 +50,7 @@ func Size[A ip.Int[A]](family ip.Family[A], maskBits int) (count *big.Int) {
 
 // Mask size in bits for CIDR block.
 //
-// Returns between 0 and [Family.Width] inclusive if first and last form valid CIDR block.
+// Returns between 0 and the family width inclusive if first and last form valid CIDR block.
 // Returns -1 if first and last do not form valid CIDR block.
 func Test[A ip.Int[A]](first, last A) (maskBits int) {
 	fam := first.Family()
