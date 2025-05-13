@@ -16,6 +16,7 @@ import(
     "fmt"
 
     "github.com/ipfreely-up/go/ip"
+	"github.com/ipfreely-up/go/ipmask"
 )
 
 func main() {
@@ -30,7 +31,7 @@ func main() {
 
 func printNetworkDetails[A ip.Int[A]](network A, maskBits int) {
 	fam := network.Family()
-	mask := ip.SubnetMask(fam, maskBits)
+	mask := ipmask.For(fam, maskBits)
 	maskComplement := mask.Not()
 
 	zero := fam.FromInt(0)
