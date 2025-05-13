@@ -16,7 +16,7 @@ import(
     "fmt"
 
     "github.com/ipfreely-up/go/ip"
-	"github.com/ipfreely-up/go/ipmask"
+    "github.com/ipfreely-up/go/ipmask"
 )
 
 func main() {
