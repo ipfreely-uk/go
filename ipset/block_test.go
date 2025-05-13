@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
+	"github.com/ipfreely-uk/go/ipmask"
 	"github.com/ipfreely-uk/go/ipset"
 	"github.com/stretchr/testify/assert"
 )
@@ -46,7 +47,7 @@ func TestBlock_Size(t *testing.T) {
 		address, _ := ip.V4().FromBytes(192, 168, 0, 0)
 		block := ipset.NewBlock(address, 24)
 		actual := block.Size()
-		expected := ip.SubnetAddressCount(ip.V4(), 24)
+		expected := ipmask.SubnetAddressCount(ip.V4(), 24)
 		assert.Equal(t, expected, actual)
 		assert.False(t, block.Empty())
 	}
@@ -54,7 +55,7 @@ func TestBlock_Size(t *testing.T) {
 		address := ip.MustParse(ip.V6(), "fe80::")
 		block := ipset.NewBlock(address, 128)
 		actual := block.Size()
-		expected := ip.SubnetAddressCount(ip.V6(), 128)
+		expected := ipmask.SubnetAddressCount(ip.V6(), 128)
 		assert.Equal(t, expected, actual)
 		assert.False(t, block.Empty())
 	}
@@ -141,13 +142,13 @@ func TestBlock_Mask(t *testing.T) {
 	{
 		address, _ := ip.V4().FromBytes(192, 168, 0, 0)
 		actual := ipset.NewBlock(address, 24).Mask()
-		expected := ip.SubnetMask(ip.V4(), 24)
+		expected := ipmask.SubnetMask(ip.V4(), 24)
 		assert.Equal(t, expected, actual)
 	}
 	{
 		address := ip.MustParse(ip.V6(), "fe80::")
 		actual := ipset.NewBlock(address, 128).Mask()
-		expected := ip.SubnetMask(ip.V6(), 128)
+		expected := ipmask.SubnetMask(ip.V6(), 128)
 		assert.Equal(t, expected, actual)
 	}
 }

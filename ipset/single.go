@@ -9,6 +9,7 @@ import (
 	"math/big"
 
 	"github.com/ipfreely-uk/go/ip"
+	"github.com/ipfreely-uk/go/ipmask"
 )
 
 type single[A ip.Int[A]] struct {
@@ -53,7 +54,7 @@ func (b *single[A]) String() string {
 }
 
 func (b *single[A]) Mask() A {
-	return ip.SubnetMask(b.address.Family(), b.MaskSize())
+	return ipmask.SubnetMask(b.address.Family(), b.MaskSize())
 }
 
 func (b *single[A]) CidrNotation() string {

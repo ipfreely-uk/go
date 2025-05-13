@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/ipfreely-uk/go/ip"
+	"github.com/ipfreely-uk/go/ipmask"
 )
 
 type interval[A ip.Int[A]] struct {
@@ -66,7 +67,7 @@ func (e *interval[A]) String() string {
 // If range is valid CIDR block returns value from [NewBlock] instead.
 func NewInterval[A ip.Int[A]](first, last A) Interval[A] {
 	least, greatest := order(first, last)
-	mask := ip.SubnetMaskSize(least, greatest)
+	mask := ipmask.SubnetMaskSize(least, greatest)
 	if mask >= 0 {
 		b := NewBlock(least, mask)
 		return b

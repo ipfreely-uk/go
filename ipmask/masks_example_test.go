@@ -1,6 +1,6 @@
 // Copyright 2024-2025 https://github.com/ipfreely-uk/go/blob/main/LICENSE
 // SPDX-License-Identifier: Apache-2.0
-package ip_test
+package ipmask_test
 
 import (
 	"fmt"
@@ -9,6 +9,7 @@ import (
 
 	"github.com/dustin/go-humanize"
 	"github.com/ipfreely-uk/go/ip"
+	"github.com/ipfreely-uk/go/ipmask"
 )
 
 func TestExampleSubnetMask(t *testing.T) {
@@ -28,7 +29,7 @@ func ExampleSubnetMask() {
 
 func printNetworkDetails[A ip.Int[A]](network A, maskBits int) {
 	fam := network.Family()
-	mask := ip.SubnetMask(fam, maskBits)
+	mask := ipmask.SubnetMask(fam, maskBits)
 	maskComplement := mask.Not()
 
 	zero := fam.FromInt(0)
@@ -50,7 +51,7 @@ func ExampleSubnetMask_second() {
 func printAllMasks[A ip.Int[A]](f ip.Family[A]) {
 	println(f.String())
 	for bits := 0; bits <= f.Width(); bits++ {
-		mask := ip.SubnetMask(f, bits)
+		mask := ipmask.SubnetMask(f, bits)
 		cidrTail := fmt.Sprintf("/%d", bits)
 		println(mask.String(), "==", cidrTail)
 	}
@@ -68,7 +69,7 @@ func ExampleSubnetAddressCount() {
 
 func printSubnetSizesForMasks[A ip.Int[A]](f ip.Family[A]) {
 	for mask := 0; mask <= f.Width(); mask++ {
-		count := ip.SubnetAddressCount(f, mask)
+		count := ipmask.SubnetAddressCount(f, mask)
 		msg := fmt.Sprintf("IPv%d /%d == %s", f.Version(), mask, humanize.BigComma(count))
 		println(msg)
 	}
@@ -78,7 +79,7 @@ func ExampleSubnetAddressCount_second() {
 	family := ip.V4()
 	min := big.NewInt(50)
 	bits := minimumMaskThatSatisfies(family, min)
-	mask := ip.SubnetMask(family, bits).String()
+	mask := ipmask.SubnetMask(family, bits).String()
 	count := humanize.BigComma(min)
 	msg := fmt.Sprintf("/%d network (%s) is the minimum size that can allocate %s addresses", bits, mask, count)
 	println(msg)
@@ -94,7 +95,7 @@ func minimumMaskThatSatisfies[A ip.Int[A]](f ip.Family[A], allocatable *big.Int)
 		min = allocatable
 	}
 	for i := f.Width(); i >= 0; i++ {
-		s := ip.SubnetAddressCount(f, i)
+		s := ipmask.SubnetAddressCount(f, i)
 		if min.Cmp(s) >= 0 {
 			return i
 		}
@@ -112,8 +113,8 @@ func ExampleSubnetMaskSize() {
 	first := family.MustFromBytes(192, 0, 2, 0)
 	last := family.MustFromBytes(192, 0, 2, 255)
 
-	maskBits := ip.SubnetMaskSize(first, last)
-	mask := ip.SubnetMask(family, maskBits)
+	maskBits := ipmask.SubnetMaskSize(first, last)
+	mask := ipmask.SubnetMask(family, maskBits)
 
 	println(fmt.Sprintf("/%d", maskBits), "==", mask.String())
 }
@@ -123,7 +124,7 @@ func ExampleSubnetMaskSize_second() {
 	first := family.MustFromBytes(192, 0, 2, 0)
 	last := family.MustFromBytes(192, 0, 2, 255)
 
-	maskBits := ip.SubnetMaskSize(first, last)
+	maskBits := ipmask.SubnetMaskSize(first, last)
 	if maskBits != -1 {
 		cidrNotation := fmt.Sprintf("%s/%d", first.String(), maskBits)
 		println(first.String(), "-", last.String(), " is valid subnet ", cidrNotation)
@@ -143,10 +144,10 @@ func ExampleSubnetMaskCovers() {
 	for mask := 32; mask >= 20; mask-- {
 		addrStr := netAddress.String()
 		cidrNotation := fmt.Sprintf("%s/%d", addrStr, mask)
-		if ip.SubnetMaskCovers(mask, netAddress) {
+		if ipmask.SubnetMaskCovers(mask, netAddress) {
 			println(cidrNotation, "is a valid expression")
 		} else {
-			maskAddr := ip.SubnetMask(v4, mask).String()
+			maskAddr := ipmask.SubnetMask(v4, mask).String()
 			println(cidrNotation, "is not a valid expression;", maskAddr, "does not cover", addrStr)
 		}
 	}
@@ -165,11 +166,11 @@ func ExampleSubnetMaskBits() {
 	validateMask(v4.MustFromBytes(255, 255, 0xF0, 0))
 	validateMask(v4.MustFromBytes(255, 255, 0x80, 0))
 	validateMask(v4.MustFromBytes(255, 255, 0xF, 0))
-	validateMask(ip.SubnetMask(v6, 56))
+	validateMask(ipmask.SubnetMask(v6, 56))
 }
 
 func validateMask[A ip.Int[A]](address A) {
-	bits := ip.SubnetMaskBits(address)
+	bits := ipmask.SubnetMaskBits(address)
 	ver := address.Version()
 	if bits >= 0 {
 		msg := fmt.Sprintf("%s is valid IPv%d mask /%d", address.String(), ver, bits)

@@ -1,4 +1,4 @@
-package ip
+package ipmask
 
 // Copyright 2024-2025 https://github.com/ipfreely-uk/go/blob/main/LICENSE
 // SPDX-License-Identifier: Apache-2.0
@@ -7,21 +7,23 @@ import (
 	"fmt"
 	"math/big"
 	"reflect"
+
+	"github.com/ipfreely-uk/go/ip"
 )
 
-var ipv4Masks []Addr4 = allMasks(V4())
-var ipv6Masks []Addr6 = allMasks(V6())
+var ipv4Masks []ip.Addr4 = allMasks(ip.V4())
+var ipv6Masks []ip.Addr6 = allMasks(ip.V6())
 
 // Subnet mask of given bit size.
 //
 // For IPv4 `0` returns `0.0.0.0` and `32` returns `255.255.255.255`.
 // For IPv6 `0` returns `::` and `128` returns `ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff`.
 // Panics if mask bits exceeds [Family].Width or is less than zero.
-func SubnetMask[A Int[A]](f Family[A], maskBits int) (mask A) {
+func SubnetMask[A ip.Int[A]](f ip.Family[A], maskBits int) (mask A) {
 	validateBits(f, maskBits)
 
-	var r Address
-	if f.Version() == Version4 {
+	var r ip.Address
+	if f.Version() == ip.Version4 {
 		r = ipv4Masks[maskBits]
 	} else {
 		r = ipv6Masks[maskBits]
@@ -29,7 +31,7 @@ func SubnetMask[A Int[A]](f Family[A], maskBits int) (mask A) {
 	return reflect.ValueOf(r).Interface().(A)
 }
 
-func validateBits[A Int[A]](family Family[A], bits int) {
+func validateBits[A ip.Int[A]](family ip.Family[A], bits int) {
 	width := family.Width()
 	if bits < 0 || bits > width {
 		msg := fmt.Sprintf("wanted 0-%d for IPv%d width; got %d", family.Width(), family.Version(), bits)
@@ -39,7 +41,7 @@ func validateBits[A Int[A]](family Family[A], bits int) {
 
 // Number of addresses in subnet with given bit mask size.
 // Panics if mask bits exceeds width of family or is less than zero.
-func SubnetAddressCount[A Int[A]](family Family[A], maskBits int) (count *big.Int) {
+func SubnetAddressCount[A ip.Int[A]](family ip.Family[A], maskBits int) (count *big.Int) {
 	validateBits(family, maskBits)
 	size := big.NewInt(int64(family.Width() - maskBits))
 	two := big.NewInt(2)
@@ -50,22 +52,22 @@ func SubnetAddressCount[A Int[A]](family Family[A], maskBits int) (count *big.In
 //
 // Returns between 0 and [Family.Width] inclusive if first and last form valid CIDR block.
 // Returns -1 if first and last do not form valid CIDR block.
-func SubnetMaskSize[A Int[A]](first, last A) (maskBits int) {
+func SubnetMaskSize[A ip.Int[A]](first, last A) (maskBits int) {
 	fam := first.Family()
 	xor := first.Xor(last)
 	zero := fam.FromInt(0)
-	if !Eq(xor.And(first), zero) || !Eq(xor.And(last), xor) {
+	if !ip.Eq(xor.And(first), zero) || !ip.Eq(xor.And(last), xor) {
 		return -1
 	}
 	bits := fam.Width() - xor.Not().TrailingZeros()
 	mask := SubnetMask(fam, bits)
-	if Eq(xor.And(mask), zero) {
+	if ip.Eq(xor.And(mask), zero) {
 		return bits
 	}
 	return -1
 }
 
-func allMasks[A Int[A]](family Family[A]) []A {
+func allMasks[A ip.Int[A]](family ip.Family[A]) []A {
 	masks := []A{}
 	for i := 0; i <= family.Width(); i++ {
 		masks = append(masks, makeMask(family, i))
@@ -73,7 +75,7 @@ func allMasks[A Int[A]](family Family[A]) []A {
 	return masks
 }
 
-func makeMask[A Int[A]](family Family[A], bits int) A {
+func makeMask[A ip.Int[A]](family ip.Family[A], bits int) A {
 	validateBits(family, bits)
 
 	bytes := family.Width() / 8
@@ -108,7 +110,7 @@ func makeMask[A Int[A]](family Family[A], bits int) A {
 }
 
 // Tests mask bits cover network address.
-func SubnetMaskCovers[A Int[A]](maskBits int, address A) (maskBitsDoCover bool) {
+func SubnetMaskCovers[A ip.Int[A]](maskBits int, address A) (maskBitsDoCover bool) {
 	if maskBits < 0 {
 		return false
 	}
@@ -126,11 +128,11 @@ func SubnetMaskCovers[A Int[A]](maskBits int, address A) (maskBitsDoCover bool) 
 // Returns count of most significant bits set to true.
 // For example, IPv4 mask `255.255.255.0` returns 24.
 // If `address` is not a mask returns -1.
-func SubnetMaskBits[A Int[A]](address A) (maskBits int) {
+func SubnetMaskBits[A ip.Int[A]](address A) (maskBits int) {
 	f := address.Family()
 	bits := f.Width() - address.TrailingZeros()
 	mask := SubnetMask(f, bits)
-	match := eq(mask, address)
+	match := ip.Eq(mask, address)
 	if match {
 		return bits
 	}

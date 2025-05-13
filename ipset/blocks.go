@@ -9,6 +9,7 @@ import (
 	"math"
 
 	"github.com/ipfreely-uk/go/ip"
+	"github.com/ipfreely-uk/go/ipmask"
 )
 
 // Splits [Block] into subnets of a given size.
@@ -45,7 +46,7 @@ var log_2 = 0.6931471805599453
 func Blocks[A ip.Int[A]](set Interval[A]) iter.Seq[Block[A]] {
 	first := set.First()
 	last := set.Last()
-	mask := ip.SubnetMaskSize(first, last)
+	mask := ipmask.SubnetMaskSize(first, last)
 	if mask >= 0 {
 		block := NewBlock(first, mask)
 		return singleSeq(block)

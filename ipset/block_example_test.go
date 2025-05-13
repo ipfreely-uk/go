@@ -8,6 +8,7 @@ import (
 
 	humanize "github.com/dustin/go-humanize"
 	"github.com/ipfreely-uk/go/ip"
+	"github.com/ipfreely-uk/go/ipmask"
 	"github.com/ipfreely-uk/go/ipset"
 )
 
@@ -34,7 +35,7 @@ func ExampleNewBlock_second() {
 }
 
 func block[A ip.Int[A]](network, mask A) ipset.Block[A] {
-	bits := ip.SubnetMaskBits(mask)
+	bits := ipmask.SubnetMaskBits(mask)
 	return ipset.NewBlock(network, bits)
 }
 

@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
+	"github.com/ipfreely-uk/go/ipmask"
 	"github.com/ipfreely-uk/go/ipset"
 )
 
@@ -24,7 +25,7 @@ func ExampleBuilder() {
 }
 
 var thirteen = ip.V4().FromInt(13)
-var maskComplement = ip.SubnetMask(ip.V4(), 24).Not()
+var maskComplement = ipmask.SubnetMask(ip.V4(), 24).Not()
 
 func removeUnlucky(addresses ipset.Discrete[ip.Addr4]) (lucky ipset.Discrete[ip.Addr4]) {
 	bldr := ipset.Builder[ip.Addr4]{}

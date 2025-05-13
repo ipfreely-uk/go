@@ -9,6 +9,7 @@ import (
 	"math/big"
 
 	"github.com/ipfreely-uk/go/ip"
+	"github.com/ipfreely-uk/go/ipmask"
 )
 
 type block[A ip.Int[A]] struct {
@@ -42,7 +43,7 @@ func (b *block[A]) First() A {
 
 func (b *block[A]) Last() A {
 	f := b.first.Family()
-	maskComplement := ip.SubnetMask(f, int(b.mask)).Not()
+	maskComplement := ipmask.SubnetMask(f, int(b.mask)).Not()
 	return b.first.Or(maskComplement)
 }
 
@@ -60,7 +61,7 @@ func (b *block[A]) String() string {
 }
 
 func (b *block[A]) Mask() A {
-	return ip.SubnetMask(b.first.Family(), b.MaskSize())
+	return ipmask.SubnetMask(b.first.Family(), b.MaskSize())
 }
 
 func (b *block[A]) CidrNotation() string {
@@ -75,7 +76,7 @@ func NewBlock[A ip.Int[A]](network A, mask int) Block[A] {
 	if fam.Width() == mask {
 		return NewSingle(network)
 	}
-	m := ip.SubnetMask(fam, mask)
+	m := ipmask.SubnetMask(fam, mask)
 	if !ip.Eq(network, m.And(network)) {
 		msg := fmt.Sprintf("mask %s does not cover %s", m.String(), network.String())
 		panic(msg)
