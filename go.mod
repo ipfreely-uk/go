@@ -14,4 +14,4 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-retract [v0.0.0-alpha, v0.0.31-alpha] // old alpha builds
+retract [v0.0.0-alpha, v0.0.32-alpha] // old alpha builds
