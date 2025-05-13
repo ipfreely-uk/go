@@ -59,9 +59,12 @@ Mask: ffff:ffff:ffff:ffff:8000::
 CIDR Notation: 2001:db80::/65
 ```
 
-## Packages
+## Module
 
-Add an import statement to [go.mod](https://go.dev/doc/modules/gomod-ref) to utilise.
+The module name is `github.com/ipfreely-uk/go`.
+Add a require statement to [go.mod](https://go.dev/doc/modules/gomod-ref) to utilise.
+
+## Packages
 
 | Package                                   | Purpose                  |
 |-------------------------------------------|--------------------------|

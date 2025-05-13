@@ -14,7 +14,7 @@ import (
 var ipv4Masks []ip.Addr4 = allMasks(ip.V4())
 var ipv6Masks []ip.Addr6 = allMasks(ip.V6())
 
-// Subnet mask of given bit size.
+// Subnet mask of given bit size as an address.
 //
 // For IPv4 `0` returns `0.0.0.0` and `32` returns `255.255.255.255`.
 // For IPv6 `0` returns `::` and `128` returns `ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff`.
