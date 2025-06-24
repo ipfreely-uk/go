@@ -3,6 +3,7 @@
 package ip_test
 
 import (
+	"fmt"
 	"math/big"
 	"math/rand"
 	"testing"
@@ -194,4 +195,31 @@ func TestA4_Float64(t *testing.T) {
 	expected, _ = ip.ToBigInt(half).Float64()
 	actual = half.Float64()
 	assert.Equal(t, expected, actual)
+}
+
+func TestA4_Format(t *testing.T) {
+	{
+		a := ip.MaxAddress(ip.V4())
+		expected := a.String()
+		actual := fmt.Sprintf("%v", a)
+		assert.Equal(t, expected, actual)
+	}
+	{
+		a := ip.MaxAddress(ip.V4())
+		expected := a.String()
+		actual := fmt.Sprintf("%s", a)
+		assert.Equal(t, expected, actual)
+	}
+	{
+		a := ip.MaxAddress(ip.V4())
+		expected := ip.ToBigInt(a).String()
+		actual := fmt.Sprintf("%d", a)
+		assert.Equal(t, expected, actual)
+	}
+	{
+		a := ip.MaxAddress(ip.V4())
+		expected := fmt.Sprintf("%x", ip.ToBigInt(a))
+		actual := fmt.Sprintf("%x", a)
+		assert.Equal(t, expected, actual)
+	}
 }
