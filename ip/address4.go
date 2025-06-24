@@ -166,9 +166,9 @@ func (a Addr4) Float64() float64 {
 func (a Addr4) Format(f fmt.State, verb rune) {
 	switch verb {
 	case 'd':
-		fmt.Fprintf(f, "%d", ToBigInt(a))
+		fmt.Fprintf(f, "%d", a.value)
 	case 'x':
-		fmt.Fprintf(f, "%x", ToBigInt(a))
+		fmt.Fprintf(f, "%x", a.value)
 	default:
 		fmt.Fprintf(f, "%s", a.String())
 	}
