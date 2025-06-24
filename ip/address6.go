@@ -246,6 +246,10 @@ func (a Addr6) Format(f fmt.State, verb rune) {
 		fmt.Fprintf(f, "%d", ToBigInt(a))
 	case 'x':
 		fmt.Fprintf(f, "%x", ToBigInt(a))
+	case 'X':
+		fmt.Fprintf(f, "%X", ToBigInt(a))
+	case 'b':
+		fmt.Fprintf(f, "%b", ToBigInt(a))
 	default:
 		fmt.Fprintf(f, "%s", a.String())
 	}

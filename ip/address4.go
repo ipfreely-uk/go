@@ -169,6 +169,10 @@ func (a Addr4) Format(f fmt.State, verb rune) {
 		fmt.Fprintf(f, "%d", a.value)
 	case 'x':
 		fmt.Fprintf(f, "%x", a.value)
+	case 'X':
+		fmt.Fprintf(f, "%X", a.value)
+	case 'b':
+		fmt.Fprintf(f, "%b", a.value)
 	default:
 		fmt.Fprintf(f, "%s", a.String())
 	}

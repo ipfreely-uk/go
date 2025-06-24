@@ -38,7 +38,7 @@ type Address interface {
 	Float64() (approximation float64)
 	// Format value.
 	//
-	// Supported verbs: 's'; 'd'; 'x'.
+	// Supported verbs: s d x X b
 	Format(f fmt.State, verb rune)
 }
 

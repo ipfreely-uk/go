@@ -320,4 +320,16 @@ func TestA6_Format(t *testing.T) {
 		actual := fmt.Sprintf("%x", a)
 		assert.Equal(t, expected, actual)
 	}
+	{
+		a := ip.MaxAddress(ip.V6())
+		expected := fmt.Sprintf("%X", ip.ToBigInt(a))
+		actual := fmt.Sprintf("%X", a)
+		assert.Equal(t, expected, actual)
+	}
+	{
+		a := ip.MaxAddress(ip.V6())
+		expected := fmt.Sprintf("%b", ip.ToBigInt(a))
+		actual := fmt.Sprintf("%b", a)
+		assert.Equal(t, expected, actual)
+	}
 }
