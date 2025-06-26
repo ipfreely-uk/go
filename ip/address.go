@@ -1,7 +1,5 @@
 package ip
 
-import "fmt"
-
 // Copyright 2024-2025 https://github.com/ipfreely-uk/go/blob/main/LICENSE
 // SPDX-License-Identifier: Apache-2.0
 
@@ -36,10 +34,6 @@ type Address interface {
 	TrailingZeros() (count int)
 	// Approximation to float64
 	Float64() (approximation float64)
-	// Format value.
-	//
-	// Supported verbs: s d x X b
-	Format(f fmt.State, verb rune)
 }
 
 // IP address as generic unsigned integer type.

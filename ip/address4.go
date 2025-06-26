@@ -4,7 +4,6 @@ package ip
 // SPDX-License-Identifier: Apache-2.0
 
 import (
-	"fmt"
 	"math/bits"
 	"strconv"
 )
@@ -160,20 +159,4 @@ func byteShift(a, shift uint32) uint32 {
 // See [Int]
 func (a Addr4) Float64() float64 {
 	return float64(a.value)
-}
-
-// See [Addr]
-func (a Addr4) Format(f fmt.State, verb rune) {
-	switch verb {
-	case 'd':
-		fmt.Fprintf(f, "%d", a.value)
-	case 'x':
-		fmt.Fprintf(f, "%x", a.value)
-	case 'X':
-		fmt.Fprintf(f, "%X", a.value)
-	case 'b':
-		fmt.Fprintf(f, "%b", a.value)
-	default:
-		fmt.Fprintf(f, "%s", a.String())
-	}
 }

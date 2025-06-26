@@ -239,22 +239,6 @@ func (a Addr6) Float64() float64 {
 	return f
 }
 
-// See [Addr]
-func (a Addr6) Format(f fmt.State, verb rune) {
-	switch verb {
-	case 'd':
-		fmt.Fprintf(f, "%d", ToBigInt(a))
-	case 'x':
-		fmt.Fprintf(f, "%x", ToBigInt(a))
-	case 'X':
-		fmt.Fprintf(f, "%X", ToBigInt(a))
-	case 'b':
-		fmt.Fprintf(f, "%b", ToBigInt(a))
-	default:
-		fmt.Fprintf(f, "%s", a.String())
-	}
-}
-
 const (
 	ip6Segments = 8
 	shortWidth  = 16

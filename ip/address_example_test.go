@@ -3,7 +3,6 @@
 package ip_test
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
@@ -29,7 +28,6 @@ func printN[A ip.Int[A]](address A, n int) {
 
 func TestExampleAddress(t *testing.T) {
 	ExampleAddress()
-	ExampleAddress_second()
 }
 
 func ExampleAddress() {
@@ -53,15 +51,4 @@ func printNthAfter[A ip.Int[A]](address A, n uint32) {
 	operand := address.Family().FromInt(n)
 	result := address.Add(operand)
 	println(result.String())
-}
-
-func ExampleAddress_second() {
-	localhost := ip.V4().MustFromBytes(127, 0, 0, 1)
-
-	fmt.Printf("Default: %v\n", localhost)
-
-	fmt.Printf("Binary:  %b\n", localhost)
-	fmt.Printf("Decimal: %d\n", localhost)
-	fmt.Printf("Hex:     %x\n", localhost)
-	fmt.Printf("Hex:     %X\n", localhost)
 }

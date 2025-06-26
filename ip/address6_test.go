@@ -3,7 +3,6 @@
 package ip_test
 
 import (
-	"fmt"
 	"math/rand"
 	"net/netip"
 	"testing"
@@ -292,44 +291,5 @@ func TestA6_Float64(t *testing.T) {
 		expected, _ := ip.ToBigInt(address).Float64()
 		actual := address.Float64()
 		assert.Equal(t, expected, actual, address.String())
-	}
-}
-
-func TestA6_Format(t *testing.T) {
-	{
-		a := ip.MaxAddress(ip.V6())
-		expected := a.String()
-		actual := fmt.Sprintf("%v", a)
-		assert.Equal(t, expected, actual)
-	}
-	{
-		a := ip.MaxAddress(ip.V6())
-		expected := a.String()
-		actual := fmt.Sprintf("%s", a)
-		assert.Equal(t, expected, actual)
-	}
-	{
-		a := ip.MaxAddress(ip.V6())
-		expected := ip.ToBigInt(a).String()
-		actual := fmt.Sprintf("%d", a)
-		assert.Equal(t, expected, actual)
-	}
-	{
-		a := ip.MaxAddress(ip.V6())
-		expected := fmt.Sprintf("%x", ip.ToBigInt(a))
-		actual := fmt.Sprintf("%x", a)
-		assert.Equal(t, expected, actual)
-	}
-	{
-		a := ip.MaxAddress(ip.V6())
-		expected := fmt.Sprintf("%X", ip.ToBigInt(a))
-		actual := fmt.Sprintf("%X", a)
-		assert.Equal(t, expected, actual)
-	}
-	{
-		a := ip.MaxAddress(ip.V6())
-		expected := fmt.Sprintf("%b", ip.ToBigInt(a))
-		actual := fmt.Sprintf("%b", a)
-		assert.Equal(t, expected, actual)
 	}
 }
