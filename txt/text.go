@@ -20,8 +20,10 @@ func CommaDelim(bi *big.Int) string {
 			r = segment
 		}
 	}
-	if len(s) > 0 {
+	if len(s) > 0 && len(r) > 0 {
 		r = s + "," + r
+	} else {
+		r = s
 	}
 	return r
 }
