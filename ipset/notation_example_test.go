@@ -5,9 +5,9 @@ package ipset_test
 import (
 	"testing"
 
-	"github.com/dustin/go-humanize"
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ipset"
+	"github.com/ipfreely-uk/go/txt"
 )
 
 func TestExampleParseCIDRNotation(t *testing.T) {
@@ -48,6 +48,6 @@ func ExampleParseUnknownCIDRNotation() {
 func printRangeDetails[A ip.Int[A]](addresses ipset.Interval[A]) {
 	println("Start:", addresses.First().String())
 	println("End:", addresses.Last().String())
-	println("Addresses:", humanize.BigComma(addresses.Size()))
+	println("Addresses:", txt.CommaDelim(addresses.Size()))
 	println()
 }

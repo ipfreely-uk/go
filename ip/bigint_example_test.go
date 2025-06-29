@@ -3,11 +3,12 @@
 package ip_test
 
 import (
+	"fmt"
 	"math/big"
 	"testing"
 
-	"github.com/dustin/go-humanize"
 	"github.com/ipfreely-uk/go/ip"
+	"github.com/ipfreely-uk/go/txt"
 )
 
 func TestExampleToBigInt(t *testing.T) {
@@ -25,5 +26,5 @@ func printNumberOfAddresses[A ip.Int[A]](first, last A) {
 	n := ip.ToBigInt(diff)
 	rangeSize := n.Add(n, big.NewInt(1))
 
-	println(first.String(), "to", last.String(), "=", humanize.BigComma(rangeSize), "addresses")
+	fmt.Printf("%v to %v = %s addresses\n", first, last, txt.CommaDelim(rangeSize))
 }

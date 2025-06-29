@@ -7,9 +7,9 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/dustin/go-humanize"
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ipmask"
+	"github.com/ipfreely-uk/go/txt"
 )
 
 func TestExampleFor(t *testing.T) {
@@ -70,8 +70,7 @@ func ExampleSize() {
 func printSubnetSizesForMasks[A ip.Int[A]](f ip.Family[A]) {
 	for mask := 0; mask <= f.Width(); mask++ {
 		count := ipmask.Size(f, mask)
-		msg := fmt.Sprintf("IPv%d /%d == %s", f.Version(), mask, humanize.BigComma(count))
-		println(msg)
+		fmt.Printf("IPv%d /%d = %s", f.Version(), mask, txt.CommaDelim(count))
 	}
 }
 
@@ -80,7 +79,7 @@ func ExampleSize_second() {
 	min := big.NewInt(50)
 	bits := minimumMaskThatSatisfies(family, min)
 	mask := ipmask.For(family, bits).String()
-	count := humanize.BigComma(min)
+	count := txt.CommaDelim(min)
 	msg := fmt.Sprintf("/%d network (%s) is the minimum size that can allocate %s addresses", bits, mask, count)
 	println(msg)
 }

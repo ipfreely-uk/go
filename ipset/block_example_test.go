@@ -6,10 +6,10 @@ import (
 	"crypto/rand"
 	"testing"
 
-	humanize "github.com/dustin/go-humanize"
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ipmask"
 	"github.com/ipfreely-uk/go/ipset"
+	"github.com/ipfreely-uk/go/txt"
 )
 
 func TestExampleNewBlock(t *testing.T) {
@@ -24,7 +24,7 @@ func ExampleNewBlock() {
 	println("Block", block.String())
 	println("First", block.First().String())
 	println("Last", block.Last().String())
-	println("Size", humanize.BigComma(block.Size()))
+	println("Size", txt.CommaDelim(block.Size()))
 }
 
 func ExampleNewBlock_second() {

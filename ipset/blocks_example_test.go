@@ -7,10 +7,10 @@ import (
 	"math/big"
 	"testing"
 
-	humanize "github.com/dustin/go-humanize"
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ipmask"
 	"github.com/ipfreely-uk/go/ipset"
+	"github.com/ipfreely-uk/go/txt"
 )
 
 func TestExampleSubnets(t *testing.T) {
@@ -33,7 +33,7 @@ func maskRequiredFor[A ip.Int[A]](f ip.Family[A], allocateableAddresses *big.Int
 			return m
 		}
 	}
-	formatted := humanize.BigComma(allocateableAddresses)
+	formatted := txt.CommaDelim(allocateableAddresses)
 	msg := fmt.Sprintf("%s is larger than family %s", formatted, f.String())
 	panic(msg)
 }
