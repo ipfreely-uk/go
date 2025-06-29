@@ -1,12 +1,11 @@
 // This package is used in example code and does not form part of the library.
-// It may be removed without warning.
+// It may be removed without warning when https://pkg.go.dev/golang.org/x/text Decimal supports [big.Int].
 package txt
 
 import "math/big"
 
-// TODO: remove this file when https://pkg.go.dev/golang.org/x/text Decimal supports big.Int
-
-// Format using comma-delimited thousand separators
+// Format using comma-delimited thousand separators.
+// This function does not support negative numbers.
 func CommaDelim(bi *big.Int) string {
 	s := bi.String()
 	r := ""
