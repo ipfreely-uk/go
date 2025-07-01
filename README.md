@@ -5,7 +5,7 @@ This library treats IP addresses as
 [generic](https://go.dev/doc/tutorial/generics)
 unsigned integers capable of arithmetic and bitwise operations
 and includes a few discrete set collection types.
-This library does not perform network I/O.
+This library does not perform network I/O and imposes no transitive runtime dependencies beyond the standard library.
 
 ## Example
 
