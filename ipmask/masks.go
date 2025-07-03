@@ -41,9 +41,9 @@ func validateBits[A ip.Int[A]](family ip.Family[A], bits int) {
 
 // Number of addresses in subnet with given bit mask size.
 // Panics if mask bits exceeds width of family or is less than zero.
-func Size[A ip.Int[A]](family ip.Family[A], maskBits int) (count *big.Int) {
-	validateBits(family, maskBits)
-	size := big.NewInt(int64(family.Width() - maskBits))
+func Size[A ip.Int[A]](f ip.Family[A], maskBits int) (count *big.Int) {
+	validateBits(f, maskBits)
+	size := big.NewInt(int64(f.Width() - maskBits))
 	two := big.NewInt(2)
 	return two.Exp(two, size, nil)
 }
@@ -75,10 +75,10 @@ func allMasks[A ip.Int[A]](family ip.Family[A]) []A {
 	return masks
 }
 
-func makeMask[A ip.Int[A]](family ip.Family[A], bits int) A {
-	validateBits(family, bits)
+func makeMask[A ip.Int[A]](f ip.Family[A], bits int) A {
+	validateBits(f, bits)
 
-	bytes := family.Width() / 8
+	bytes := f.Width() / 8
 	arr := make([]byte, bytes)
 	fullyMasked := bits / 8
 	for i := 0; i < fullyMasked; i++ {
@@ -105,7 +105,7 @@ func makeMask[A ip.Int[A]](family ip.Family[A], bits int) A {
 		}
 		arr[fullyMasked] = end
 	}
-	mask, _ := family.FromBytes(arr...)
+	mask, _ := f.FromBytes(arr...)
 	return mask
 }
 
@@ -123,9 +123,9 @@ func Covers[A ip.Int[A]](maskBits int, address A) (maskBitsDoCover bool) {
 }
 
 // Tests mask bits are within width & [Covers] network address.
-func IsValid(maskBits int, address ip.Address) (isValid bool) {
+func IsValid(maskBits int, a ip.Address) (isValid bool) {
 	var valid = false
-	switch a := address.(type) {
+	switch a := a.(type) {
 	case ip.Addr4:
 		valid = checkCIDRMask(a, maskBits)
 	case ip.Addr6:
