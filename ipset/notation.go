@@ -33,7 +33,7 @@ func ParseCIDRNotation[A ip.Int[A]](f ip.Family[A], notation string) (netAddress
 	if err != nil {
 		return address, mask, err
 	}
-	if !ipmask.Covers(mask, address) {
+	if !ipmask.IsValid(mask, address) {
 		msg := fmt.Sprintf("%s has invalid mask", notation)
 		return address, mask, errors.New(msg)
 	}
@@ -58,7 +58,6 @@ func splitCidr(notation string) (addr string, maskBits int, err error) {
 // Returns error if argument is invalid CIDR notation.
 func ParseUnknownCIDRNotation(notation string) (netAddress ip.Address, maskBits int, err error) {
 	var addr ip.Address
-	var mask int
 
 	addressPart, mask, err := splitCidr(notation)
 	if err != nil {
@@ -68,16 +67,9 @@ func ParseUnknownCIDRNotation(notation string) (netAddress ip.Address, maskBits 
 	if err != nil {
 		return addr, mask, err
 	}
-	cover := false
-	switch a := address.(type) {
-	case ip.Addr4:
-		cover = ipmask.Covers(mask, a)
-	case ip.Addr6:
-		cover = ipmask.Covers(mask, a)
-	}
-	if !cover {
+	if !ipmask.IsValid(mask, address) {
 		msg := fmt.Sprintf("%s has invalid mask", notation)
 		return address, mask, errors.New(msg)
 	}
-	return address, mask, err
+	return address, mask, nil
 }

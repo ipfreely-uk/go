@@ -110,17 +110,32 @@ func makeMask[A ip.Int[A]](family ip.Family[A], bits int) A {
 }
 
 // Tests mask bits cover network address.
+// Panics on invalid mask bits.
 func Covers[A ip.Int[A]](maskBits int, address A) (maskBitsDoCover bool) {
-	if maskBits < 0 {
-		return false
-	}
 	fam := address.Family()
-	if maskBits > fam.Width() {
-		return false
+	if maskBits < 0 || maskBits > fam.Width() {
+		msg := fmt.Sprintf("%d is not a valid mask size for %v", maskBits, address)
+		panic(msg)
 	}
 	zero := fam.FromInt(0)
 	iMask := For(fam, maskBits).Not()
 	return iMask.And(address).Compare(zero) == 0
+}
+
+// Tests mask bits are within width & [Covers] network address.
+func IsValid(maskBits int, address ip.Address) (isValid bool) {
+	var valid = false
+	switch a := address.(type) {
+	case ip.Addr4:
+		valid = checkCIDRMask(a, maskBits)
+	case ip.Addr6:
+		valid = checkCIDRMask(a, maskBits)
+	}
+	return valid
+}
+
+func checkCIDRMask[A ip.Int[A]](addr A, mask int) bool {
+	return mask >= 0 && mask <= addr.Family().Width() && Covers(mask, addr)
 }
 
 // Tests if the address is a valid subnet mask.

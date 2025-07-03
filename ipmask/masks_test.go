@@ -85,9 +85,16 @@ func TestSubnetCovers(t *testing.T) {
 	assert.True(t, ipmask.Covers(16, fe80))
 	assert.True(t, ipmask.Covers(0, zero))
 
-	assert.False(t, ipmask.Covers(-1, fe80))
 	assert.False(t, ipmask.Covers(0, fe80))
-	assert.False(t, ipmask.Covers(129, fe80))
+	assert.False(t, ipmask.Covers(1, fe80))
+	assert.False(t, ipmask.Covers(8, fe80))
+
+	assert.Panics(t, func() {
+		ipmask.Covers(-1, fe80)
+	})
+	assert.Panics(t, func() {
+		ipmask.Covers(129, fe80)
+	})
 }
 
 func TestSubnetMaskBits(t *testing.T) {
