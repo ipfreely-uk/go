@@ -244,7 +244,9 @@ const (
 	shortWidth  = 16
 )
 
-// See [Int]
+// Returns RFC 5952 notation.
+//
+// https://datatracker.ietf.org/doc/html/rfc5952
 func (a Addr6) String() string {
 	if isV4Mapped(a.high, a.low) {
 		prefix := "::ffff:"

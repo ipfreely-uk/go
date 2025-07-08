@@ -139,7 +139,7 @@ func (a Addr4) TrailingZeros() int {
 	return bits.TrailingZeros32(a.value)
 }
 
-// See [Int]
+// Returns compact decimal dotted quad notation
 func (a Addr4) String() string {
 	first := byteShift(a.value, 24)
 	second := byteShift(a.value, 16)
