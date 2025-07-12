@@ -70,7 +70,7 @@ func ExampleSize() {
 func printSubnetSizesForMasks[A ip.Int[A]](f ip.Family[A]) {
 	for mask := 0; mask <= f.Width(); mask++ {
 		count := ipmask.Size(f, mask)
-		fmt.Printf("IPv%d /%d = %s", f.Version(), mask, txt.CommaDelim(count))
+		fmt.Printf("IPv%d /%d = %s\n", f.Version(), mask, txt.CommaDelim(count))
 	}
 }
 
