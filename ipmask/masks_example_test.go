@@ -93,9 +93,9 @@ func minimumMaskThatSatisfies[A ip.Int[A]](f ip.Family[A], allocatable *big.Int)
 	} else {
 		min = allocatable
 	}
-	for i := f.Width(); i >= 0; i++ {
+	for i := f.Width(); i >= 0; i-- {
 		s := ipmask.Size(f, i)
-		if min.Cmp(s) >= 0 {
+		if min.Cmp(s) <= 0 {
 			return i
 		}
 	}
