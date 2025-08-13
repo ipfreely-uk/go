@@ -4,6 +4,7 @@ package ipset_test
 
 import (
 	"math/big"
+	"math/rand"
 	"slices"
 	"testing"
 
@@ -67,6 +68,26 @@ func TestNewDiscrete(t *testing.T) {
 		for a := range expected.Addresses() {
 			contents = append(contents, ipset.NewSingle(a))
 		}
+		actual := ipset.NewDiscrete(contents...)
+		assert.True(t, ipset.Eq(expected, actual))
+	}
+	{
+		net, mask, err := ipset.ParseCIDRNotation(ip.V4(), "10.0.0.0/24")
+		assert.Nil(t, err)
+		expected := ipset.NewBlock(net, mask)
+		contents := []ipset.Discrete[ip.Addr4]{}
+		for a := range expected.Addresses() {
+			set := ipset.NewSingle(a)
+			contents = append(contents, set)
+		}
+		src := rand.NewSource(0)
+		ran := rand.New(src)
+		ran.Shuffle(len(contents), func(i, j int) {
+			left := contents[i]
+			right := contents[j]
+			contents[i] = right
+			contents[j] = left
+		})
 		actual := ipset.NewDiscrete(contents...)
 		assert.True(t, ipset.Eq(expected, actual))
 	}
