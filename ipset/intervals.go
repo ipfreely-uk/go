@@ -12,7 +12,9 @@ func Intersect[A ip.Int[A]](i0, i1 Interval[A]) bool {
 	return i0.Contains(i1.First()) || i0.Contains(i1.Last()) || i1.Contains(i0.First()) || i1.Contains(i0.Last())
 }
 
-// Tests if IP address ranges are one element from overlap
+// Tests if IP address ranges are one element from overlap.
+//
+// Does not overflow - the maximum value is not considered adjacent to the minimum.
 func Adjacent[A ip.Int[A]](i0, i1 Interval[A]) bool {
 	return lastNextToFirst(i0.Last(), i1.First()) || lastNextToFirst(i1.Last(), i0.First())
 }
