@@ -13,7 +13,7 @@ func TestExampleBuilder(t *testing.T) {
 }
 
 func ExampleBuilder() {
-	addr, bits, err := ipset.ParseCIDRNotation(ip.V4(), "10.0.0.0/15")
+	addr, bits, err := ipmask.ParseCIDRNotation(ip.V4(), "10.0.0.0/15")
 	if err != nil {
 		panic(err.Error())
 	}

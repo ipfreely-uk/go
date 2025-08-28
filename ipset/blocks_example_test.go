@@ -42,7 +42,7 @@ func ExampleSubnets() {
 	oneHundredAddresses := big.NewInt(100)
 	mask := maskRequiredFor(ip.V4(), oneHundredAddresses)
 
-	netAddr, bits, _ := ipset.ParseCIDRNotation(ip.V4(), "203.0.113.0/24")
+	netAddr, bits, _ := ipmask.ParseCIDRNotation(ip.V4(), "203.0.113.0/24")
 	block := ipset.NewBlock(netAddr, bits)
 
 	println(fmt.Sprintf("Dividing %s into blocks of at least %s addresses", block.CidrNotation(), oneHundredAddresses.String()))

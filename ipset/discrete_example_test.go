@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
+	"github.com/ipfreely-uk/go/ipmask"
 	"github.com/ipfreely-uk/go/ipset"
 )
 
@@ -56,7 +57,7 @@ func ExampleNewDiscrete_third() {
 }
 
 func parseV4(notation string) ipset.Block[ip.Addr4] {
-	a, m, err := ipset.ParseCIDRNotation(ip.V4(), notation)
+	a, m, err := ipmask.ParseCIDRNotation(ip.V4(), notation)
 	if err != nil {
 		panic(err)
 	}

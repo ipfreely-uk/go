@@ -1,4 +1,4 @@
-package ipset
+package ipmask
 
 // Copyright 2024-2025 https://github.com/ipfreely-uk/go/blob/main/LICENSE
 // SPDX-License-Identifier: Apache-2.0
@@ -10,7 +10,6 @@ import (
 	"strings"
 
 	"github.com/ipfreely-uk/go/ip"
-	"github.com/ipfreely-uk/go/ipmask"
 )
 
 // Parses RFC 4632 CIDR notation.
@@ -33,7 +32,7 @@ func ParseCIDRNotation[A ip.Int[A]](f ip.Family[A], notation string) (netAddress
 	if err != nil {
 		return address, mask, err
 	}
-	if !ipmask.IsValid(mask, address) {
+	if !IsValid(mask, address) {
 		msg := fmt.Sprintf("%s has invalid mask", notation)
 		return address, mask, errors.New(msg)
 	}
@@ -67,7 +66,7 @@ func ParseUnknownCIDRNotation(notation string) (netAddress ip.Address, maskBits 
 	if err != nil {
 		return addr, mask, err
 	}
-	if !ipmask.IsValid(mask, address) {
+	if !IsValid(mask, address) {
 		msg := fmt.Sprintf("%s has invalid mask", notation)
 		return address, mask, errors.New(msg)
 	}

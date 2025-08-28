@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
+	"github.com/ipfreely-uk/go/ipmask"
 	"github.com/ipfreely-uk/go/ipset"
 	"github.com/stretchr/testify/assert"
 )
@@ -72,7 +73,7 @@ func TestNewDiscrete(t *testing.T) {
 		assert.True(t, ipset.Eq(expected, actual))
 	}
 	{
-		net, mask, err := ipset.ParseCIDRNotation(ip.V4(), "10.0.0.0/24")
+		net, mask, err := ipmask.ParseCIDRNotation(ip.V4(), "10.0.0.0/24")
 		assert.Nil(t, err)
 		expected := ipset.NewBlock(net, mask)
 		contents := []ipset.Discrete[ip.Addr4]{}

@@ -1,11 +1,12 @@
 // Copyright 2024-2025 https://github.com/ipfreely-uk/go/blob/main/LICENSE
 // SPDX-License-Identifier: Apache-2.0
-package ipset_test
+package ipmask_test
 
 import (
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
+	"github.com/ipfreely-uk/go/ipmask"
 	"github.com/ipfreely-uk/go/ipset"
 	"github.com/ipfreely-uk/go/txt"
 )
@@ -15,7 +16,7 @@ func TestExampleParseCIDRNotation(t *testing.T) {
 }
 
 func ExampleParseCIDRNotation() {
-	address, mask, _ := ipset.ParseCIDRNotation(ip.V6(), "2001:db8::/32")
+	address, mask, _ := ipmask.ParseCIDRNotation(ip.V6(), "2001:db8::/32")
 	reservedForDocumentation := ipset.NewBlock(address, mask)
 	printRangeDetails(reservedForDocumentation)
 }
@@ -32,7 +33,7 @@ func ExampleParseUnknownCIDRNotation() {
 		"2001:db8::/32",
 	}
 	for _, notation := range reservedForDocumentation {
-		address, mask, err := ipset.ParseUnknownCIDRNotation(notation)
+		address, mask, err := ipmask.ParseUnknownCIDRNotation(notation)
 		if err != nil {
 			panic(err)
 		}
