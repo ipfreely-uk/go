@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
-	"github.com/ipfreely-uk/go/ipmask"
+	. "github.com/ipfreely-uk/go/ipmask"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -18,7 +18,7 @@ func TestParseCIDRNotation(t *testing.T) {
 			"192.168.0.0/32",
 		}
 		for _, c := range legal {
-			a, m, err := ipmask.ParseCIDRNotation(ip.V4(), c)
+			a, m, err := ParseCIDRNotation(ip.V4(), c)
 			assert.Nil(t, err)
 			cidr := fmt.Sprintf("%s/%d", a, m)
 			assert.Equal(t, c, cidr)
@@ -30,7 +30,7 @@ func TestParseCIDRNotation(t *testing.T) {
 			"::/128",
 		}
 		for _, c := range legal {
-			a, m, err := ipmask.ParseCIDRNotation(ip.V6(), c)
+			a, m, err := ParseCIDRNotation(ip.V6(), c)
 			assert.Nil(t, err)
 			cidr := fmt.Sprintf("%s/%d", a, m)
 			assert.Equal(t, c, cidr)
@@ -47,11 +47,11 @@ func TestParseCIDRNotation(t *testing.T) {
 			"::/129",
 		}
 		for _, c := range illegal {
-			_, _, err := ipmask.ParseCIDRNotation(ip.V4(), c)
+			_, _, err := ParseCIDRNotation(ip.V4(), c)
 			assert.NotNil(t, err)
 		}
 		for _, c := range illegal {
-			_, _, err := ipmask.ParseCIDRNotation(ip.V6(), c)
+			_, _, err := ParseCIDRNotation(ip.V6(), c)
 			assert.NotNil(t, err)
 		}
 	}
@@ -65,7 +65,7 @@ func TestParseUnknownCIDRNotation(t *testing.T) {
 		"::/128",
 	}
 	for _, c := range legal {
-		a, m, err := ipmask.ParseUnknownCIDRNotation(c)
+		a, m, err := ParseUnknownCIDRNotation(c)
 		assert.Nil(t, err)
 		cidr := fmt.Sprintf("%s/%d", a.String(), m)
 		assert.Equal(t, c, cidr)
@@ -80,7 +80,7 @@ func TestParseUnknownCIDRNotation(t *testing.T) {
 		"::/129",
 	}
 	for _, c := range illegal {
-		_, _, err := ipmask.ParseUnknownCIDRNotation(c)
+		_, _, err := ParseUnknownCIDRNotation(c)
 		assert.NotNil(t, err)
 	}
 }

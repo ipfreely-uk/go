@@ -8,23 +8,23 @@ import (
 
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ipmask"
-	"github.com/ipfreely-uk/go/ipset"
+	. "github.com/ipfreely-uk/go/ipset"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestNewBlock(t *testing.T) {
 	{
 		address, _ := ip.V4().FromBytes(192, 168, 0, 0)
-		subnet := ipset.NewBlock(address, 24)
+		subnet := NewBlock(address, 24)
 		assert.NotNil(t, subnet)
 
 		assert.Panics(t, func() {
-			ipset.NewBlock(address, 0)
+			NewBlock(address, 0)
 		})
 	}
 	{
 		address := ip.MustParse(ip.V6(), "fe80::")
-		block := ipset.NewBlock(address, 128)
+		block := NewBlock(address, 128)
 		assert.NotNil(t, block)
 	}
 }
@@ -32,12 +32,12 @@ func TestNewBlock(t *testing.T) {
 func TestBlock_MaskSize(t *testing.T) {
 	{
 		address, _ := ip.V4().FromBytes(192, 168, 0, 0)
-		mask := ipset.NewBlock(address, 24).MaskSize()
+		mask := NewBlock(address, 24).MaskSize()
 		assert.Equal(t, 24, mask)
 	}
 	{
 		address := ip.MustParse(ip.V6(), "fe80::")
-		block := ipset.NewBlock(address, 128)
+		block := NewBlock(address, 128)
 		assert.Equal(t, 128, block.MaskSize())
 	}
 }
@@ -45,7 +45,7 @@ func TestBlock_MaskSize(t *testing.T) {
 func TestBlock_Size(t *testing.T) {
 	{
 		address, _ := ip.V4().FromBytes(192, 168, 0, 0)
-		block := ipset.NewBlock(address, 24)
+		block := NewBlock(address, 24)
 		actual := block.Size()
 		expected := ipmask.Size(ip.V4(), 24)
 		assert.Equal(t, expected, actual)
@@ -53,7 +53,7 @@ func TestBlock_Size(t *testing.T) {
 	}
 	{
 		address := ip.MustParse(ip.V6(), "fe80::")
-		block := ipset.NewBlock(address, 128)
+		block := NewBlock(address, 128)
 		actual := block.Size()
 		expected := ipmask.Size(ip.V6(), 128)
 		assert.Equal(t, expected, actual)
@@ -64,13 +64,13 @@ func TestBlock_Size(t *testing.T) {
 func TestBlock_Contains(t *testing.T) {
 	{
 		address, _ := ip.V4().FromBytes(192, 168, 0, 0)
-		actual := ipset.NewBlock(address, 24)
+		actual := NewBlock(address, 24)
 		assert.True(t, actual.Contains(address))
 		assert.False(t, actual.Contains(ip.MaxAddress(ip.V4())))
 	}
 	{
 		address := ip.MustParse(ip.V6(), "fe80::")
-		actual := ipset.NewBlock(address, 128)
+		actual := NewBlock(address, 128)
 		assert.True(t, actual.Contains(address))
 		assert.False(t, actual.Contains(ip.MinAddress(ip.V6())))
 	}
@@ -79,7 +79,7 @@ func TestBlock_Contains(t *testing.T) {
 func TestBlock_Addresses(t *testing.T) {
 	{
 		address, _ := ip.V4().FromBytes(192, 168, 0, 0)
-		actual := ipset.NewBlock(address, 24)
+		actual := NewBlock(address, 24)
 
 		count := big.NewInt(0)
 		one := big.NewInt(1)
@@ -90,7 +90,7 @@ func TestBlock_Addresses(t *testing.T) {
 	}
 	{
 		address := ip.MustParse(ip.V6(), "fe80::")
-		actual := ipset.NewBlock(address, 128)
+		actual := NewBlock(address, 128)
 
 		count := big.NewInt(0)
 		one := big.NewInt(1)
@@ -101,7 +101,7 @@ func TestBlock_Addresses(t *testing.T) {
 	}
 	{
 		address := ip.MustParse(ip.V6(), "::")
-		actual := ipset.NewBlock(address, 0)
+		actual := NewBlock(address, 0)
 
 		count := big.NewInt(0)
 		one := big.NewInt(1)
@@ -116,7 +116,7 @@ func TestBlock_Addresses(t *testing.T) {
 func TestBlock_Intervals(t *testing.T) {
 	{
 		address, _ := ip.V4().FromBytes(192, 168, 0, 0)
-		actual := ipset.NewBlock(address, 24)
+		actual := NewBlock(address, 24)
 
 		count := big.NewInt(0)
 		one := big.NewInt(1)
@@ -127,7 +127,7 @@ func TestBlock_Intervals(t *testing.T) {
 	}
 	{
 		address := ip.MustParse(ip.V6(), "fe80::")
-		actual := ipset.NewBlock(address, 128)
+		actual := NewBlock(address, 128)
 
 		count := big.NewInt(0)
 		one := big.NewInt(1)
@@ -141,13 +141,13 @@ func TestBlock_Intervals(t *testing.T) {
 func TestBlock_Mask(t *testing.T) {
 	{
 		address, _ := ip.V4().FromBytes(192, 168, 0, 0)
-		actual := ipset.NewBlock(address, 24).Mask()
+		actual := NewBlock(address, 24).Mask()
 		expected := ipmask.For(ip.V4(), 24)
 		assert.Equal(t, expected, actual)
 	}
 	{
 		address := ip.MustParse(ip.V6(), "fe80::")
-		actual := ipset.NewBlock(address, 128).Mask()
+		actual := NewBlock(address, 128).Mask()
 		expected := ipmask.For(ip.V6(), 128)
 		assert.Equal(t, expected, actual)
 	}
@@ -156,13 +156,13 @@ func TestBlock_Mask(t *testing.T) {
 func TestBlock_CidrNotation(t *testing.T) {
 	{
 		address, _ := ip.V4().FromBytes(192, 168, 0, 0)
-		actual := ipset.NewBlock(address, 24).CidrNotation()
+		actual := NewBlock(address, 24).CidrNotation()
 		expected := "192.168.0.0/24"
 		assert.Equal(t, expected, actual)
 	}
 	{
 		address := ip.MustParse(ip.V6(), "fe80::")
-		actual := ipset.NewBlock(address, 128).CidrNotation()
+		actual := NewBlock(address, 128).CidrNotation()
 		expected := "fe80::/128"
 		assert.Equal(t, expected, actual)
 	}

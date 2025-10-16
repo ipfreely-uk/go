@@ -9,15 +9,15 @@ import (
 
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ipmask"
-	"github.com/ipfreely-uk/go/ipset"
+	. "github.com/ipfreely-uk/go/ipset"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestSubnets(t *testing.T) {
 	netAddr := ip.MustParse(ip.V4(), "192.168.0.0")
 	{
-		b := ipset.NewBlock(netAddr, 31)
-		next, stop := iter.Pull(ipset.Subnets(b, 32))
+		b := NewBlock(netAddr, 31)
+		next, stop := iter.Pull(Subnets(b, 32))
 		defer stop()
 
 		b, exists := next()
@@ -32,12 +32,12 @@ func TestSubnets(t *testing.T) {
 		assert.False(t, exists)
 	}
 	{
-		b := ipset.NewBlock(netAddr, 31)
+		b := NewBlock(netAddr, 31)
 		assert.Panics(t, func() {
-			ipset.Subnets(b, 12)
+			Subnets(b, 12)
 		})
 		assert.Panics(t, func() {
-			ipset.Subnets(b, 33)
+			Subnets(b, 33)
 		})
 	}
 }
@@ -51,9 +51,9 @@ func TestBlocks(t *testing.T) {
 		expectedLast0 := inverse.Or(expectedFirst0)
 		expectedFirst1 := ip.Next(expectedLast0)
 		expectedLast1 := expectedFirst1
-		input := ipset.NewInterval(expectedFirst0, expectedLast1)
+		input := NewInterval(expectedFirst0, expectedLast1)
 
-		nextBlock, stop := iter.Pull(ipset.Blocks(input))
+		nextBlock, stop := iter.Pull(Blocks(input))
 		defer stop()
 
 		actual, exists := nextBlock()
@@ -77,9 +77,9 @@ func TestBlocks(t *testing.T) {
 		expectedLast0 := inverse.Or(expectedFirst0)
 		expectedFirst1 := ip.Next(expectedLast0)
 		expectedLast1 := expectedFirst1
-		input := ipset.NewInterval(expectedFirst0, expectedLast1)
+		input := NewInterval(expectedFirst0, expectedLast1)
 
-		nextBlock, stop := iter.Pull(ipset.Blocks(input))
+		nextBlock, stop := iter.Pull(Blocks(input))
 		defer stop()
 
 		actual, exists := nextBlock()
@@ -103,9 +103,9 @@ func TestBlocks(t *testing.T) {
 		expectedLast0 := inverse.Or(expectedFirst0)
 		expectedFirst1 := ip.Next(expectedLast0)
 		expectedLast1 := expectedFirst1
-		input := ipset.NewInterval(expectedFirst0, expectedLast1)
+		input := NewInterval(expectedFirst0, expectedLast1)
 
-		nextBlock, stop := iter.Pull(ipset.Blocks(input))
+		nextBlock, stop := iter.Pull(Blocks(input))
 		defer stop()
 
 		actual, exists := nextBlock()
@@ -129,9 +129,9 @@ func TestBlocks(t *testing.T) {
 		expectedLast0 := inverse.Or(expectedFirst0)
 		expectedFirst1 := ip.Next(expectedLast0)
 		expectedLast1 := expectedFirst1
-		input := ipset.NewInterval(expectedFirst0, expectedLast1)
+		input := NewInterval(expectedFirst0, expectedLast1)
 
-		nextBlock, stop := iter.Pull(ipset.Blocks(input))
+		nextBlock, stop := iter.Pull(Blocks(input))
 		defer stop()
 
 		actual, exists := nextBlock()
@@ -155,9 +155,9 @@ func TestBlocks(t *testing.T) {
 		expectedLast0 := inverse.Or(expectedFirst0)
 		expectedFirst1 := ip.Next(expectedLast0)
 		expectedLast1 := expectedFirst1
-		input := ipset.NewInterval(expectedFirst0, expectedLast1)
+		input := NewInterval(expectedFirst0, expectedLast1)
 
-		nextBlock, stop := iter.Pull(ipset.Blocks(input))
+		nextBlock, stop := iter.Pull(Blocks(input))
 		defer stop()
 
 		actual, exists := nextBlock()
@@ -179,9 +179,9 @@ func TestBlocks(t *testing.T) {
 		mask := ipmask.For(family, 32)
 		inverse := mask.Not()
 		expectedLast0 := inverse.Or(expectedFirst0)
-		input := ipset.NewInterval(expectedFirst0, expectedLast0)
+		input := NewInterval(expectedFirst0, expectedLast0)
 
-		nextBlock, stop := iter.Pull(ipset.Blocks(input))
+		nextBlock, stop := iter.Pull(Blocks(input))
 		defer stop()
 
 		actual, exists := nextBlock()
@@ -195,9 +195,9 @@ func TestBlocks(t *testing.T) {
 	{
 		first := ip.V6().FromInt(999)
 		last := ip.V6().FromInt(0).Not()
-		input := ipset.NewInterval(first, last)
+		input := NewInterval(first, last)
 
-		for block := range ipset.Blocks(input) {
+		for block := range Blocks(input) {
 			assert.True(t, input.Contains(block.First()))
 			assert.True(t, input.Contains(block.Last()))
 		}
@@ -210,10 +210,10 @@ func TestBlocks(t *testing.T) {
 		expectedLast0 := inverse.Or(expectedFirst0)
 		expectedFirst1 := ip.Next(expectedLast0)
 		expectedLast1 := expectedFirst1
-		input := ipset.NewInterval(expectedFirst0, expectedLast1)
+		input := NewInterval(expectedFirst0, expectedLast1)
 		// check algo stops early
 		count := 0
-		ipset.Blocks(input)(func(b ipset.Block[ip.Addr6]) bool {
+		Blocks(input)(func(b Block[ip.Addr6]) bool {
 			count++
 			return false
 		})
@@ -244,15 +244,15 @@ func makeAndWalkBlocks[A ip.Int[A]](t *testing.T, family ip.Family[A]) {
 }
 
 func walkBlocks[A ip.Int[A]](t *testing.T, a1, a2 A) {
-	r := ipset.NewInterval(a1, a2)
-	nextBlock, stop := iter.Pull(ipset.Blocks(r))
+	r := NewInterval(a1, a2)
+	nextBlock, stop := iter.Pull(Blocks(r))
 	defer stop()
 
 	prev, _ := nextBlock()
 
 	for block, exists := nextBlock(); exists; block, exists = nextBlock() {
-		assert.True(t, ipset.Adjacent(prev, block))
-		assert.False(t, ipset.Intersect(prev, block))
+		assert.True(t, Adjacent(prev, block))
+		assert.False(t, Intersect(prev, block))
 
 		prev = block
 	}

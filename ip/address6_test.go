@@ -7,22 +7,22 @@ import (
 	"net/netip"
 	"testing"
 
-	"github.com/ipfreely-uk/go/ip"
+	. "github.com/ipfreely-uk/go/ip"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestMaths6(t *testing.T) {
-	v6 := ip.V6()
+	v6 := V6()
 
-	values := []ip.Addr6{
-		ip.MinAddress(v6),
-		ip.MaxAddress(v6),
-		ip.MustParse(v6, "::ffff:ffff:ffff:ffff"),
-		ip.MustParse(v6, "ffff:ffff:ffff:ffff::"),
-		ip.MustParse(v6, "::1"),
-		ip.MustParse(v6, "::2"),
-		ip.MustParse(v6, "fe80::"),
+	values := []Addr6{
+		MinAddress(v6),
+		MaxAddress(v6),
+		MustParse(v6, "::ffff:ffff:ffff:ffff"),
+		MustParse(v6, "ffff:ffff:ffff:ffff::"),
+		MustParse(v6, "::1"),
+		MustParse(v6, "::2"),
+		MustParse(v6, "fe80::"),
 	}
 
 	bytes := make([]byte, v6.Width()/8)
@@ -42,34 +42,34 @@ func TestMaths6(t *testing.T) {
 }
 
 func TestAdd6(t *testing.T) {
-	one := ip.V6().FromInt(1)
-	expected := ip.V6().FromInt(2)
+	one := V6().FromInt(1)
+	expected := V6().FromInt(2)
 	actual := one.Add(one)
 	assert.Equal(t, expected, actual)
 
-	big, _ := ip.Parse(ip.V6(), "::ffff:ffff:ffff:ffff")
-	expected, _ = ip.Parse(ip.V6(), "0:0:0:1::")
+	big, _ := Parse(V6(), "::ffff:ffff:ffff:ffff")
+	expected, _ = Parse(V6(), "0:0:0:1::")
 	actual = big.Add(one)
 	assert.Equal(t, expected, actual)
 }
 
 func TestSubtract6(t *testing.T) {
-	one := ip.V6().FromInt(1)
-	expected := ip.V6().FromInt(0)
+	one := V6().FromInt(1)
+	expected := V6().FromInt(0)
 	actual := one.Subtract(one)
 	assert.Equal(t, expected, actual)
 
-	big, _ := ip.Parse(ip.V6(), "fe80:0:0:1::")
-	expected, _ = ip.Parse(ip.V6(), "fe80:0:0:0:ffff:ffff:ffff:ffff")
+	big, _ := Parse(V6(), "fe80:0:0:1::")
+	expected, _ = Parse(V6(), "fe80:0:0:0:ffff:ffff:ffff:ffff")
 	actual = big.Subtract(one)
 	assert.Equal(t, expected, actual)
 }
 
 func TestMultiply6(t *testing.T) {
-	zero := ip.V6().FromInt(0)
-	one := ip.V6().FromInt(1)
-	two := ip.V6().FromInt(2)
-	four := ip.V6().FromInt(4)
+	zero := V6().FromInt(0)
+	one := V6().FromInt(1)
+	two := V6().FromInt(2)
+	four := V6().FromInt(4)
 	max := zero.Not()
 
 	actual := two.Multiply(two)
@@ -92,10 +92,10 @@ func TestMultiply6(t *testing.T) {
 }
 
 func TestDivide6(t *testing.T) {
-	zero := ip.V6().FromInt(0)
-	one := ip.V6().FromInt(1)
-	two := ip.V6().FromInt(2)
-	three := ip.V6().FromInt(3)
+	zero := V6().FromInt(0)
+	one := V6().FromInt(1)
+	two := V6().FromInt(2)
+	three := V6().FromInt(3)
 	max := zero.Not()
 
 	actual := three.Divide(two)
@@ -118,10 +118,10 @@ func TestDivide6(t *testing.T) {
 }
 
 func TestMod6(t *testing.T) {
-	zero := ip.V6().FromInt(0)
-	one := ip.V6().FromInt(1)
-	two := ip.V6().FromInt(2)
-	three := ip.V6().FromInt(3)
+	zero := V6().FromInt(0)
+	one := V6().FromInt(1)
+	two := V6().FromInt(2)
+	three := V6().FromInt(3)
 
 	actual := three.Mod(two)
 	assert.Equal(t, one, actual)
@@ -133,54 +133,54 @@ func TestMod6(t *testing.T) {
 }
 
 func TestNot6(t *testing.T) {
-	zero := ip.V6().FromInt(0)
-	expected, _ := ip.V6().FromBytes(0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF)
+	zero := V6().FromInt(0)
+	expected, _ := V6().FromBytes(0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF)
 	actual := zero.Not()
 	assert.Equal(t, expected, actual)
 }
 
 func TestAnd6(t *testing.T) {
-	first := ip.V6().FromInt(0xAABBCC00)
-	second := ip.V6().FromInt(0x00B000DD)
-	expected := ip.V6().FromInt(0x00B00000)
+	first := V6().FromInt(0xAABBCC00)
+	second := V6().FromInt(0x00B000DD)
+	expected := V6().FromInt(0x00B00000)
 	actual := first.And(second)
 	assert.Equal(t, expected, actual)
 }
 
 func TestOr6(t *testing.T) {
-	first := ip.V6().FromInt(0xAABBCC00)
-	second := ip.V6().FromInt(0x00B000DD)
-	expected := ip.V6().FromInt(0xAABBCCDD)
+	first := V6().FromInt(0xAABBCC00)
+	second := V6().FromInt(0x00B000DD)
+	expected := V6().FromInt(0xAABBCCDD)
 	actual := first.Or(second)
 	assert.Equal(t, expected, actual)
 }
 
 func TestXor6(t *testing.T) {
-	first := ip.V6().FromInt(0xAABBCC00)
-	second := ip.V6().FromInt(0x00B000DD)
-	expected := ip.V6().FromInt(0xAA0BCCDD)
+	first := V6().FromInt(0xAABBCC00)
+	second := V6().FromInt(0x00B000DD)
+	expected := V6().FromInt(0xAA0BCCDD)
 	actual := first.Xor(second)
 	assert.Equal(t, expected, actual)
 }
 
 func TestShiftRight6(t *testing.T) {
-	first, _ := ip.V6().FromBytes(0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x11)
-	expected, _ := ip.V6().FromBytes(0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF)
+	first, _ := V6().FromBytes(0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x11)
+	expected, _ := V6().FromBytes(0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF)
 	actual := first.Shift(8)
 	assert.Equal(t, expected, actual)
 }
 
 func TestShiftLeft6(t *testing.T) {
-	first, _ := ip.V6().FromBytes(0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x11)
-	expected, _ := ip.V6().FromBytes(0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x11, 0x00)
+	first, _ := V6().FromBytes(0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x11)
+	expected, _ := V6().FromBytes(0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x11, 0x00)
 	actual := first.Shift(-8)
 	assert.Equal(t, expected, actual)
 }
 
 func TestCompare6(t *testing.T) {
-	one := ip.V6().FromInt(1)
-	hundred := ip.V6().FromInt(100)
-	max := ip.V6().FromInt(0).Not()
+	one := V6().FromInt(1)
+	hundred := V6().FromInt(100)
+	max := V6().FromInt(0).Not()
 	assert.Equal(t, -1, one.Compare(hundred))
 	assert.Equal(t, 1, hundred.Compare(one))
 	assert.Equal(t, 0, hundred.Compare(hundred))
@@ -189,7 +189,7 @@ func TestCompare6(t *testing.T) {
 }
 
 func TestLeadingZeros6(t *testing.T) {
-	f := ip.V6()
+	f := V6()
 	two := f.FromInt(2)
 	assert.Equal(t, 0, f.FromInt(0).Not().LeadingZeros())
 	assert.Equal(t, 128, f.FromInt(0).LeadingZeros())
@@ -197,19 +197,19 @@ func TestLeadingZeros6(t *testing.T) {
 	assert.Equal(t, 104, f.FromInt(0xFF_FF_00).LeadingZeros())
 	assert.Equal(t, 105, f.FromInt(0b01111111_11111111_11111111).LeadingZeros())
 	assert.Equal(t, 0, f.FromInt(1).Not().LeadingZeros())
-	assert.Equal(t, 1, ip.MaxAddress(f).Divide(two).LeadingZeros())
-	bottom, _ := ip.Parse(ip.V6(), "::FFFF:FFFF:FFFF:FFFF")
+	assert.Equal(t, 1, MaxAddress(f).Divide(two).LeadingZeros())
+	bottom, _ := Parse(V6(), "::FFFF:FFFF:FFFF:FFFF")
 	assert.Equal(t, 64, bottom.LeadingZeros())
 }
 
 func TestTrailingZeros6(t *testing.T) {
-	f := ip.V6()
+	f := V6()
 	assert.Equal(t, 0, f.FromInt(0xFFFFFFFF).TrailingZeros())
 	assert.Equal(t, 128, f.FromInt(0).TrailingZeros())
 	assert.Equal(t, 0, f.FromInt(0xFFFFFF).TrailingZeros())
 	assert.Equal(t, 8, f.FromInt(0xFFFF00).TrailingZeros())
 	assert.Equal(t, 1, f.FromInt(0b10).TrailingZeros())
-	top, _ := ip.Parse(ip.V6(), "FFFF:FFFF:FFFF:FFFF::")
+	top, _ := Parse(V6(), "FFFF:FFFF:FFFF:FFFF::")
 	assert.Equal(t, 64, top.TrailingZeros())
 }
 
@@ -246,7 +246,7 @@ func TestString6(t *testing.T) {
 	}}
 
 	for _, candidate := range tests {
-		a, err := ip.V6().FromBytes(candidate.input...)
+		a, err := V6().FromBytes(candidate.input...)
 		assert.Nil(t, err)
 		actual := a.String()
 		assert.Equal(t, candidate.expected, actual)
@@ -258,21 +258,21 @@ func TestString6(t *testing.T) {
 }
 
 func TestA6_Float64(t *testing.T) {
-	v6 := ip.V6()
-	min := ip.MinAddress(v6)
+	v6 := V6()
+	min := MinAddress(v6)
 	max := min.Not()
 	two := v6.FromInt(2)
-	a1 := ip.MustParse(v6, "::ffff:ffff")
-	a2 := ip.MustParse(v6, "::ffff:ffff:ffff:ffff")
-	a3 := ip.MustParse(v6, "::ffff:ffff:ffff:ffff:ffff:ffff")
-	a4 := ip.MustParse(v6, "ffff:ffff::")
-	a5 := ip.MustParse(v6, "ffff:ffff:ffff:ffff::")
-	a6 := ip.MustParse(v6, "ffff:ffff:ffff:ffff:ffff:ffff::")
-	a7 := ip.MustParse(v6, "cafe:babe:dead:d00d:fee1:cafe:cafe:cafe")
-	a8 := ip.MustParse(v6, "::ffff:ffff:ffff:ffff:ffff:f000")
-	a9 := ip.MustParse(v6, "f000:ffff:ffff:ffff:ffff:ffff::")
+	a1 := MustParse(v6, "::ffff:ffff")
+	a2 := MustParse(v6, "::ffff:ffff:ffff:ffff")
+	a3 := MustParse(v6, "::ffff:ffff:ffff:ffff:ffff:ffff")
+	a4 := MustParse(v6, "ffff:ffff::")
+	a5 := MustParse(v6, "ffff:ffff:ffff:ffff::")
+	a6 := MustParse(v6, "ffff:ffff:ffff:ffff:ffff:ffff::")
+	a7 := MustParse(v6, "cafe:babe:dead:d00d:fee1:cafe:cafe:cafe")
+	a8 := MustParse(v6, "::ffff:ffff:ffff:ffff:ffff:f000")
+	a9 := MustParse(v6, "f000:ffff:ffff:ffff:ffff:ffff::")
 
-	tests := []ip.Addr6{
+	tests := []Addr6{
 		min,
 		max,
 		two,
@@ -288,7 +288,7 @@ func TestA6_Float64(t *testing.T) {
 	}
 
 	for _, address := range tests {
-		expected, _ := ip.ToBigInt(address).Float64()
+		expected, _ := ToBigInt(address).Float64()
 		actual := address.Float64()
 		assert.Equal(t, expected, actual, address.String())
 	}

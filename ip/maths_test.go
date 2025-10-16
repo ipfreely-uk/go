@@ -7,16 +7,16 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/ipfreely-uk/go/ip"
+	. "github.com/ipfreely-uk/go/ip"
 	"github.com/stretchr/testify/assert"
 )
 
 var size4 = func() *big.Int {
-	last := ip.ToBigInt(ip.MaxAddress(ip.V4()))
+	last := ToBigInt(MaxAddress(V4()))
 	return last.Add(last, big.NewInt(1))
 }()
 var size6 = func() *big.Int {
-	last := ip.ToBigInt(ip.MaxAddress(ip.V6()))
+	last := ToBigInt(MaxAddress(V6()))
 	return last.Add(last, big.NewInt(1))
 }()
 
@@ -26,9 +26,9 @@ var add op = func(x, y *big.Int) *big.Int { return big.NewInt(0).Add(x, y) }
 var mul op = func(x, y *big.Int) *big.Int { return big.NewInt(0).Mul(x, y) }
 var sub op = func(x, y *big.Int) *big.Int { return big.NewInt(0).Sub(x, y) }
 
-func testMaths[A ip.Int[A]](t *testing.T, addresses []A) {
+func testMaths[A Int[A]](t *testing.T, addresses []A) {
 	for _, a := range addresses {
-		expected, _ := ip.ToBigInt(a).Float64()
+		expected, _ := ToBigInt(a).Float64()
 		actual := a.Float64()
 		assert.Equal(t, expected, actual, a.String())
 
@@ -37,9 +37,9 @@ func testMaths[A ip.Int[A]](t *testing.T, addresses []A) {
 	}
 
 	for _, a := range addresses {
-		bigA := ip.ToBigInt(a)
+		bigA := ToBigInt(a)
 		for _, b := range addresses {
-			bigB := ip.ToBigInt(b)
+			bigB := ToBigInt(b)
 			testAdd(t, a, b, bigA, bigB)
 			testMultiply(t, a, b, bigA, bigB)
 			testSubtract(t, a, b, bigA, bigB)
@@ -48,37 +48,37 @@ func testMaths[A ip.Int[A]](t *testing.T, addresses []A) {
 	}
 }
 
-func testAdd[A ip.Int[A]](t *testing.T, a, b A, bigA, bigB *big.Int) {
+func testAdd[A Int[A]](t *testing.T, a, b A, bigA, bigB *big.Int) {
 	r := perform(a.Family(), add, bigA, bigB)
 
-	expected, _ := ip.FromBigInt(a.Family(), r)
+	expected, _ := FromBigInt(a.Family(), r)
 	actual := a.Add(b)
 	msg := fmt.Sprintf("%s + %s = %s    expected %s", a.String(), b.String(), actual.String(), expected.String())
 	assert.Equal(t, expected, actual, msg)
 }
 
-func testMultiply[A ip.Int[A]](t *testing.T, a, b A, bigA, bigB *big.Int) {
+func testMultiply[A Int[A]](t *testing.T, a, b A, bigA, bigB *big.Int) {
 	r := perform(a.Family(), mul, bigA, bigB)
 
-	expected, _ := ip.FromBigInt(a.Family(), r)
+	expected, _ := FromBigInt(a.Family(), r)
 	actual := a.Multiply(b)
 	msg := fmt.Sprintf("%s * %s = %s    expected %s", a.String(), b.String(), actual.String(), expected.String())
 	assert.Equal(t, expected, actual, msg)
 }
 
-func testSubtract[A ip.Int[A]](t *testing.T, a, b A, bigA, bigB *big.Int) {
+func testSubtract[A Int[A]](t *testing.T, a, b A, bigA, bigB *big.Int) {
 	r := perform(a.Family(), sub, bigA, bigB)
 
-	expected, _ := ip.FromBigInt(a.Family(), r)
+	expected, _ := FromBigInt(a.Family(), r)
 	actual := a.Subtract(b)
 	msg := fmt.Sprintf("%s - %s = %s    expected %s", a.String(), b.String(), actual.String(), expected.String())
 	assert.Equal(t, expected, actual, msg)
 }
 
-func testDivide[A ip.Int[A]](t *testing.T, a, b A, bigA, bigB *big.Int) {
-	zero := ip.MinAddress(a.Family())
+func testDivide[A Int[A]](t *testing.T, a, b A, bigA, bigB *big.Int) {
+	zero := MinAddress(a.Family())
 
-	if ip.Eq(b, zero) {
+	if Eq(b, zero) {
 		assert.Panics(t, func() {
 			a.Divide(b)
 		})
@@ -87,23 +87,23 @@ func testDivide[A ip.Int[A]](t *testing.T, a, b A, bigA, bigB *big.Int) {
 		})
 	} else {
 		r := big.NewInt(0).Div(bigA, bigB)
-		expected, _ := ip.FromBigInt(a.Family(), r)
+		expected, _ := FromBigInt(a.Family(), r)
 		actual := a.Divide(b)
 		msg := fmt.Sprintf("%s / %s = %s    expected %s", a.String(), b.String(), actual.String(), expected.String())
 		assert.Equal(t, expected, actual, msg)
 
 		r = big.NewInt(0).Mod(bigA, bigB)
-		expected, _ = ip.FromBigInt(a.Family(), r)
+		expected, _ = FromBigInt(a.Family(), r)
 		actual = a.Mod(b)
 		msg = fmt.Sprintf("%s mod %s = %s    expected %s", a.String(), b.String(), actual.String(), expected.String())
 		assert.Equal(t, expected, actual, msg)
 	}
 }
 
-func perform[A ip.Int[A]](family ip.Family[A], f op, x, y *big.Int) *big.Int {
+func perform[A Int[A]](family Family[A], f op, x, y *big.Int) *big.Int {
 	z := f(x, y)
 	var size *big.Int
-	if family.Version() == ip.Version4 {
+	if family.Version() == Version4 {
 		size = size4
 	} else {
 		size = size6

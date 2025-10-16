@@ -10,7 +10,7 @@ import (
 
 	"github.com/ipfreely-uk/go/ip"
 	"github.com/ipfreely-uk/go/ipmask"
-	"github.com/ipfreely-uk/go/ipset"
+	. "github.com/ipfreely-uk/go/ipset"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -19,66 +19,66 @@ func TestNewDiscrete(t *testing.T) {
 		zero := ip.V6().FromInt(0)
 		hundred := ip.V6().FromInt(100)
 		thousand := ip.V6().FromInt(1000)
-		r0 := ipset.NewInterval(zero, zero)
-		r1 := ipset.NewInterval(hundred, thousand)
-		r3 := ipset.NewInterval(zero, thousand)
-		set := ipset.NewDiscrete(r0, r1, r3, r0)
+		r0 := NewInterval(zero, zero)
+		r1 := NewInterval(hundred, thousand)
+		r3 := NewInterval(zero, thousand)
+		set := NewDiscrete(r0, r1, r3, r0)
 		assert.NotNil(t, set)
 	}
 	{
-		empty := ipset.NewDiscrete[ip.Addr4]()
-		empty = ipset.NewDiscrete(empty, empty, empty)
+		empty := NewDiscrete[ip.Addr4]()
+		empty = NewDiscrete(empty, empty, empty)
 		assert.Equal(t, int64(0), empty.Size().Int64())
 	}
 	{
 		zero := ip.V6().FromInt(0)
 		two := ip.V6().FromInt(2)
 		kay := ip.V6().FromInt(1024)
-		expected := ipset.NewInterval(zero, kay)
-		odds := []ipset.Discrete[ip.Addr6]{}
+		expected := NewInterval(zero, kay)
+		odds := []Discrete[ip.Addr6]{}
 		for a := range expected.Addresses() {
 			if !ip.Eq(a.Mod(two), zero) {
-				odds = append(odds, ipset.NewSingle(a))
+				odds = append(odds, NewSingle(a))
 			}
 		}
-		evens := []ipset.Discrete[ip.Addr6]{}
+		evens := []Discrete[ip.Addr6]{}
 		for a := range expected.Addresses() {
 			if ip.Eq(a.Mod(two), zero) {
-				evens = append(evens, ipset.NewSingle(a))
+				evens = append(evens, NewSingle(a))
 			}
 		}
 		// reverse evens
-		slices.SortFunc(evens, func(a, b ipset.Discrete[ip.Addr6]) int {
-			left := a.(ipset.Block[ip.Addr6])
-			right := b.(ipset.Block[ip.Addr6])
+		slices.SortFunc(evens, func(a, b Discrete[ip.Addr6]) int {
+			left := a.(Block[ip.Addr6])
+			right := b.(Block[ip.Addr6])
 			return right.First().Compare(left.First())
 		})
 		rogueIdx := 20
 		rogue := evens[rogueIdx]
 		evens = slices.Delete(evens, rogueIdx, rogueIdx)
-		odd := ipset.NewDiscrete(odds...)
-		even := ipset.NewDiscrete(evens...)
-		actual := ipset.NewDiscrete(odd, even, rogue)
-		assert.True(t, ipset.Eq(expected, actual))
+		odd := NewDiscrete(odds...)
+		even := NewDiscrete(evens...)
+		actual := NewDiscrete(odd, even, rogue)
+		assert.True(t, Eq(expected, actual))
 	}
 	{
 		zero := ip.V6().FromInt(0)
 		meg := ip.V6().FromInt(1024 * 1024)
-		expected := ipset.NewInterval(zero, meg)
-		contents := []ipset.Discrete[ip.Addr6]{}
+		expected := NewInterval(zero, meg)
+		contents := []Discrete[ip.Addr6]{}
 		for a := range expected.Addresses() {
-			contents = append(contents, ipset.NewSingle(a))
+			contents = append(contents, NewSingle(a))
 		}
-		actual := ipset.NewDiscrete(contents...)
-		assert.True(t, ipset.Eq(expected, actual))
+		actual := NewDiscrete(contents...)
+		assert.True(t, Eq(expected, actual))
 	}
 	{
 		net, mask, err := ipmask.ParseCIDRNotation(ip.V4(), "10.0.0.0/24")
 		assert.Nil(t, err)
-		expected := ipset.NewBlock(net, mask)
-		contents := []ipset.Discrete[ip.Addr4]{}
+		expected := NewBlock(net, mask)
+		contents := []Discrete[ip.Addr4]{}
 		for a := range expected.Addresses() {
-			set := ipset.NewSingle(a)
+			set := NewSingle(a)
 			contents = append(contents, set)
 		}
 		src := rand.NewSource(0)
@@ -89,8 +89,8 @@ func TestNewDiscrete(t *testing.T) {
 			contents[i] = right
 			contents[j] = left
 		})
-		actual := ipset.NewDiscrete(contents...)
-		assert.True(t, ipset.Eq(expected, actual))
+		actual := NewDiscrete(contents...)
+		assert.True(t, Eq(expected, actual))
 	}
 }
 
@@ -98,9 +98,9 @@ func TestDiscrete_Size(t *testing.T) {
 	zero := ip.V6().FromInt(0)
 	hundred := ip.V6().FromInt(100)
 	thousand := ip.V6().FromInt(1000)
-	r0 := ipset.NewInterval(zero, zero)
-	r1 := ipset.NewInterval(hundred, thousand)
-	set := ipset.NewDiscrete(r0, r1, r0)
+	r0 := NewInterval(zero, zero)
+	r1 := NewInterval(hundred, thousand)
+	set := NewDiscrete(r0, r1, r0)
 
 	expected := big.NewInt(902)
 	actual := set.Size()
@@ -113,15 +113,15 @@ func TestDiscrete_Empty(t *testing.T) {
 		zero := ip.V6().FromInt(0)
 		hundred := ip.V6().FromInt(100)
 		thousand := ip.V6().FromInt(1000)
-		r0 := ipset.NewInterval(zero, zero)
-		r1 := ipset.NewInterval(hundred, thousand)
-		set := ipset.NewDiscrete(r0, r1, r0)
+		r0 := NewInterval(zero, zero)
+		r1 := NewInterval(hundred, thousand)
+		set := NewDiscrete(r0, r1, r0)
 
 		assert.False(t, set.Empty())
 	}
 	{
-		empty := ipset.NewDiscrete[ip.Addr6]()
-		d := ipset.NewDiscrete(empty, empty, empty)
+		empty := NewDiscrete[ip.Addr6]()
+		d := NewDiscrete(empty, empty, empty)
 
 		assert.True(t, d.Empty())
 	}
@@ -133,9 +133,9 @@ func TestDiscrete_Contains(t *testing.T) {
 	hundred := ip.V6().FromInt(100)
 	thousand := ip.V6().FromInt(1000)
 	tenthousand := ip.V6().FromInt(10000)
-	r0 := ipset.NewInterval(zero, zero)
-	r1 := ipset.NewInterval(hundred, thousand)
-	set := ipset.NewDiscrete(r0, r1, r0, r1)
+	r0 := NewInterval(zero, zero)
+	r1 := NewInterval(hundred, thousand)
+	set := NewDiscrete(r0, r1, r0, r1)
 
 	assert.True(t, set.Contains(zero))
 	assert.False(t, set.Contains(ninteynine))
@@ -148,9 +148,9 @@ func TestDiscrete_Addresses(t *testing.T) {
 	zero := ip.V6().FromInt(0)
 	hundred := ip.V6().FromInt(100)
 	hundredAndOne := ip.V6().FromInt(101)
-	r0 := ipset.NewInterval(zero, zero)
-	r1 := ipset.NewInterval(hundred, hundredAndOne)
-	set := ipset.NewDiscrete(r0, r1, r0, r1)
+	r0 := NewInterval(zero, zero)
+	r1 := NewInterval(hundred, hundredAndOne)
+	set := NewDiscrete(r0, r1, r0, r1)
 
 	{
 		addresses := []ip.Addr6{}
@@ -178,9 +178,9 @@ func TestDiscrete_String(t *testing.T) {
 	zero := ip.V6().FromInt(0)
 	hundred := ip.V6().FromInt(100)
 	thousand := ip.V6().FromInt(1000)
-	r0 := ipset.NewInterval(zero, zero)
-	r1 := ipset.NewInterval(hundred, thousand)
-	set := ipset.NewDiscrete(r0, r1, r0, r1)
+	r0 := NewInterval(zero, zero)
+	r1 := NewInterval(hundred, thousand)
+	set := NewDiscrete(r0, r1, r0, r1)
 
 	actual := set.String()
 

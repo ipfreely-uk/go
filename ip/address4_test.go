@@ -7,21 +7,21 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/ipfreely-uk/go/ip"
+	. "github.com/ipfreely-uk/go/ip"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestMaths4(t *testing.T) {
-	v4 := ip.V4()
+	v4 := V4()
 
-	values := []ip.Addr4{
-		ip.MinAddress(v4),
-		ip.MaxAddress(v4),
-		ip.MustParse(v4, "255.0.0.0"),
-		ip.MustParse(v4, "0.0.0.255"),
-		ip.MustParse(v4, "0.0.0.1"),
-		ip.MustParse(v4, "0.0.0.2"),
+	values := []Addr4{
+		MinAddress(v4),
+		MaxAddress(v4),
+		MustParse(v4, "255.0.0.0"),
+		MustParse(v4, "0.0.0.255"),
+		MustParse(v4, "0.0.0.1"),
+		MustParse(v4, "0.0.0.2"),
 	}
 
 	bytes := make([]byte, v4.Width()/8)
@@ -41,97 +41,97 @@ func TestMaths4(t *testing.T) {
 }
 
 func TestAdd(t *testing.T) {
-	one := ip.V4().FromInt(1)
-	expected := ip.V4().FromInt(2)
+	one := V4().FromInt(1)
+	expected := V4().FromInt(2)
 	actual := one.Add(one)
 	assert.Equal(t, expected, actual)
 }
 
 func TestSubtract(t *testing.T) {
-	one := ip.V4().FromInt(1)
-	expected := ip.V4().FromInt(0)
+	one := V4().FromInt(1)
+	expected := V4().FromInt(0)
 	actual := one.Subtract(one)
 	assert.Equal(t, expected, actual)
 }
 
 func TestMultiply(t *testing.T) {
-	two := ip.V4().FromInt(2)
-	expected := ip.V4().FromInt(4)
+	two := V4().FromInt(2)
+	expected := V4().FromInt(4)
 	actual := two.Multiply(two)
 	assert.Equal(t, expected, actual)
 }
 
 func TestDivide(t *testing.T) {
-	two := ip.V4().FromInt(2)
-	three := ip.V4().FromInt(3)
-	expected := ip.V4().FromInt(1)
+	two := V4().FromInt(2)
+	three := V4().FromInt(3)
+	expected := V4().FromInt(1)
 	actual := three.Divide(two)
 	assert.Equal(t, expected, actual)
 }
 
 func TestMod(t *testing.T) {
-	two := ip.V4().FromInt(2)
-	three := ip.V4().FromInt(3)
-	expected := ip.V4().FromInt(1)
+	two := V4().FromInt(2)
+	three := V4().FromInt(3)
+	expected := V4().FromInt(1)
 	actual := three.Mod(two)
 	assert.Equal(t, expected, actual)
 }
 
 func TestNot(t *testing.T) {
-	zero := ip.V4().FromInt(0)
-	expected := ip.V4().FromInt(0xFFFFFFFF)
+	zero := V4().FromInt(0)
+	expected := V4().FromInt(0xFFFFFFFF)
 	actual := zero.Not()
 	assert.Equal(t, expected, actual)
 }
 
 func TestAnd(t *testing.T) {
-	first := ip.V4().FromInt(0xAABBCC00)
-	second := ip.V4().FromInt(0x00B000DD)
-	expected := ip.V4().FromInt(0x00B00000)
+	first := V4().FromInt(0xAABBCC00)
+	second := V4().FromInt(0x00B000DD)
+	expected := V4().FromInt(0x00B00000)
 	actual := first.And(second)
 	assert.Equal(t, expected, actual)
 }
 
 func TestOr(t *testing.T) {
-	first := ip.V4().FromInt(0xAABBCC00)
-	second := ip.V4().FromInt(0x00B000DD)
-	expected := ip.V4().FromInt(0xAABBCCDD)
+	first := V4().FromInt(0xAABBCC00)
+	second := V4().FromInt(0x00B000DD)
+	expected := V4().FromInt(0xAABBCCDD)
 	actual := first.Or(second)
 	assert.Equal(t, expected, actual)
 }
 
 func TestXor(t *testing.T) {
-	first := ip.V4().FromInt(0xAABBCC00)
-	second := ip.V4().FromInt(0x00B000DD)
-	expected := ip.V4().FromInt(0xAA0BCCDD)
+	first := V4().FromInt(0xAABBCC00)
+	second := V4().FromInt(0x00B000DD)
+	expected := V4().FromInt(0xAA0BCCDD)
 	actual := first.Xor(second)
 	assert.Equal(t, expected, actual)
 }
 
 func TestShiftRight(t *testing.T) {
-	first := ip.V4().FromInt(0xAABBCC00)
-	expected := ip.V4().FromInt(0x00AABBCC)
+	first := V4().FromInt(0xAABBCC00)
+	expected := V4().FromInt(0x00AABBCC)
 	actual := first.Shift(8)
 	assert.Equal(t, expected, actual)
 }
 
 func TestShiftLeft(t *testing.T) {
-	first := ip.V4().FromInt(0xAABBCC00)
-	expected := ip.V4().FromInt(0xBBCC0000)
+	first := V4().FromInt(0xAABBCC00)
+	expected := V4().FromInt(0xBBCC0000)
 	actual := first.Shift(-8)
 	assert.Equal(t, expected, actual)
 }
 
 func TestCompare(t *testing.T) {
-	one := ip.V4().FromInt(1)
-	hundred := ip.V4().FromInt(100)
+	one := V4().FromInt(1)
+	hundred := V4().FromInt(100)
 	assert.Equal(t, -1, one.Compare(hundred))
 	assert.Equal(t, 1, hundred.Compare(one))
 	assert.Equal(t, 0, hundred.Compare(hundred))
 }
 
 func TestLeadingZeros(t *testing.T) {
-	f := ip.V4()
+	f := V4()
 	assert.Equal(t, 0, f.FromInt(0xFFFFFFFF).LeadingZeros())
 	assert.Equal(t, 32, f.FromInt(0).LeadingZeros())
 	assert.Equal(t, 8, f.FromInt(0xFFFFFF).LeadingZeros())
@@ -140,7 +140,7 @@ func TestLeadingZeros(t *testing.T) {
 }
 
 func TestTrailingZeros(t *testing.T) {
-	f := ip.V4()
+	f := V4()
 	assert.Equal(t, 0, f.FromInt(0xFFFFFFFF).TrailingZeros())
 	assert.Equal(t, 32, f.FromInt(0).TrailingZeros())
 	assert.Equal(t, 0, f.FromInt(0xFFFFFF).TrailingZeros())
@@ -166,7 +166,7 @@ func TestString(t *testing.T) {
 	}}
 
 	for _, candidate := range tests {
-		a, err := ip.V4().FromBytes(candidate.input...)
+		a, err := V4().FromBytes(candidate.input...)
 		assert.Nil(t, err)
 		actual := a.String()
 		assert.Equal(t, candidate.expected, actual)
@@ -174,24 +174,24 @@ func TestString(t *testing.T) {
 }
 
 func TestA4_Float64(t *testing.T) {
-	min := ip.MinAddress(ip.V4())
+	min := MinAddress(V4())
 	max := min.Not()
-	two := ip.V4().FromInt(2)
+	two := V4().FromInt(2)
 	half := max.Divide(two)
 
 	expected, _ := big.NewInt(0).Float64()
 	actual := min.Float64()
 	assert.Equal(t, expected, actual)
 
-	expected, _ = ip.ToBigInt(max).Float64()
+	expected, _ = ToBigInt(max).Float64()
 	actual = max.Float64()
 	assert.Equal(t, expected, actual)
 
-	expected, _ = ip.ToBigInt(two).Float64()
+	expected, _ = ToBigInt(two).Float64()
 	actual = two.Float64()
 	assert.Equal(t, expected, actual)
 
-	expected, _ = ip.ToBigInt(half).Float64()
+	expected, _ = ToBigInt(half).Float64()
 	actual = half.Float64()
 	assert.Equal(t, expected, actual)
 }

@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/ipfreely-uk/go/ip"
-	"github.com/ipfreely-uk/go/ipset"
+	. "github.com/ipfreely-uk/go/ipset"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -15,7 +15,7 @@ func TestNewInterval(t *testing.T) {
 	first := ip.V6().FromInt(1)
 	last := ip.V6().FromInt(10)
 
-	actual := ipset.NewInterval(first, last)
+	actual := NewInterval(first, last)
 
 	assert.Equal(t, first, actual.First())
 	assert.Equal(t, last, actual.Last())
@@ -28,7 +28,7 @@ func TestInterval_Contains(t *testing.T) {
 	three := ip.V6().FromInt(3)
 	four := ip.V6().FromInt(4)
 
-	actual := ipset.NewInterval(one, three)
+	actual := NewInterval(one, three)
 
 	assert.True(t, actual.Contains(one))
 	assert.True(t, actual.Contains(two))
@@ -42,7 +42,7 @@ func TestInterval_Size(t *testing.T) {
 	three := ip.V6().FromInt(3)
 
 	expected := big.NewInt(3)
-	interval := ipset.NewInterval(one, three)
+	interval := NewInterval(one, three)
 	actual := interval.Size()
 
 	assert.Equal(t, expected, actual)
@@ -53,7 +53,7 @@ func TestInterval_Addresses(t *testing.T) {
 	one := ip.V6().FromInt(1)
 	three := ip.V6().FromInt(3)
 
-	actual := ipset.NewInterval(one, three)
+	actual := NewInterval(one, three)
 
 	var count = 0
 	var last ip.Addr6
@@ -68,10 +68,10 @@ func TestInterval_Addresses(t *testing.T) {
 func TestInterval_Intervals(t *testing.T) {
 	one := ip.V6().FromInt(1)
 	three := ip.V6().FromInt(3)
-	net := ipset.NewInterval(one, three)
+	net := NewInterval(one, three)
 
 	var count = 0
-	var last ipset.Interval[ip.Addr6]
+	var last Interval[ip.Addr6]
 	for addr := range net.Intervals() {
 		last = addr
 		count++
