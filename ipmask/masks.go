@@ -81,7 +81,7 @@ func makeMask[A ip.Int[A]](f ip.Family[A], bits int) A {
 	bytes := f.Width() / 8
 	arr := make([]byte, bytes)
 	fullyMasked := bits / 8
-	for i := 0; i < fullyMasked; i++ {
+	for i := range fullyMasked {
 		arr[i] = 0b11111111
 	}
 	if fullyMasked != bytes {

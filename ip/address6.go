@@ -256,7 +256,7 @@ func (a Addr6) String() string {
 
 	z0 := -1
 	zn := -1
-	for i := 0; i < ip6Segments; i++ {
+	for i := range ip6Segments {
 		if shortAtSegment(a.high, a.low, i) == 0 {
 			count := countContiguousZeroShortsFrom(a.high, a.low, i)
 			if count > 1 && count > zn-z0 {

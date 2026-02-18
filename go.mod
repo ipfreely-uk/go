@@ -1,6 +1,6 @@
 module github.com/ipfreely-uk/go
 
-go 1.23.1
+go 1.26.0
 
 // Test/example dependencies
 require github.com/stretchr/testify v1.11.1

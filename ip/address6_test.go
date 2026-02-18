@@ -27,7 +27,7 @@ func TestMaths6(t *testing.T) {
 
 	bytes := make([]byte, v6.Width()/8)
 	ran := rand.New(rand.NewSource(0))
-	for i := 0; i < 200; i++ {
+	for range 200 {
 		_, err := ran.Read(bytes)
 		if err != nil {
 			t.Fail()

@@ -105,7 +105,7 @@ func TestSubnetMaskBits(t *testing.T) {
 	}
 	{
 		v4 := ip.V4()
-		for i := 0; i < ip.Width4; i++ {
+		for i := range ip.Width4 {
 			m := For(v4, i)
 			actual := Bits(m)
 			assert.Equal(t, i, actual, m.String())
@@ -113,7 +113,7 @@ func TestSubnetMaskBits(t *testing.T) {
 	}
 	{
 		v6 := ip.V6()
-		for i := 0; i < ip.Width6; i++ {
+		for i := range ip.Width6 {
 			m := For(v6, i)
 			actual := Bits(m)
 			assert.Equal(t, i, actual, m.String())

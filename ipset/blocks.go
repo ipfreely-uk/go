@@ -83,10 +83,3 @@ func walkBlocks[A ip.Int[A]](start, end A, yield func(Block[A]) bool) {
 		current = ip.Next(last)
 	}
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}

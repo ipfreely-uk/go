@@ -20,7 +20,7 @@ func ExampleInt() {
 func printN[A ip.Int[A]](address A, n int) {
 	a := address
 	one := a.Family().FromInt(1)
-	for i := 0; i < n; i++ {
+	for range n {
 		println(a.String())
 		a = a.Add(one)
 	}

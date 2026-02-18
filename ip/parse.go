@@ -123,15 +123,15 @@ func parse6(candidate string) ([]byte, error) {
 }
 
 func headTail6(candidate string) ([]string, []string, error) {
-	shortener := strings.Index(candidate, "::")
-	if shortener < 0 {
+	before, after, ok := strings.Cut(candidate, "::")
+	if !ok {
 		c := split6(candidate)
 		if len(c) != 8 {
 			return nil, nil, errInvalid
 		}
 		return c, []string{}, nil
 	}
-	head, tail := candidate[:shortener], candidate[shortener+2:]
+	head, tail := before, after
 	h, t := split6(head), split6(tail)
 	if len(h)+len(t) > 7 {
 		return nil, nil, errInvalid

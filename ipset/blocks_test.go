@@ -232,7 +232,7 @@ func makeAndWalkBlocks[A ip.Int[A]](t *testing.T, family ip.Family[A]) {
 	buf := make([]byte, family.Width()/8)
 
 	prev := family.MustFromBytes(buf...)
-	for i := 0; i < 200; i++ {
+	for range 200 {
 		_, err := src.Read(buf)
 		assert.Nil(t, err)
 
