@@ -13,8 +13,7 @@ import (
 )
 
 type interval[A ip.Int[A]] struct {
-	first A
-	last  A
+	first, last A
 }
 
 func (a *interval[A]) Contains(address A) bool {
