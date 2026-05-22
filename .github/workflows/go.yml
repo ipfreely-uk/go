@@ -25,6 +25,14 @@ jobs:
       run: go test -v ./...
     - name: Vet
       run: go vet ./...
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+    - name: Set up Go
+      uses: actions/setup-go@v6
+      with:
+        go-version-file: 'go.mod'  
     - name: Install gosec
       run: go install github.com/securego/gosec/v2/cmd/gosec@latest
     - name: gosec
