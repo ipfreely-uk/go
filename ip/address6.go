@@ -124,9 +124,9 @@ func (a Addr6) Divide(denominator Addr6) Addr6 {
 			low: a.low / denominator.low,
 		}
 	}
-	// if denominator == v6TWO {
-	// 	return a.Shift(1)
-	// }
+	if denominator == v6TWO {
+		return a.Shift(1)
+	}
 	return a.divMod(denominator, false)
 }
 
