@@ -154,11 +154,9 @@ func (a Addr6) divMod(denominator Addr6, modulus bool) Addr6 {
 	offset := a.LeadingZeros()
 
 	// quotient
-	var qh uint64 = 0
-	var ql uint64 = 0
+	var qh, ql uint64 = 0, 0
 	// remainder
-	var rh uint64 = 0
-	var rl uint64 = 0
+	var rh, rl uint64 = 0, 0
 	// divide
 	for i := Width6 - offset - 1; i >= 0; i-- {
 		// r << 1
@@ -166,16 +164,14 @@ func (a Addr6) divMod(denominator Addr6, modulus bool) Addr6 {
 		rh = (rh << 1) | x
 		rl = rl << 1
 		// r[0] = n[i]
-		var bh uint64 = 0
-		var bl uint64 = 0
+		var bh, bl uint64 = 0, 0
 		z := i - 64
 		if z >= 0 {
 			bh = 1 << z
 		} else {
 			bl = 1 << i
 		}
-		var zh uint64 = a.high & bh
-		var zl uint64 = a.low & bl
+		var zh, zl uint64 = a.high & bh, a.low & bl
 		if zh != 0 || zl != 0 {
 			rl |= 1
 		}
@@ -231,8 +227,7 @@ func (a Addr6) Xor(operand Addr6) Addr6 {
 
 // See [Int]
 func (a Addr6) Shift(bits int) Addr6 {
-	var high uint64
-	var low uint64
+	var high, low uint64
 	if bits > 0 {
 		n := bits % 64
 		x := a.high << (64 - n)
