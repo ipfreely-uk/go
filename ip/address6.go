@@ -19,6 +19,7 @@ type Addr6 struct {
 
 var v6ZERO = Addr6{}
 var v6ONE = Addr6{0, 1}
+var v6TWO = Addr6{0, 2}
 
 func (a Addr6) sealed() {}
 
@@ -108,7 +109,7 @@ func (a Addr6) Divide(denominator Addr6) Addr6 {
 	if denominator == v6ZERO {
 		panic("divide by zero")
 	}
-	if denominator == v6ONE {
+	if denominator == v6ONE || a == v6ZERO {
 		return a
 	}
 	compared := a.Compare(denominator)
@@ -123,11 +124,10 @@ func (a Addr6) Divide(denominator Addr6) Addr6 {
 			low: a.low / denominator.low,
 		}
 	}
-	this := ToBigInt(a)
-	that := ToBigInt(denominator)
-	result := this.Div(this, that)
-	address, _ := FromBigInt(a.Family(), result)
-	return address
+	// if denominator == v6TWO {
+	// 	return a.Shift(1)
+	// }
+	return a.divMod(denominator, false)
 }
 
 // See [Int]
@@ -146,6 +146,61 @@ func (a Addr6) Mod(denominator Addr6) Addr6 {
 	}
 	quotient := a.Divide(denominator)
 	return a.Subtract(quotient.Multiply(denominator))
+}
+
+func (a Addr6) divMod(denominator Addr6, modulus bool) Addr6 {
+	offset := a.LeadingZeros()
+
+	// quotient
+	var qh uint64 = 0
+	var ql uint64 = 0
+	// remainder
+	var rh uint64 = 0
+	var rl uint64 = 0
+	// divide
+	for i := Width6 - offset - 1; i >= 0; i-- {
+		// r << 1
+		x := rl >> (64 - 1)
+		rh = (rh << 1) | x
+		rl = rl << 1
+		// r[0] = n[i]
+		var bh uint64 = 0
+		var bl uint64 = 0
+		z := i - 64
+		if z >= 0 {
+			bh = 1 << z
+		} else {
+			bl = 1 << i
+		}
+		var zh uint64 = a.high & bh
+		var zl uint64 = a.low & bl
+		if zh != 0 || zl != 0 {
+			rl |= 1
+		}
+		// if r >= d
+		var c bool
+		if rh == denominator.high {
+			c = rl >= denominator.low
+		} else {
+			c = rh >= denominator.high
+		}
+		if c {
+			// r = r -d
+			rh = rh - denominator.high
+			if rl < denominator.low {
+				rh--
+			}
+			rl = rl - denominator.low
+			// q[i] = 1
+			qh |= bh
+			ql |= bl
+		}
+	}
+
+	if modulus {
+		return Addr6{rh, rl}
+	}
+	return Addr6{qh, ql}
 }
 
 // See [Int]
@@ -241,7 +296,6 @@ func (a Addr6) Float64() float64 {
 
 const (
 	ip6Segments = 8
-	shortWidth  = 16
 )
 
 // Returns RFC 5952 notation.
