@@ -132,6 +132,9 @@ func (a Addr6) Divide(denominator Addr6) Addr6 {
 
 // See [Int]
 func (a Addr6) Mod(denominator Addr6) Addr6 {
+	if denominator == v6ZERO {
+		panic("divide by zero")
+	}
 	if denominator == v6ONE {
 		return v6ZERO
 	}
@@ -144,8 +147,7 @@ func (a Addr6) Mod(denominator Addr6) Addr6 {
 			return a
 		}
 	}
-	quotient := a.Divide(denominator)
-	return a.Subtract(quotient.Multiply(denominator))
+	return a.divMod(denominator, true)
 }
 
 func (a Addr6) divMod(denominator Addr6, modulus bool) Addr6 {
